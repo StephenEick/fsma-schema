@@ -1,5 +1,10 @@
-package com.example.blog
+package com.example.fsma.controller
 
+import com.example.fsma.model.Article
+import com.example.fsma.model.User
+import com.example.fsma.repository.ArticleRepository
+import com.example.fsma.util.FsmaProperties
+import com.example.fsma.util.format
 import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,7 +15,8 @@ import org.springframework.web.server.ResponseStatusException
 
 @Controller
 class HtmlController(private val repository: ArticleRepository,
-                     private val properties: BlogProperties) {
+                     private val properties: FsmaProperties
+) {
 
     @GetMapping("/")
     fun blog(model: Model): String {

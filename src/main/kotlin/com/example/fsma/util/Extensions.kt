@@ -1,4 +1,4 @@
-package com.example.blog
+package com.example.fsma.util
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatterBuilder

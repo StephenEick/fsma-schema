@@ -1,5 +1,9 @@
-package com.example.blog
+package com.example.fsma
 
+import com.example.fsma.model.Article
+import com.example.fsma.model.User
+import com.example.fsma.repository.ArticleRepository
+import com.example.fsma.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +15,8 @@ import org.springframework.data.repository.findByIdOrNull
 class RepositoriesTests @Autowired constructor(
     val entityManager: TestEntityManager,
     val userRepository: UserRepository,
-    val articleRepository: ArticleRepository) {
+    val articleRepository: ArticleRepository
+) {
 
     @Test
     fun `When findByIdOrNull then return Article`() {

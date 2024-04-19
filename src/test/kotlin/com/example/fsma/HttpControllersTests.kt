@@ -1,5 +1,9 @@
-package com.example.blog
+package com.example.fsma
 
+import com.example.fsma.model.Article
+import com.example.fsma.model.User
+import com.example.fsma.repository.ArticleRepository
+import com.example.fsma.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.Test

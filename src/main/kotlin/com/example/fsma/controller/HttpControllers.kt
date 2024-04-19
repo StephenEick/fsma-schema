@@ -1,5 +1,7 @@
-package com.example.blog
+package com.example.fsma.controller
 
+import com.example.fsma.repository.ArticleRepository
+import com.example.fsma.repository.UserRepository
 import org.springframework.http.HttpStatus.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
