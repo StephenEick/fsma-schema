@@ -1,6 +1,6 @@
 package com.example.fsma
 
-import com.example.fsma.util.FsmaProperties
+import com.example.fsma.config.FsmaProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication

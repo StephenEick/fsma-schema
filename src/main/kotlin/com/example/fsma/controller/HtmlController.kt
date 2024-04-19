@@ -3,7 +3,7 @@ package com.example.fsma.controller
 import com.example.fsma.model.Article
 import com.example.fsma.model.User
 import com.example.fsma.repository.ArticleRepository
-import com.example.fsma.util.FsmaProperties
+import com.example.fsma.config.FsmaProperties
 import com.example.fsma.util.format
 import org.springframework.http.HttpStatus.*
 import org.springframework.stereotype.Controller

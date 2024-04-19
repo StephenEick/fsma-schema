@@ -1,4 +1,4 @@
-package com.example.fsma.util
+package com.example.fsma.config
 
 import com.example.fsma.model.Article
 import com.example.fsma.model.User
