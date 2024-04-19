@@ -1,10 +1,10 @@
-package com.example.fsma_schema
+package com.example.blog
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class FsmaSchemaApplicationTests {
+class FsmaApplicationTests {
 
 	@Test
 	fun contextLoads() {
