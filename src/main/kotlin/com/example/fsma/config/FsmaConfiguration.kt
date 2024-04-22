@@ -12,26 +12,27 @@ import org.springframework.context.annotation.Configuration
 class FsmaConfiguration {
 
     @Bean
-    fun databaseInitializer(userRepository: UserRepository,
-                            articleRepository: ArticleRepository
+    fun databaseInitializer(
+        userRepository: UserRepository,
+        articleRepository: ArticleRepository
     ) = ApplicationRunner {
 
         val johnDoe = userRepository.save(User("johnDoe", "John", "Doe"))
         articleRepository.save(
             Article(
-            title = "Lorem",
-            headline = "Lorem",
-            content = "dolor sit amet",
-            author = johnDoe
-        )
+                title = "Lorem",
+                headline = "Lorem",
+                content = "dolor sit amet",
+                author = johnDoe
+            )
         )
         articleRepository.save(
             Article(
-            title = "Ipsum",
-            headline = "Ipsum",
-            content = "dolor sit amet",
-            author = johnDoe
-        )
+                title = "Ipsum",
+                headline = "Ipsum",
+                content = "dolor sit amet",
+                author = johnDoe
+            )
         )
     }
 }

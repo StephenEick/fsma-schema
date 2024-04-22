@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
+private const val FSMA_USER_BASE_URL = "/api/v1/user"
+
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping(FSMA_USER_BASE_URL)
 class UserController(private val repository: UserRepository) {
 
     @GetMapping("/")
