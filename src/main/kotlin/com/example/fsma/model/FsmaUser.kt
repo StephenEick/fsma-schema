@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 
 @Entity
-data class User(
+data class FsmaUser(
     val login: String,
     val firstname: String,
     val lastname: String,

@@ -1,6 +1,6 @@
 package com.example.fsma.repository
 
-import com.example.fsma.model.Article
+import com.example.fsma.model.old.Article
 import org.springframework.data.repository.CrudRepository
 
 interface ArticleRepository : CrudRepository<Article, Long> {

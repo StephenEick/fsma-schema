@@ -1,5 +1,6 @@
-package com.example.fsma.model
+package com.example.fsma.model.old
 
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.util.toSlug
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -12,7 +13,7 @@ data class Article(
     val title: String,
     val headline: String,
     val content: String,
-    @ManyToOne val author: User,
+    @ManyToOne val author: FsmaUser,
     val slug: String = title.toSlug(),
     val addedAt: LocalDateTime = LocalDateTime.now(),
     @Id @GeneratedValue val id: Long = 0

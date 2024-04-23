@@ -1,7 +1,7 @@
 package com.example.fsma.config
 
-import com.example.fsma.model.Article
-import com.example.fsma.model.User
+import com.example.fsma.model.old.Article
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.repository.ArticleRepository
 import com.example.fsma.repository.UserRepository
 import org.springframework.boot.ApplicationRunner
@@ -17,7 +17,7 @@ class FsmaConfiguration {
         articleRepository: ArticleRepository
     ) = ApplicationRunner {
 
-        val johnDoe = userRepository.save(User("johnDoe", "John", "Doe"))
+        val johnDoe = userRepository.save(FsmaUser("johnDoe", "John", "Doe"))
         articleRepository.save(
             Article(
                 title = "Lorem",

@@ -1,7 +1,7 @@
 package com.example.fsma
 
-import com.example.fsma.model.Article
-import com.example.fsma.model.User
+import com.example.fsma.model.old.Article
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.repository.ArticleRepository
 import com.example.fsma.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -20,7 +20,7 @@ class RepositoriesTests @Autowired constructor(
 
     @Test
     fun `When findByIdOrNull then return Article`() {
-        val johnDoe = User("johnDoe", "John", "Doe")
+        val johnDoe = FsmaUser("johnDoe", "John", "Doe")
         entityManager.persist(johnDoe)
         val article = Article("Lorem", "Lorem", "dolor sit amet", johnDoe)
         entityManager.persist(article)
@@ -31,7 +31,7 @@ class RepositoriesTests @Autowired constructor(
 
     @Test
     fun `When findByLogin then return User`() {
-        val johnDoe = User("johnDoe", "John", "Doe")
+        val johnDoe = FsmaUser("johnDoe", "John", "Doe")
         entityManager.persist(johnDoe)
         entityManager.flush()
         val user = userRepository.findByLogin(johnDoe.login)

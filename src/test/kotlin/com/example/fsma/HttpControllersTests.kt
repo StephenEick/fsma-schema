@@ -1,7 +1,7 @@
 package com.example.fsma
 
-import com.example.fsma.model.Article
-import com.example.fsma.model.User
+import com.example.fsma.model.old.Article
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.repository.ArticleRepository
 import com.example.fsma.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
@@ -25,7 +25,7 @@ class HttpControllersTests(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `List articles`() {
-        val johnDoe = User("johnDoe", "John", "Doe")
+        val johnDoe = FsmaUser("johnDoe", "John", "Doe")
         val lorem5Article = Article("Lorem", "Lorem", "dolor sit amet", johnDoe)
         val ipsumArticle = Article("Ipsum", "Ipsum", "dolor sit amet", johnDoe)
         every { articleRepository.findAllByOrderByAddedAtDesc() } returns listOf(lorem5Article, ipsumArticle)
@@ -40,8 +40,8 @@ class HttpControllersTests(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `List users`() {
-        val johnDoe = User("johnDoe", "John", "Doe")
-        val janeDoe = User("janeDoe", "Jane", "Doe")
+        val johnDoe = FsmaUser("johnDoe", "John", "Doe")
+        val janeDoe = FsmaUser("janeDoe", "Jane", "Doe")
         every { userRepository.findAll() } returns listOf(johnDoe, janeDoe)
         mockMvc.perform(get("/api/user/").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)

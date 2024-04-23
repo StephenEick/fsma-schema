@@ -1,7 +1,7 @@
 package com.example.fsma.controller
 
-import com.example.fsma.model.Article
-import com.example.fsma.model.User
+import com.example.fsma.model.old.Article
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.repository.ArticleRepository
 import com.example.fsma.config.FsmaProperties
 import com.example.fsma.util.format
@@ -51,7 +51,7 @@ class HtmlController(private val repository: ArticleRepository,
         val title: String,
         val headline: String,
         val content: String,
-        val author: User,
+        val author: FsmaUser,
         val addedAt: String)
 
 }
