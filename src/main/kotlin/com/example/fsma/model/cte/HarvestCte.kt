@@ -1,7 +1,6 @@
 package com.example.fsma.model.cte
 
 import com.example.fsma.model.BusinessName
-import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
 import com.example.fsma.util.UnitOfMeasure

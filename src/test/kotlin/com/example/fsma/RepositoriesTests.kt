@@ -25,7 +25,7 @@ class RepositoriesTests @Autowired constructor(
         val article = Article("Lorem", "Lorem", "dolor sit amet", johnDoe)
         entityManager.persist(article)
         entityManager.flush()
-        val found = articleRepository.findByIdOrNull(article.id!!)
+        val found = articleRepository.findByIdOrNull(article.id)
         assertThat(found).isEqualTo(article)
     }
 
