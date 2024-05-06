@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 
 @Entity
-data class Harvest(
+data class TransformCte(
     @Id @GeneratedValue
     override val id: Long = 0,
-) : BaseCte<Harvest>()
+) : BaseCte<TransformCte>()

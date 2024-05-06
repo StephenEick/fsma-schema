@@ -1,6 +1,6 @@
 package com.example.fsma.util
 
-enum class Ctes {
+enum class CteType {
     Harvesting,
     Cooling,
     InitialPacking,
@@ -9,4 +9,109 @@ enum class Ctes {
     Receiving,
     Transformation,
     TraceabilityPlan,
+}
+
+enum class FtlItem {
+    Bivalves,
+    Cheeses,
+    Cucumbers,
+    DeliSalads,
+    Finfish,
+    Fruits,
+    Herbs,
+    LeafyGreens,
+    Melons,
+    MolluscanShellfish,
+    NutButters,
+    Peppers,
+    ShellEggs,
+    SmokedFinfish,
+    Sprouts,
+    Tomatoes,
+    TropicalTreeFruits,
+    Vegetables,
+}
+
+
+// The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
+enum class UnitOfMeasure {
+    Pound,
+    Kilo,
+    Bin,
+    Carton,
+}
+
+// -- ISO-3166 3-Letter Country codes
+enum class Country {
+    USA,
+    CANADA,
+    MEX,
+    UNKNOWN // "Unknown" - needed for importing from Quickbooks
+}
+
+enum class UsaCanadaState(val stateName: String) {
+    AL("Alabama"),
+    AK("Alaska"),
+    AR("Arkansas"),
+    AZ("Arizona"),
+    CA("California"),
+    CO("Colorado"),
+    CT("Connecticut"),
+    DE("Delaware"),
+    FL("Florida"),
+    GA("Georgia"),
+    HI("Hawaii"),
+    IA("Iowa"),
+    ID("Idaho"),
+    IL("Illinois"),
+    IN("Indiana"),
+    KS("Kansas"),
+    KY("Kentucky"),
+    LA("Louisiana"),
+    MA("Massachusetts"),
+    MD("Maryland"),
+    ME("Maine"),
+    MI("Michigan"),
+    MN("Minnesota"),
+    MO("Missouri"),
+    MS("Mississippi"),
+    MT("Montana"),
+    NC("NorthCarolina"),
+    ND("NorthDakota"),
+    NE("Nebraska"),
+    NH("NewHampshire"),
+    NJ("NewJersey"),
+    NM("NewMexico"),
+    NV("Nevada"),
+    NY("NewYork"),
+    OH("Ohio"),
+    OK("Oklahoma"),
+    OR("Oregon"),
+    PA("Pennsylvania"),
+    RI("RhodeIsland"),
+    SC("SouthCarolina"),
+    SD("SouthDakota"),
+    TN("Tennessee"),
+    TX("Texas"),
+    UT("Utah"),
+    VA("Virginia"),
+    VT("Vermont"),
+    WA("Washington"),
+    WI("Wisconsin"),
+    WV("WestVirginia"),
+    WY("Wyoming"),
+    ON("Ontario"),
+    QC("Quebec"),
+    NS("Nova Scotia"),
+    NB("New Brunswick"),
+    MB("Manitoba"),
+    BC("British Columbia"),
+    PE("Prince Edward Island"),
+    SK("Saskatchewan"),
+    AB("Alberta"),
+    NL("Newfoundland and Labrador"),
+    NT("Northwest Territories"),
+    YT("Yukon"),
+    NU("Nunavut"),
+    UNKNOWN("Unknown") // needed for importing data from Quickbooks
 }
