@@ -1,6 +1,5 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.Address
 import com.example.fsma.model.BusinessName
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
@@ -22,11 +21,7 @@ data class HarvestCte(
     @Id @GeneratedValue
     override val id: Long = 0,
 
-    override val cteType: CteType = CteType.Harvesting,
-
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn
-    override val tlc: TraceabilityLotCode,
+    override val cteType: CteType = CteType.Harvest,
 
     // ************** KDEs *************
     // (1) For each raw agricultural commodity (not obtained from a fishing vessel)
@@ -40,12 +35,12 @@ data class HarvestCte(
     var subsequentRecipient: BusinessName,
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    val commodity: FtlItem,
+    val commodityVariety: String,
 
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     val harvestQuantity: Double,
-    val unitOfMeasure: UnitOfMeasure,
+    val harvestUnitOfMeasure: UnitOfMeasure,
 
     // (1)(iv) The location description for the farm where the food was harvested;
     val harvestLocation: String,
@@ -69,8 +64,8 @@ data class HarvestCte(
     val harvestDate: OffsetDateTime,
 
     // (1)(viii) The reference document type and reference document number.
-    val referenceDocumentType: String,
-    val referenceDocumentNum: String,
+    val harvestReferenceDocumentType: String,
+    val harvestReferenceDocumentNum: String,
 
     // (2) For each raw agricultural commodity (not obtained from a fishing vessel)
     // on the Food Traceability List that you harvest, you must provide (in electronic,
@@ -82,5 +77,5 @@ data class HarvestCte(
     // Harvest business name, e.g. creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val businessName: BusinessName,
+    override val cteBusName: BusinessName,
 ) : BaseCte<HarvestCte>()

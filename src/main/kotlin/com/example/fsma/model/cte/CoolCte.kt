@@ -1,6 +1,5 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.Address
 import com.example.fsma.model.BusinessName
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
@@ -22,11 +21,7 @@ data class CoolCte(
     @Id @GeneratedValue
     override val id: Long = 0,
 
-    override val cteType: CteType = CteType.Cooling,
-
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn
-    override val tlc: TraceabilityLotCode,
+    override val cteType: CteType = CteType.Cool,
 
     // ************** KDEs *************
     // (1) For each raw agricultural commodity
@@ -34,15 +29,15 @@ data class CoolCte(
     // that you cool before it is initially packed, you must maintain records
     // containing the following information:
 
-    // (1)(i) The location description for the immediate subsequent recipient
-    // (other than a transporter) of the food;
+    // (1)(i) The location description for the immediate subsequent
+    // recipient (other than a transporter) of the food;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    var subsequentRecipient: BusinessName,
+    var coolSubsequentRecipient: BusinessName,
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    val commodity: FtlItem,
+    val commodityVariety: String,
 
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     val coolingQuantity: Double,
@@ -59,8 +54,8 @@ data class CoolCte(
     val harvestLocation: String,
 
     // (1)(vii) The reference document type and reference document number.
-    val referenceDocumentType: String,
-    val referenceDocumentNum: String,
+    val coolReferenceDocumentType: String,
+    val coolReferenceDocumentNum: String,
 
     // (2) For each raw agricultural commodity (not obtained from a fishing vessel)
     // on the Food Traceability List that you harvest, you must provide (in electronic,
@@ -72,5 +67,5 @@ data class CoolCte(
     // Cooler business name
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val businessName: BusinessName,
+    override val cteBusName: BusinessName,
 ) : BaseCte<CoolCte>()

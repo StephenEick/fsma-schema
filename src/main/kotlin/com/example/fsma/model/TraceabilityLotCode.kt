@@ -8,5 +8,10 @@ import jakarta.persistence.Id
 data class TraceabilityLotCode(
     val tlc: String,
     val desc: String,
+    //val tlcSource: String,
     @Id @GeneratedValue val id: Long = 0,
+)
+
+data class TraceabilityLotCodeLocation(
+    val address: Address
 )

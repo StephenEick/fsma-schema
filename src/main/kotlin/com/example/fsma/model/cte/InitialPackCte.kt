@@ -1,6 +1,5 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.Address
 import com.example.fsma.model.BusinessName
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
@@ -20,14 +19,14 @@ Food Traceability List?
 @Entity
 data class InitialPackCte(
     @Id @GeneratedValue
-
     override val id: Long = 0,
-    override val cteType: CteType = CteType.InitialPacking,
+
+    override val cteType: CteType = CteType.InitialPack,
 
     // Packer business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val businessName: BusinessName,
+    override val cteBusName: BusinessName,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraph (c) of this section, for each traceability
@@ -37,8 +36,8 @@ data class InitialPackCte(
     // traceability lot:
 
     // (a)(1) The commodity and, if applicable, variety of the food;
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    val commodity: FtlItem,
+    val commodityVariety: String,
 
     // (a)(2) The date you received the food;
     val receiveDate: OffsetDateTime,
@@ -71,7 +70,8 @@ data class InitialPackCte(
     // (a)(8) The date of harvesting;
     val harvestDate: OffsetDateTime,
 
-    // (a)(9) The location description for where the food was cooled (if applicable);
+    // (a)(9) The location description for where the food was cooled
+    // (if applicable);
     val coolingLocation: String? = null,
 
     // (a)(10) The date of cooling (if applicable);
@@ -80,10 +80,10 @@ data class InitialPackCte(
     // (a)(11) The traceability lot code you assigned;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val tlc: TraceabilityLotCode,
+    val packTlc: TraceabilityLotCode,
 
     // (a)(12) The product description of the packed food;
-    val prodDescPackedFood: String,
+    val packProdDesc: String,
 
     // (a)(13) The quantity and unit of measure of the packed food (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
     val packQuantity: Double,
@@ -100,8 +100,8 @@ data class InitialPackCte(
     val packDate: OffsetDateTime,
 
     // (a)(16) The reference document type and reference document number.
-    val referenceDocumentType: String,
-    val referenceDocumentNum: String,
+    val packReferenceDocumentType: String,
+    val packReferenceDocumentNum: String,
 
     // TODO - Sprouts.  Ignore for now
     // (b) For each traceability lot of sprouts (except soil- or substrate-grown

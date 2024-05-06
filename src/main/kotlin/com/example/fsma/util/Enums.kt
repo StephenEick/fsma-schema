@@ -1,13 +1,13 @@
 package com.example.fsma.util
 
 enum class CteType {
-    Harvesting,
-    Cooling,
-    InitialPacking,
-    FirstLandReceiver,
-    Shipping,
-    Receiving,
-    Transformation,
+    Harvest,
+    Cool,
+    InitialPack,
+    FirstLandReceive,
+    Ship,
+    Receive,
+    Transform,
     TraceabilityPlan,
 }
 
