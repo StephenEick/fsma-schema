@@ -1,14 +1,9 @@
 package com.example.fsma.model.cte
 
 import com.example.fsma.model.BusinessName
-import com.example.fsma.model.Location
-import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
-import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
-import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
-import java.time.LocalDate
 
 /**
 https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
