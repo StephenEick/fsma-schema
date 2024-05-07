@@ -1,22 +1,27 @@
 package com.example.fsma.model.cte
 
 import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Location
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
+import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import com.fasterxml.jackson.datatype.jsr310.deser.key.OffsetDateTimeKeyDeserializer
 import jakarta.persistence.*
-/**
-https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1345
+import java.time.LocalDate
 
+/**
+https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
+look at p.27
+
+https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1345
 § 1.1345 What records must I keep when I receive a food on the
 Food Traceability List?
  **/
 @Entity
 
 data class ReceiveCte(
-    @Id @GeneratedValue
-    override val id: Long = 0,
+    @Id @GeneratedValue override val id: Long = 0,
 
     override val cteType: CteType = CteType.Receive,
 
@@ -46,21 +51,22 @@ data class ReceiveCte(
 
     // (a)(4) The location description for the immediate previous source
     // (other than a transporter) for the food;
-    val previousSourceLocation: String,
+    val shipFromLocation: Location,
 
     // (a)(5) The location description for where the food was received;
-    val receiveLocation: String,
+    val shipToLocation: Location,
 
     // (a)(6) The date you received the food;
-    val receiveDate: OffsetDateTimeKeyDeserializer,
+    val receiveDate: LocalDate,
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
-    val tlcSource: BusinessName,
+    val tlcSource: Location,
+    val tlcSourceReference: String? = null,
 
     // (a)(8) The reference document type and reference document number.
-    val referenceDocumentType: String,
-    val referenceDocumentNum: String,
+    override val referenceDocumentType: ReferenceDocumentType,
+    override val referenceDocumentNum: String,
 
     //(b) For each traceability lot of a food on the Food Traceability List
     // you receive from a person to whom this subpart does not apply,

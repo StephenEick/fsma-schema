@@ -35,10 +35,12 @@ enum class FtlItem {
 
 // The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
 enum class UnitOfMeasure {
-    Pound,
-    Kilo,
     Bin,
     Carton,
+    Case,
+    FieldBin,
+    Kilo,
+    Pound,
 }
 
 // -- ISO-3166 3-Letter Country codes
@@ -46,7 +48,16 @@ enum class Country {
     USA,
     CANADA,
     MEX,
-    UNKNOWN // "Unknown" - needed for importing from Quickbooks
+    OTHER // TODO: Fill in later
+}
+
+enum class ReferenceDocumentType {
+    ASN,
+    BOL,
+    CTE,
+    PO,
+    WO,
+    OTHER, // TODO: fill in later
 }
 
 enum class UsaCanadaState(val stateName: String) {
@@ -100,18 +111,20 @@ enum class UsaCanadaState(val stateName: String) {
     WI("Wisconsin"),
     WV("WestVirginia"),
     WY("Wyoming"),
-    ON("Ontario"),
-    QC("Quebec"),
-    NS("Nova Scotia"),
-    NB("New Brunswick"),
-    MB("Manitoba"),
-    BC("British Columbia"),
-    PE("Prince Edward Island"),
-    SK("Saskatchewan"),
+
+    // ****** Canada *******
     AB("Alberta"),
+    BC("British Columbia"),
+    MB("Manitoba"),
+    NB("New Brunswick"),
     NL("Newfoundland and Labrador"),
+    NS("Nova Scotia"),
     NT("Northwest Territories"),
-    YT("Yukon"),
     NU("Nunavut"),
-    UNKNOWN("Unknown") // needed for importing data from Quickbooks
+    ON("Ontario"),
+    PE("Prince Edward Island"),
+    QC("Quebec"),
+    SK("Saskatchewan"),
+    YT("Yukon"),
 }
+

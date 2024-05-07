@@ -8,9 +8,9 @@ data class BusinessName(
     val id: Long = 0,
     val name: String,
     val contactName: String? = null,
-    val contactPhone : String,
+    val contactPhone: String,
 
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    var businessAddress: Address,
+    val address: Address,
 )

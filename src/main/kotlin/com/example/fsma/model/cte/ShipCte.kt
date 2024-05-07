@@ -1,23 +1,26 @@
 package com.example.fsma.model.cte
 
 import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Location
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
+import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
-import java.time.OffsetDateTime
+import java.time.LocalDate
 
 /**
-https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1340
+https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
+look at p.26
 
+https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1340
 § 1.1340 What records must I keep and provide when I ship a food on the
 Food Traceability List?
  **/
 
 @Entity
 data class ShipCte(
-    @Id @GeneratedValue
-    override val id: Long = 0,
+    @Id @GeneratedValue override val id: Long = 0,
 
     override val cteType: CteType = CteType.Ship,
 
@@ -46,22 +49,23 @@ data class ShipCte(
 
     // (a)(4) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
-    val shipToLocation: String,
+    val shipToLocation: Location,
 
     // (a)(5) The location description for the location from which you shipped
     // the food;
-    val shipFromLocation: String,
+    val shipFromLocation: Location,
 
     // (a)(6) The date you shipped the food;
-    val shipDate: OffsetDateTime,
+    val shipDate: LocalDate,
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
-    val tlCSource: TraceabilityLotCode,
+    val tlcSource: Location,
+    val tlcSourceReference: String? = null,
 
     // (a)(8) The reference document type and reference document number.
-    val referenceDocumentType: String,
-    val referenceDocumentNum: String,
+    override val referenceDocumentType: ReferenceDocumentType,
+    override val referenceDocumentNum: String,
 
     // (b) You must provide (in electronic, paper, or other written form) the
     // information in paragraphs (a)(1) through (7) of this section

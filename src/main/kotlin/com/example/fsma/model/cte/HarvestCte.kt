@@ -1,15 +1,19 @@
 package com.example.fsma.model.cte
 
 import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Location
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
+import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
-import java.time.OffsetDateTime
+import java.time.LocalDate
 
 /**
-https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1325#p-1.1325(a)
+https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
+Look at p.20
 
+https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1325#p-1.1325(a)
 § 1.1325 What records must I keep and provide when I harvest or cool
 a raw agricultural commodity on the Food Traceability List?
  **/
@@ -17,8 +21,7 @@ a raw agricultural commodity on the Food Traceability List?
 // (a) Harvesting.
 @Entity
 data class HarvestCte(
-    @Id @GeneratedValue
-    override val id: Long = 0,
+    @Id @GeneratedValue override val id: Long = 0,
 
     override val cteType: CteType = CteType.Harvest,
 
@@ -31,7 +34,7 @@ data class HarvestCte(
     // (other than a transporter) of the food;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    var subsequentRecipient: BusinessName,
+    val subsequentRecipient: Location,
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     val commodity: FtlItem,
@@ -42,29 +45,29 @@ data class HarvestCte(
     val harvestUnitOfMeasure: UnitOfMeasure,
 
     // (1)(iv) The location description for the farm where the food was harvested;
-    val harvestLocation: String,
+    val harvestLocation: Location,
 
     // (1)(v) For produce, the name of the field or other growing area from which the
     // food was harvested (which must correspond to the name used by the grower),
     // or other information identifying the harvest location at least as precisely
     // as the field or other growing area name;
-    val growingAreaName: String,
-    val growingAreaDesc: String,
+    val fieldName: String,
+    val fieldDesc: String,
 
     // (1)(vi) For aquacultured food, the name of the container
     // (e.g., pond, pool, tank, cage) from which the food was harvested
     // (which must correspond to the container name
     // used by the aquaculture farmer) or other information identifying the harvest
     // location at least as precisely as the container name;
-    val containerName: String,
-    val containerDesc: String,
+    val containerName: String? = null,
+    val containerDesc: String? = null,
 
     // (1)(vii) The date of harvesting;
-    val harvestDate: OffsetDateTime,
+    val harvestDate: LocalDate,
 
     // (1)(viii) The reference document type and reference document number.
-    val harvestReferenceDocumentType: String,
-    val harvestReferenceDocumentNum: String,
+    override val referenceDocumentType: ReferenceDocumentType,
+    override val referenceDocumentNum: String,
 
     // (2) For each raw agricultural commodity (not obtained from a fishing vessel)
     // on the Food Traceability List that you harvest, you must provide (in electronic,

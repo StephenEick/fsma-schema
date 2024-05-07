@@ -1,23 +1,26 @@
 package com.example.fsma.model.cte
 
 import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Location
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
+import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
-import java.time.OffsetDateTime
+import java.time.LocalDate
 
 /**
-https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1350
+https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
+look at p.29
 
+https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1350
 § 1.1350 What records must I keep when I transform a food on the
 Food Traceability List?
  **/
 
 @Entity
 data class TransformCte(
-    @Id @GeneratedValue
-    override val id: Long = 0,
+    @Id @GeneratedValue override val id: Long = 0,
 
     override val cteType: CteType = CteType.Transform,
 
@@ -38,16 +41,16 @@ data class TransformCte(
     // (a)(1)(i) The traceability lot code for the food;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val packTlc: TraceabilityLotCode,  // from Initial Packer
+    val usedTlc: TraceabilityLotCode,  // from Initial Packer or previous Transformer
 
     // (a)(1)(ii) The product description for the food to which the traceability
     // lot code applies; and
-    val packProdDesc: String, // from Initial Packer
+    val usedProdDesc: String, // from Initial Packer or previous Transformer
 
     // (a)(1)(iii) For each traceability lot used, the quantity and unit of measure
     // of the food used from that lot.
-    val packQuantity: Double,   // from Initial Packer
-    val packUnitOfMeasure: UnitOfMeasure,   // from Initial Packer
+    val usedQuantity: Double,   // from Initial Packer
+    val usedUnitOfMeasure: UnitOfMeasure,   // from Initial Packer
 
     // (a)(2) For the food produced through transformation, the following
     // information:
@@ -55,15 +58,16 @@ data class TransformCte(
     // (a)(2)(i) The new traceability lot code for the food;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val transformTlc: TraceabilityLotCode,
+    val transformTlc: TraceabilityLotCode,  // the new Tlc
 
     // (a)(2)(ii) The location description for where you transformed
     // the food (i.e., the traceability lot code source),
     // and (if applicable) the traceability lot code source reference;
-    val transformLocation: String,
+    val transformTlcLocation: Location,
+    val transformTlcSourceReference: String? = null,
 
     // (a)(2)(iii) The date transformation was completed;
-    val transformDate: OffsetDateTime,
+    val transformDate: LocalDate,
 
     // (a)(2)(iv) The product description for the food;
     val transformProdDesc: String,
@@ -76,8 +80,8 @@ data class TransformCte(
 
     // (a)(2)(vi) The reference document type and reference document
     // number for the transformation event.
-    val referenceDocumentType: String,
-    val referenceDocumentNum: String,
+    override val referenceDocumentType: ReferenceDocumentType,
+    override val referenceDocumentNum: String,
 
     // (b) For each traceability lot produced through transformation of a raw
     // agricultural commodity (other than a food obtained from a fishing vessel)
