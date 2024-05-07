@@ -6,7 +6,6 @@ import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
 import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
-import com.fasterxml.jackson.datatype.jsr310.deser.key.OffsetDateTimeKeyDeserializer
 import jakarta.persistence.*
 import java.time.LocalDate
 
