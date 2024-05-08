@@ -21,7 +21,7 @@ data class Address(
     val street2: String? = null,
     val city: String,
     @Enumerated(EnumType.STRING)
-    val state: UsaCanadaState, // UsaState,
+    val state: UsaCanadaState,
     val postalCode: String,
     @Enumerated(EnumType.STRING)
     val country: Country, // Country = Country.USA,
