@@ -2,8 +2,8 @@ package com.example.fsma
 
 import com.example.fsma.model.old.Article
 import com.example.fsma.model.FsmaUser
-import com.example.fsma.repository.ArticleRepository
-import com.example.fsma.repository.UserRepository
+import com.example.fsma.repository.old.ArticleRepository
+import com.example.fsma.repository.old.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.Test

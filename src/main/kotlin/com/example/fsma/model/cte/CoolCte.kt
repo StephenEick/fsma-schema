@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Business
 import com.example.fsma.model.Location
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
@@ -19,7 +19,7 @@ a raw agricultural commodity on the Food Traceability List?
  **/
 
 // (b) Cooling before initial packing.
-@Entity
+//@Entity
 data class CoolCte(
     @Id @GeneratedValue override val id: Long = 0,
 
@@ -69,5 +69,5 @@ data class CoolCte(
     // Cooler business name
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: BusinessName,
+    override val cteBusName: Business,
 ) : BaseCte<CoolCte>()

@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Business
 import com.example.fsma.util.CteType
 import com.example.fsma.util.ReferenceDocumentType
 import jakarta.persistence.*
@@ -15,7 +15,7 @@ agricultural commodity (other than a food obtained from a fishing vessel) on the
 Food Traceability List?
  **/
 
-@Entity
+//@Entity
 data class InitialPackSproutsCte(
     @Id @GeneratedValue override val id: Long = 0,
 
@@ -24,7 +24,7 @@ data class InitialPackSproutsCte(
     // Packer business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: BusinessName,
+    override val cteBusName: Business,
 
     // ************** KDEs *************
 

@@ -8,11 +8,10 @@ import java.time.OffsetDateTime
 @Entity
 //@EntityListeners(BaseModelEntityListener::class)
 data class Address(
-    @Id @GeneratedValue
-    override val id: Long = 0,
+    @Id @GeneratedValue override val id: Long = 0,
 
-    @ManyToOne @JoinColumn // (name = "reseller_id")
-    val resellerId: Long = 0,
+//    @ManyToOne @JoinColumn // (name = "reseller_id")
+//    val resellerId: Long = 0,
 
 //    @ManyToOne @JoinColumn // (name = "client_id")
 //    val clientId: Long,
@@ -36,9 +35,22 @@ data class Address(
 
 ) : BaseModel<Address>()
 
+data class AddressRequestDto(
+    val id: Long = 0,
+//    val resellerId: Long? = null,
+    val street: String,
+    val street2: String? = null,
+    val city: String,
+    val state: UsaCanadaState, // UsaState,
+    val postalCode: String,
+    val country: Country, // Country = Country.USA,
+    val lat: Double,
+    val lng: Double
+)
+
 fun Address.toAddressResponseDto() = AddressResponseDto(
     id = id,
-    resellerId = resellerId,
+//    resellerId = resellerId,
     street = street,
     street2 = street2,
     city = city,
@@ -53,24 +65,9 @@ fun Address.toAddressResponseDto() = AddressResponseDto(
     dateDeleted = dateDeleted
 )
 
-// ------------------------------------
-
-data class AddressRequestDto(
-    val id: Long = 0,
-    val resellerId: Long? = null,
-    val street: String,
-    val street2: String? = null,
-    val city: String,
-    val state: UsaCanadaState, // UsaState,
-    val postalCode: String,
-    val country: Country, // Country = Country.USA,
-    val lat: Double,
-    val lng: Double
-)
-
 data class AddressResponseDto(
     val id: Long = 0,
-    val resellerId: Long? = null,
+//    val resellerId: Long? = null,
     val street: String,
     val street2: String? = null,
     val city: String,
@@ -85,9 +82,9 @@ data class AddressResponseDto(
     val dateDeleted: OffsetDateTime?,
 )
 
-fun AddressRequestDto.toAddress(resellerId: Long) = Address(
+fun AddressRequestDto.toAddress() = Address(
     id = id,
-    resellerId = resellerId,
+//    resellerId = resellerId,
     street = street,
     street2 = street2,
     city = city,

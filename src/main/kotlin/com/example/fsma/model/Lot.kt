@@ -5,7 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 
-@Entity
+//@Entity
 data class Lot(
     @Id @GeneratedValue val id: Long = 0,
     val desc: String,

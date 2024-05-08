@@ -1,6 +1,6 @@
-package com.example.fsma.controller
+package com.example.fsma.controller.old
 
-import com.example.fsma.repository.ArticleRepository
+import com.example.fsma.repository.old.ArticleRepository
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

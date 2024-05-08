@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Business
 import com.example.fsma.model.Location
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
@@ -18,7 +18,7 @@ https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/su
 Food Traceability List?
  **/
 
-@Entity
+//@Entity
 data class ShipCte(
     @Id @GeneratedValue override val id: Long = 0,
 
@@ -27,7 +27,7 @@ data class ShipCte(
     // Shipper business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: BusinessName,
+    override val cteBusName: Business,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List

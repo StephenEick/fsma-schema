@@ -1,8 +1,8 @@
-package com.example.fsma.controller
+package com.example.fsma.controller.old
 
 import com.example.fsma.model.old.Article
 import com.example.fsma.model.FsmaUser
-import com.example.fsma.repository.ArticleRepository
+import com.example.fsma.repository.old.ArticleRepository
 import com.example.fsma.config.FsmaProperties
 import com.example.fsma.util.format
 import org.springframework.http.HttpStatus.*

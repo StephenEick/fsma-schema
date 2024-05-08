@@ -1,5 +1,13 @@
 package com.example.fsma.util
 
+// -- ISO-3166 3-Letter Country codes
+enum class Country {
+    USA,
+    CANADA,
+    MEX,
+    OTHER // TODO: Fill in later
+}
+
 enum class CteType {
     Harvest,
     Cool,
@@ -32,6 +40,14 @@ enum class FtlItem {
     Vegetables,
 }
 
+enum class ReferenceDocumentType {
+    ASN,
+    BOL,
+    CTE,
+    PO,
+    WO,
+    OTHER, // TODO: fill in later
+}
 
 // The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
 enum class UnitOfMeasure {
@@ -41,23 +57,6 @@ enum class UnitOfMeasure {
     FieldBin,
     Kilo,
     Pound,
-}
-
-// -- ISO-3166 3-Letter Country codes
-enum class Country {
-    USA,
-    CANADA,
-    MEX,
-    OTHER // TODO: Fill in later
-}
-
-enum class ReferenceDocumentType {
-    ASN,
-    BOL,
-    CTE,
-    PO,
-    WO,
-    OTHER, // TODO: fill in later
 }
 
 enum class UsaCanadaState(val stateName: String) {

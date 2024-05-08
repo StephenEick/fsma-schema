@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Business
 import com.example.fsma.model.Location
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
@@ -23,6 +23,7 @@ a raw agricultural commodity on the Food Traceability List?
 data class HarvestCte(
     @Id @GeneratedValue override val id: Long = 0,
 
+    @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Harvest,
 
     // ************** KDEs *************
@@ -32,19 +33,23 @@ data class HarvestCte(
 
     // (1)(i) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
-    @OneToOne(cascade = [CascadeType.ALL])
+    @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     val subsequentRecipient: Location,
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
+    @Enumerated(EnumType.STRING)
     val commodity: FtlItem,
     val commodityVariety: String,
 
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     val harvestQuantity: Double,
+    @Enumerated(EnumType.STRING)
     val harvestUnitOfMeasure: UnitOfMeasure,
 
     // (1)(iv) The location description for the farm where the food was harvested;
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val harvestLocation: Location,
 
     // (1)(v) For produce, the name of the field or other growing area from which the
@@ -79,5 +84,5 @@ data class HarvestCte(
     // Harvest business name, e.g. creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: BusinessName,
+    override val cteBusName: Business,
 ) : BaseCte<HarvestCte>()

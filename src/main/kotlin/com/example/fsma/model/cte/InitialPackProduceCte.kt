@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.BusinessName
+import com.example.fsma.model.Business
 import com.example.fsma.model.Location
 import com.example.fsma.model.TraceabilityLotCode
 import com.example.fsma.util.CteType
@@ -20,7 +20,7 @@ agricultural commodity (other than a food obtained from a fishing vessel) on the
 Food Traceability List?
  **/
 
-@Entity
+//@Entity
 data class InitialPackProduceCte(
     @Id @GeneratedValue override val id: Long = 0,
 
@@ -29,7 +29,7 @@ data class InitialPackProduceCte(
     // Packer business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: BusinessName,
+    override val cteBusName: Business,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraph (c) of this section, for each traceability
@@ -68,7 +68,7 @@ data class InitialPackProduceCte(
     val containerDesc: String,
 
     // (a)(7) The business name and phone number for the harvester of the food
-    val harvestBusinessName: BusinessName,
+    val harvestBusiness: Business,
 
     // (a)(8) The date of harvesting;
     val harvestDate: LocalDate,

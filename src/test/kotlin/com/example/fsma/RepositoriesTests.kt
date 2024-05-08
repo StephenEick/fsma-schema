@@ -2,8 +2,8 @@ package com.example.fsma
 
 import com.example.fsma.model.old.Article
 import com.example.fsma.model.FsmaUser
-import com.example.fsma.repository.ArticleRepository
-import com.example.fsma.repository.UserRepository
+import com.example.fsma.repository.old.ArticleRepository
+import com.example.fsma.repository.old.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

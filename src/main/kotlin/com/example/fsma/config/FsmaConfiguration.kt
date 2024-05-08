@@ -2,8 +2,8 @@ package com.example.fsma.config
 
 import com.example.fsma.model.old.Article
 import com.example.fsma.model.FsmaUser
-import com.example.fsma.repository.ArticleRepository
-import com.example.fsma.repository.UserRepository
+import com.example.fsma.repository.old.ArticleRepository
+import com.example.fsma.repository.old.UserRepository
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

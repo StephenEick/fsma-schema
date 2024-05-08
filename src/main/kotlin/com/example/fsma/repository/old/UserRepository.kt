@@ -1,4 +1,4 @@
-package com.example.fsma.repository
+package com.example.fsma.repository.old
 
 import com.example.fsma.model.FsmaUser
 import org.springframework.data.repository.CrudRepository
