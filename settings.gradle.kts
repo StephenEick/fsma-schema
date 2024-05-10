@@ -1,1 +1,1 @@
-rootProject.name = "fsma_schema"
+rootProject.name = "fsma-server"
