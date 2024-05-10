@@ -1,7 +1,7 @@
 package com.example.fsma
 
 import com.example.fsma.model.AddressRequestDto
-import com.example.fsma.model.BusinessDto
+import com.example.fsma.model.BusinessRequestDto
 import com.example.fsma.util.Country
 import com.example.fsma.util.UsaCanadaState
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -29,8 +29,8 @@ class ServerApplicationTests {
 
     private lateinit var addressRequestDto: AddressRequestDto
     private lateinit var addressRequestDtoUpdated: AddressRequestDto
-    private lateinit var businessDto: BusinessDto
-    private lateinit var businessDtoUpdated: BusinessDto
+    private lateinit var businessRequestDto: BusinessRequestDto
+    private lateinit var businessRequestDtoUpdated: BusinessRequestDto
 
 
     @BeforeEach
@@ -60,20 +60,20 @@ class ServerApplicationTests {
             lng = -88.162270
         )
 
-        businessDto = BusinessDto(
-            id=0,
+        businessRequestDto = BusinessRequestDto(
+            id = 0,
             mainAddressId = 1,
-            name = "Fred's Restaurant",
             contactName = "Steve",
-            contactPhone = "1-800-555-1212"
+            contactPhone = "1-800-555-1212",
+            name = "Fred's Restaurant",
         )
 
-        businessDtoUpdated = BusinessDto(
-            id=0,
+        businessRequestDtoUpdated = BusinessRequestDto(
+            id = 0,
             mainAddressId = 1,
+            contactName = "NewContact",
+            contactPhone = "1-800-555-1212",
             name = "Fred's Restaurant",
-            contactName = "Steve",
-            contactPhone = "1-800-555-1212"
         )
     }
 
@@ -174,5 +174,69 @@ class ServerApplicationTests {
     }
 
     // ------------------------------------------------------------------------
-    // -- BusinessName tests
+    // -- Business tests
+
+    fun addBusiness(mainAddressId:Long=0): Long {
+//        val accessToken: String? = authenticate()
+        val mvcResult = mockMvc.post("/api/v1/business") {
+//            header("Authorization", "Bearer $accessToken")
+            content = objectMapper.writeValueAsString(businessRequestDto.copy(mainAddressId=mainAddressId))
+            contentType = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isCreated() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+        }.andReturn()
+        return JsonPath.read(mvcResult.response.contentAsString, "$.id")
+    }
+
+    @Test
+    fun `get business`() {
+//        val accessToken: String? = authenticate()
+        val addressId = addAddress()
+        val businessId = addBusiness(mainAddressId = addressId)
+        mockMvc.get("/api/v1/business/$businessId") {
+//            header("Authorization", "Bearer $accessToken")
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.id") { value(businessId) }
+            jsonPath("$.contactName") { value("Steve") }
+            jsonPath("$.contactPhone") { value("1-800-555-1212") }
+            jsonPath("$.name") { value("Fred's Restaurant") }
+        }
+    }
+
+    @Test
+    fun `update business`() {
+//        addFsaUsers()
+//        val accessToken: String? = authenticate()
+        val addressId = addAddress()
+        val businessId: Long = addBusiness(mainAddressId = addressId)
+        businessRequestDtoUpdated = businessRequestDtoUpdated.copy(id = businessId)
+        mockMvc.put("/api/v1/business/$businessId") {
+//            header("Authorization", "Bearer $accessToken")
+            content = objectMapper.writeValueAsString(businessRequestDtoUpdated)
+            contentType = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.id") { value(businessId) }
+            jsonPath("$.contactName") { value("NewContact") }
+            jsonPath("$.contactPhone") { value("1-800-555-1212") }
+            jsonPath("$.name") { value("Fred's Restaurant") }
+        }
+    }
+
+    @Test
+    fun `delete business`() {
+//        val accessToken: String? = authenticate()
+        val addressId = addAddress()
+        val businessId: Long = addBusiness(addressId)
+        mockMvc.delete("/api/v1/business/$businessId") {
+//            header("Authorization", "Bearer $accessToken")
+        }.andExpect {
+            status { isNoContent() }
+        }
+    }
+
 }

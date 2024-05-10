@@ -5,11 +5,11 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 
 //@Entity
-data class TraceabilityPlan (
+data class TraceabilityPlan(
+    @Id @GeneratedValue override val id: Long = 0,
     val descRecordMaintenance: String,
     val descIdentifyFoods: String,
     val descTraceabilityLotCodes: String,
-    val pointOfContact: String,
     val farmMap: String,
-    @Id @GeneratedValue override val id: Long = 0,
-): BaseModel<TraceabilityPlan>()
+    val pointOfContact: String,
+) : BaseModel<TraceabilityPlan>()

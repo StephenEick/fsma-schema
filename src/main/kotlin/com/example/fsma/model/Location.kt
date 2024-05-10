@@ -1,10 +1,11 @@
 package com.example.fsma.model
 
 import jakarta.persistence.*
+import java.time.OffsetDateTime
 
 @Entity
 data class Location(
-    @Id @GeneratedValue val id: Long = 0,
+    @Id @GeneratedValue override val id: Long = 0,
 
     @ManyToOne @JoinColumn
     val business: Business,
@@ -14,7 +15,13 @@ data class Location(
 
     @ManyToOne @JoinColumn
     val serviceAddress: Address,
-)
+
+    @Column(updatable = false)
+    override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
+    override var dateModified: OffsetDateTime = OffsetDateTime.now(),
+    override var isDeleted: Boolean = false,
+    override var dateDeleted: OffsetDateTime? = null
+) : BaseModel<Location>()
 
 data class LocationDto(
     val id: Long = 0,

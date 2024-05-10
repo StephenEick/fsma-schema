@@ -4,6 +4,8 @@
 package com.example.fsma.controller
 
 import com.example.fsma.service.AddressService
+import com.example.fsma.service.BusinessService
+import com.example.fsma.service.LocationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
@@ -21,8 +23,9 @@ class BaseController {
 
 //    internal val logger by LoggerDelegate()
 
-    @Autowired
-    protected lateinit var addressService: AddressService
+    @Autowired protected lateinit var addressService: AddressService
+    @Autowired protected lateinit var businessService: BusinessService
+    @Autowired protected lateinit var locationService: LocationService
 
 //    @Autowired
 //    protected lateinit var clientService: ClientService
