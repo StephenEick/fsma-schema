@@ -23,7 +23,7 @@ data class Location(
     override var dateDeleted: OffsetDateTime? = null
 ) : BaseModel<Location>()
 
-data class LocationDto(
+data class LocationRequestDto(
     val id: Long = 0,
     val businessId: Long,
     val contactName: String? = null,
@@ -31,21 +31,37 @@ data class LocationDto(
     val serviceAddressId: Long,
 )
 
-fun Location.toLocationDto() = LocationDto(
+data class LocationResponseDto(
+    val id: Long = 0,
+    val businessId: Long,
+    val contactName: String? = null,
+    val contactPhone: String? = null,
+    val serviceAddressId: Long,
+    val dateCreated: OffsetDateTime,
+    val dateModified: OffsetDateTime,
+    val isDeleted: Boolean,
+    val dateDeleted: OffsetDateTime?,
+)
+
+fun Location.toLocationResponseDto() = LocationResponseDto(
     id = id,
     businessId = business.id,
     contactName = contactName,
     contactPhone = contactPhone,
     serviceAddressId = serviceAddress.id,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
 )
 
-fun LocationDto.toLocation(
+fun LocationRequestDto.toLocation(
     business: Business,
-    address: Address,
+    serviceAddress: Address,
 ) = Location(
     id = id,
     business = business,
     contactName = contactName,
     contactPhone = contactPhone,
-    serviceAddress = address,
+    serviceAddress = serviceAddress,
 )

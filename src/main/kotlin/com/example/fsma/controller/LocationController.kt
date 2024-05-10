@@ -1,15 +1,16 @@
 package com.example.fsma.controller
 
-import com.example.fsma.model.AddressRequestDto
-import com.example.fsma.model.AddressResponseDto
-import com.example.fsma.model.toAddress
-import com.example.fsma.model.toAddressResponseDto
+import com.example.fsma.model.LocationRequestDto
+import com.example.fsma.model.LocationResponseDto
+import com.example.fsma.model.toLocation
+import com.example.fsma.model.toLocationResponseDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
+
 private const val LOCATION_BASE_URL = "/api/v1/location"
 
 @RestController
@@ -23,37 +24,48 @@ class LocationController : BaseController() {
     fun findById(
         @PathVariable(value = "id") id: Long,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<AddressResponseDto> {
-        val address = addressService.findById(id)
-            ?: throw EntityNotFoundException("Address not found = $id")
+    ): ResponseEntity<LocationResponseDto> {
+        val location = locationService.findById(id)
+            ?: throw EntityNotFoundException("ServiceAddress not found = $id")
 //        assertResellerClientMatchesToken(fsaUser, address.resellerId)
-        return ResponseEntity.ok(address.toAddressResponseDto())
+        return ResponseEntity.ok(location.toLocationResponseDto())
     }
 
     // -- Create a new Address
     @PostMapping
     fun create(
-        @Valid @RequestBody addressRequestDto: AddressRequestDto,
+        @Valid @RequestBody locationRequestDto: LocationRequestDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<AddressResponseDto> {
-        val address = addressRequestDto.toAddress()
-        val addressResponse = addressService.insert(address).toAddressResponseDto()
-        return ResponseEntity.created(URI.create(LOCATION_BASE_URL.plus("/${addressResponse.id}")))
-            .body(addressResponse)
+    ): ResponseEntity<LocationResponseDto> {
+        val serviceAddress = addressService.findById(locationRequestDto.serviceAddressId)
+            ?: throw EntityNotFoundException("Service Address not found: ${locationRequestDto.serviceAddressId}")
+        val business = businessService.findById(locationRequestDto.businessId)
+            ?: throw EntityNotFoundException("ServiceAddress not found: ${locationRequestDto.serviceAddressId}")
+        val location = locationRequestDto.toLocation(business = business, serviceAddress = serviceAddress)
+        val locationResponse = locationService.insert(location).toLocationResponseDto()
+        return ResponseEntity.created(URI.create(LOCATION_BASE_URL.plus("/${locationResponse.id}")))
+            .body(locationResponse)
     }
 
-    // -- Update an existing Address
+    // -- Update an existing Location
     @PutMapping("/{id}")
     fun update(
         @PathVariable id: Long,
-        @Valid @RequestBody addressRequestDto: AddressRequestDto,
+        @Valid @RequestBody locationRequestDto: LocationRequestDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<AddressResponseDto> {
-        if (addressRequestDto.id <= 0L || addressRequestDto.id != id)
-            throw UnauthorizedRequestException("Conflicting AddressIds specified: $id != ${addressRequestDto.id}")
-        val address = addressRequestDto.toAddress()
-        val addressResponse = addressService.update(address).toAddressResponseDto()
-        return ResponseEntity.ok().body(addressResponse)
+    ): ResponseEntity<LocationResponseDto> {
+        if (locationRequestDto.id <= 0L || locationRequestDto.id != id)
+            throw UnauthorizedRequestException("Conflicting LocationIds specified: $id != ${locationRequestDto.id}")
+
+        val business = businessService.findById(locationRequestDto.businessId)
+            ?: throw EntityNotFoundException("Business not found: ${locationRequestDto.businessId}")
+
+        val serviceAddress = addressService.findById(locationRequestDto.serviceAddressId)
+            ?: throw EntityNotFoundException("ServiceAddress not found: ${locationRequestDto.serviceAddressId}")
+
+        val location = locationRequestDto.toLocation(business, serviceAddress)
+        val locationResponse = locationService.update(location).toLocationResponseDto()
+        return ResponseEntity.ok().body(locationResponse)
     }
 
     // -- Delete an existing Address
@@ -62,9 +74,9 @@ class LocationController : BaseController() {
         @PathVariable id: Long,
 //        @AuthenticationPrincipal fsaUser: FsaUser
     ): ResponseEntity<Void> {
-        addressService.findById(id)?.let { address ->
+        locationService.findById(id)?.let { location ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)
-            addressService.delete(address) // soft delete?
+            locationService.delete(location) // soft delete?
         }
         return ResponseEntity.noContent().build()
     }

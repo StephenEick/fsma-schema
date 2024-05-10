@@ -35,23 +35,6 @@ data class Address(
 
 ) : BaseModel<Address>()
 
-fun Address.toAddressResponseDto() = AddressResponseDto(
-    id = id,
-//    resellerId = resellerId,
-    street = street,
-    street2 = street2,
-    city = city,
-    state = state,
-    postalCode = postalCode,
-    country = country,
-    lat = lat,
-    lng = lng,
-    dateCreated = dateCreated,
-    dateModified = dateModified,
-    isDeleted = isDeleted,
-    dateDeleted = dateDeleted,
-)
-
 data class AddressRequestDto(
     val id: Long = 0,
 //    val resellerId: Long? = null,
@@ -80,6 +63,23 @@ data class AddressResponseDto(
     val dateModified: OffsetDateTime,
     val isDeleted: Boolean,
     val dateDeleted: OffsetDateTime?,
+)
+
+fun Address.toAddressResponseDto() = AddressResponseDto(
+    id = id,
+//    resellerId = resellerId,
+    street = street,
+    street2 = street2,
+    city = city,
+    state = state,
+    postalCode = postalCode,
+    country = country,
+    lat = lat,
+    lng = lng,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
 )
 
 fun AddressRequestDto.toAddress() = Address(

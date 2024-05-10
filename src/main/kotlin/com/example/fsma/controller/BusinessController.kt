@@ -1,12 +1,16 @@
 package com.example.fsma.controller
 
-import com.example.fsma.model.*
+import com.example.fsma.model.BusinessRequestDto
+import com.example.fsma.model.BusinessResponseDto
+import com.example.fsma.model.toBusiness
+import com.example.fsma.model.toBusinessResponseDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
+
 private const val BUSINESS_BASE_URL = "/api/v1/business"
 
 @RestController
@@ -35,7 +39,7 @@ class BusinessController : BaseController() {
     ): ResponseEntity<BusinessResponseDto> {
         val mainAddress = addressService.findById(businessRequestDto.mainAddressId)
             ?: throw EntityNotFoundException("Address not found: ${businessRequestDto.mainAddressId}")
-        val business = businessRequestDto.toBusiness(mainAddress=mainAddress)
+        val business = businessRequestDto.toBusiness(mainAddress = mainAddress)
         val businessResponse = businessService.insert(business).toBusinessResponseDto()
         return ResponseEntity.created(URI.create(BUSINESS_BASE_URL.plus("/${businessResponse.id}")))
             .body(businessResponse)
@@ -52,7 +56,7 @@ class BusinessController : BaseController() {
             throw UnauthorizedRequestException("Conflicting BusinessIds specified: $id != ${businessRequestDto.id}")
         val mainAddress = addressService.findById(businessRequestDto.mainAddressId)
             ?: throw EntityNotFoundException("Address not found: ${businessRequestDto.mainAddressId}")
-        val business = businessRequestDto.toBusiness(mainAddress=mainAddress)
+        val business = businessRequestDto.toBusiness(mainAddress = mainAddress)
         val businessResponseDto = businessService.update(business).toBusinessResponseDto()
         return ResponseEntity.ok().body(businessResponseDto)
     }

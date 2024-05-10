@@ -10,7 +10,7 @@ data class Business(
     val contactName: String? = null,
     val contactPhone: String? = null,
 
-    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
+    @ManyToOne @JoinColumn
     val mainAddress: Address,
     val name: String,
 
@@ -20,18 +20,6 @@ data class Business(
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null
 ) : BaseModel<Business>()
-
-fun Business.toBusinessResponseDto() = BusinessResponseDto(
-    id = id,
-    contactName = contactName,
-    contactPhone = contactPhone,
-    mainAddressId = mainAddress.id,
-    name = name,
-    dateCreated = dateCreated,
-    dateModified = dateModified,
-    isDeleted = isDeleted,
-    dateDeleted = dateDeleted,
-)
 
 data class BusinessRequestDto(
     val id: Long = 0,
@@ -53,10 +41,22 @@ data class BusinessResponseDto(
     val dateDeleted: OffsetDateTime?,
 )
 
+fun Business.toBusinessResponseDto() = BusinessResponseDto(
+    id = id,
+    contactName = contactName,
+    contactPhone = contactPhone,
+    mainAddressId = mainAddress.id,
+    name = name,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
+)
+
 fun BusinessRequestDto.toBusiness(mainAddress: Address) = Business(
     id = id,
     contactName = contactName,
+    contactPhone = contactPhone,
     mainAddress = mainAddress,
     name = name,
-    contactPhone = contactPhone,
 )
