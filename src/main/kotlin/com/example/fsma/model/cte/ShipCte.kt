@@ -75,4 +75,4 @@ data class ShipCte(
     // (c) This section does not apply to the shipment of a food that occurs
     // before the food is initially packed (if the food is a raw agricultural
     // commodity not obtained from a fishing vessel).
-) : BaseCte<ShipCte>()
+) : CteBase<ShipCte>()

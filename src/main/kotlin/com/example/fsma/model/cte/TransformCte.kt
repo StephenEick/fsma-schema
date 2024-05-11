@@ -94,4 +94,4 @@ data class TransformCte(
     // establishments and restaurants with respect to foods they do not ship
     // (e.g., foods they sell or send directly to consumers).
 
-) : BaseCte<TransformCte>()
+) : CteBase<TransformCte>()

@@ -61,4 +61,4 @@ data class InitialPackSproutsCte(
     // (b)(6) The date of receipt of the seeds by the sprouter; and
 
     // (b)(7) The reference document type and reference document number.
-) : BaseCte<InitialPackSproutsCte>()
+) : CteBase<InitialPackSproutsCte>()

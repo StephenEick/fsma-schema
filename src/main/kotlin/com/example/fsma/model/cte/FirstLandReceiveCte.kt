@@ -15,4 +15,4 @@ data class FirstLandReceiveCte(
 
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
-) : BaseCte<FirstLandReceiveCte>()
+) : CteBase<FirstLandReceiveCte>()

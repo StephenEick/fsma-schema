@@ -3,11 +3,9 @@
 // ----------------------------------------------------------------------------
 package com.example.fsma.controller
 
-import com.example.fsma.service.AddressService
-import com.example.fsma.service.BusinessService
-import com.example.fsma.service.LocationService
+//import com.example.fsma.service.CteCoolService
+import com.example.fsma.service.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 
 // -- @RequestParam date format (ISO8601)
@@ -27,57 +25,9 @@ class BaseController {
     @Autowired protected lateinit var businessService: BusinessService
     @Autowired protected lateinit var locationService: LocationService
 
-//    @Autowired
-//    protected lateinit var clientService: ClientService
-//
-//    @Autowired
-//    protected lateinit var customerService: CustomerService
-//
-//    @Autowired
-//    lateinit var datastoreService: DatastoreService
-//
-//    @Autowired
-//    protected lateinit var estimateService: EstimateService
-//
-//    @Autowired
-//    protected lateinit var fsaUserService: FsaUserService
-//
-//    @Autowired
-//    protected lateinit var invoiceService: InvoiceService
-//
-//    @Autowired
-//    protected lateinit var jwtService: JwtService
-//
-//    @Autowired
-//    protected lateinit var portalService: PortalService
-//
-//    @Autowired
-//    protected lateinit var propertyClientService: PropertyClientService
-//
-//    @Autowired
-//    protected lateinit var resellerService: ResellerService
-//
-//    @Autowired
-//    protected lateinit var resellerPropertyService: ResellerPropertyService
-//
-//    @Autowired
-//    protected lateinit var scheduleItemService: ScheduleItemService
-//
-//    @Autowired
-//    protected lateinit var servLocService: ServLocService
-//
-//    @Autowired
-//    protected lateinit var workRequestHistoryService: WorkRequestHistoryService
-//
-//    @Autowired
-//    protected lateinit var workTypeItemService: WorkTypeItemService
-//
-//    @Autowired
-//    protected lateinit var workRequestService: WorkRequestService
-//
-//    @Autowired
-//    protected lateinit var workTypeService: WorkTypeService
-//
+    @Autowired protected lateinit var cteCoolService: CteCoolService
+    @Autowired protected lateinit var cteHarvestService: CteHarvestService
+
 //    fun getFsaUser(id: Long, authPrincipal: FsaUser): FsaUser {
 //        val fsaUser = fsaUserService.findById(id)
 //            ?: throw EntityNotFoundException("FsaUser not found: $id")

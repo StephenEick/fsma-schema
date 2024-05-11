@@ -97,4 +97,4 @@ data class ReceiveCte(
     // commodity not obtained from a fishing vessel) or to the receipt
     // of a food by the first land-based receiver (if the food is obtained
     // from a fishing vessel).
-) : BaseCte<ReceiveCte>()
+) : CteBase<ReceiveCte>()

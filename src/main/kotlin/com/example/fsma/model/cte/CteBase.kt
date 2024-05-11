@@ -8,7 +8,7 @@ import com.example.fsma.util.ReferenceDocumentType
 /**
  *** Base superclass of Critical Tracking Events
  **/
-abstract class BaseCte<T> : BaseModel<T>() {
+abstract class CteBase<T> : BaseModel<T>() {
     abstract val cteType: CteType
 
     // Your business name for the creator of this CTE

@@ -8,6 +8,7 @@ import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.OffsetDateTime
 
 /**
 https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
@@ -20,7 +21,7 @@ a raw agricultural commodity on the Food Traceability List?
 
 // (a) Harvesting.
 @Entity
-data class HarvestCte(
+data class CteHarvest(
     @Id @GeneratedValue override val id: Long = 0,
 
     @Enumerated(EnumType.STRING)
@@ -33,8 +34,7 @@ data class HarvestCte(
 
     // (1)(i) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
-    @ManyToOne(cascade = [CascadeType.ALL])
-    @JoinColumn
+    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
     val subsequentRecipient: Location,
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
@@ -48,8 +48,7 @@ data class HarvestCte(
     val harvestUnitOfMeasure: UnitOfMeasure,
 
     // (1)(iv) The location description for the farm where the food was harvested;
-    @ManyToOne(cascade = [CascadeType.ALL])
-    @JoinColumn
+    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
     val harvestLocation: Location,
 
     // (1)(v) For produce, the name of the field or other growing area from which the
@@ -71,6 +70,7 @@ data class HarvestCte(
     val harvestDate: LocalDate,
 
     // (1)(viii) The reference document type and reference document number.
+    @Enumerated(EnumType.STRING)
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 
@@ -82,7 +82,85 @@ data class HarvestCte(
     // or through the supply chain.
 
     // Harvest business name, e.g. creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL])
-    @JoinColumn
+    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
     override val cteBusName: Business,
-) : BaseCte<HarvestCte>()
+
+    @Column(updatable = false)
+    override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
+    override var dateModified: OffsetDateTime = OffsetDateTime.now(),
+    override var isDeleted: Boolean = false,
+    override var dateDeleted: OffsetDateTime? = null
+) : CteBase<CteHarvest>()
+
+data class CteHarvestDto(
+    val id: Long,
+    val cteType: CteType,
+    val subsequentRecipientId: Long,
+    val commodity: FtlItem,
+    val commodityVariety: String,
+    val harvestQuantity: Double,
+    val harvestUnitOfMeasure: UnitOfMeasure,
+    val harvestLocationId: Long,
+    val fieldName: String,
+    val fieldDesc: String,
+    val containerName: String?,
+    val containerDesc: String?,
+    val harvestDate: LocalDate,
+    val referenceDocumentType: ReferenceDocumentType,
+    val referenceDocumentNum: String,
+    val cteBusNameId: Long,
+    val dateCreated: OffsetDateTime,
+    val dateModified: OffsetDateTime,
+    val isDeleted: Boolean,
+    val dateDeleted: OffsetDateTime?,
+)
+
+fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
+    id = id,
+    cteType = cteType,
+    subsequentRecipientId = subsequentRecipient.id,
+    commodity = commodity,
+    commodityVariety = commodityVariety,
+    harvestQuantity = harvestQuantity,
+    harvestUnitOfMeasure = harvestUnitOfMeasure,
+    harvestLocationId = harvestLocation.id,
+    fieldName = fieldName,
+    fieldDesc = fieldDesc,
+    containerName = containerName,
+    containerDesc = containerDesc,
+    harvestDate = harvestDate,
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    cteBusNameId = cteBusName.id,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
+)
+
+fun CteHarvestDto.toCteHarvest(
+    subsequentRecipient: Location,
+    harvestLocation: Location,
+    cteBusName: Business,
+) = CteHarvest(
+    id = id,
+    cteType = cteType,
+    subsequentRecipient = subsequentRecipient,
+    commodity = commodity,
+    commodityVariety = commodityVariety,
+    harvestQuantity = harvestQuantity,
+    harvestUnitOfMeasure = harvestUnitOfMeasure,
+    harvestLocation = harvestLocation,
+    fieldName = fieldName,
+    fieldDesc = fieldDesc,
+    containerName = containerName,
+    containerDesc = containerDesc,
+    harvestDate = harvestDate,
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    cteBusName = cteBusName,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
+)

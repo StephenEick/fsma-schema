@@ -65,4 +65,4 @@ data class InitialPackExemptCte(
 
     // (c)(10) The reference document type and reference document number.
 
-) : BaseCte<InitialPackExemptCte>()
+) : CteBase<InitialPackExemptCte>()

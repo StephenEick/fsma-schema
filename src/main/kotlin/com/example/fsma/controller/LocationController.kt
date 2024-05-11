@@ -18,20 +18,20 @@ private const val LOCATION_BASE_URL = "/api/v1/location"
 //@SecurityRequirement(name = "bearerAuth")
 class LocationController : BaseController() {
 
-    // -- Return a specific Address
-    // -    http://localhost:8080/api/v1/addresses/1
+    // -- Return a specific Location
+    // -    http://localhost:8080/api/v1/location/1
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
 //        @AuthenticationPrincipal fsaUser: FsaUser
     ): ResponseEntity<LocationResponseDto> {
         val location = locationService.findById(id)
-            ?: throw EntityNotFoundException("ServiceAddress not found = $id")
+            ?: throw EntityNotFoundException("Location not found = $id")
 //        assertResellerClientMatchesToken(fsaUser, address.resellerId)
         return ResponseEntity.ok(location.toLocationResponseDto())
     }
 
-    // -- Create a new Address
+    // -- Create a new Location
     @PostMapping
     fun create(
         @Valid @RequestBody locationRequestDto: LocationRequestDto,
@@ -41,7 +41,7 @@ class LocationController : BaseController() {
             ?: throw EntityNotFoundException("Service Address not found: ${locationRequestDto.serviceAddressId}")
         val business = businessService.findById(locationRequestDto.businessId)
             ?: throw EntityNotFoundException("ServiceAddress not found: ${locationRequestDto.serviceAddressId}")
-        val location = locationRequestDto.toLocation(business = business, serviceAddress = serviceAddress)
+        val location = locationRequestDto.toLocation( business, serviceAddress)
         val locationResponse = locationService.insert(location).toLocationResponseDto()
         return ResponseEntity.created(URI.create(LOCATION_BASE_URL.plus("/${locationResponse.id}")))
             .body(locationResponse)
@@ -68,7 +68,7 @@ class LocationController : BaseController() {
         return ResponseEntity.ok().body(locationResponse)
     }
 
-    // -- Delete an existing Address
+    // -- Delete an existing Location
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
