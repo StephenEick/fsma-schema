@@ -30,6 +30,7 @@ class BaseController {
     @Autowired protected lateinit var cteHarvestService: CteHarvestService
     @Autowired protected lateinit var cteReceiveService: CteReceiveService
     @Autowired protected lateinit var cteShipService: CteShipService
+    @Autowired protected lateinit var cteTransformService: CteTransformService
 
 //    fun getFsaUser(id: Long, authPrincipal: FsaUser): FsaUser {
 //        val fsaUser = fsaUserService.findById(id)
