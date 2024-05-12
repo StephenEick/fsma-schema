@@ -131,7 +131,7 @@ data class CteReceiveDto(
     val shipToLocationId: Long,
     val receiveDate: LocalDate,
     val tlcSourceId: Long,
-    val tlcSourceReference: String? = null,
+    val tlcSourceReference: String?,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
     val dateCreated: OffsetDateTime,

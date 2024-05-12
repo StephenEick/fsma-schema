@@ -18,6 +18,10 @@ abstract class CteBase<T> : BaseModel<T>() {
     abstract val commodity: FtlItem
     abstract val commodityVariety: String
 
+    // TODO: add quantity and unitOfMeasure to base class
+    //val quantity: Double   // from Initial Packer or Transformer
+    //val unitOfMeasure: UnitOfMeasure   // from Initial Packer or Transformer
+
     // TODO: need retain multiple referenceDocuments for debugging
     abstract val referenceDocumentType: ReferenceDocumentType
     abstract val referenceDocumentNum: String

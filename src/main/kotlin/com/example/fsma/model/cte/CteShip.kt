@@ -9,6 +9,7 @@ import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.OffsetDateTime
 
 /**
 https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
@@ -19,8 +20,8 @@ https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/su
 Food Traceability List?
  **/
 
-//@Entity
-data class ShipCte(
+@Entity
+data class CteShip(
     @Id @GeneratedValue override val id: Long = 0,
 
     override val cteType: CteType = CteType.Ship,
@@ -40,7 +41,7 @@ data class ShipCte(
     // and linking this information to the traceability lot:
 
     // (a)(1) The traceability lot code for the food;
-    @OneToOne(cascade = [CascadeType.ALL])
+    @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     val tlc: TraceLotCode,  // from Initial Packer or Transformer
 
@@ -54,10 +55,14 @@ data class ShipCte(
 
     // (a)(4) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val shipToLocation: Location,
 
     // (a)(5) The location description for the location from which you shipped
     // the food;
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val shipFromLocation: Location,
 
     // (a)(6) The date you shipped the food;
@@ -65,12 +70,20 @@ data class ShipCte(
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val tlcSource: Location,
     val tlcSourceReference: String? = null,
 
     // (a)(8) The reference document type and reference document number.
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
+
+    @Column(updatable = false)
+    override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
+    override var dateModified: OffsetDateTime = OffsetDateTime.now(),
+    override var isDeleted: Boolean = false,
+    override var dateDeleted: OffsetDateTime? = null,
 
     // (b) You must provide (in electronic, paper, or other written form) the
     // information in paragraphs (a)(1) through (7) of this section
@@ -80,4 +93,79 @@ data class ShipCte(
     // (c) This section does not apply to the shipment of a food that occurs
     // before the food is initially packed (if the food is a raw agricultural
     // commodity not obtained from a fishing vessel).
-) : CteBase<ShipCte>()
+) : CteBase<CteShip>()
+
+data class CteShipDto(
+    val id: Long,
+    val cteType: CteType,
+    val cteBusNameId: Long,
+    val commodity: FtlItem,
+    val commodityVariety: String,
+    val tlcId: Long,
+    val quantity: Double,
+    val unitOfMeasure: UnitOfMeasure,
+    val prodDesc: String,
+    val shipToLocationId: Long,
+    val shipFromLocationId: Long,
+    val shipDate: LocalDate,
+    val tlcSourceId: Long,
+    val tlcSourceReference: String?,
+    val referenceDocumentType: ReferenceDocumentType,
+    val referenceDocumentNum: String,
+    val dateCreated: OffsetDateTime,
+    val dateModified: OffsetDateTime,
+    val isDeleted: Boolean,
+    val dateDeleted: OffsetDateTime?,
+)
+
+fun CteShip.toCteShipDto() = CteShipDto(
+    id = id,
+    cteType = cteType,
+    cteBusNameId = cteBusName.id,
+    commodity = commodity,
+    commodityVariety = commodityVariety,
+    tlcId = tlc.id,
+    quantity = quantity,
+    unitOfMeasure=unitOfMeasure,
+    prodDesc = prodDesc,
+    shipToLocationId = shipToLocation.id,
+    shipFromLocationId = shipFromLocation.id,
+    shipDate = shipDate,
+    tlcSourceId = tlcSource.id,
+    tlcSourceReference = tlcSourceReference,
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
+)
+
+fun CteShipDto.toCteShip(
+    cteBusName: Business,
+    tlc: TraceLotCode,
+    shipToLocation:Location,
+    shipFromLocation:Location,
+    tlcSource: Location,
+) = CteShip(
+    id = id,
+    cteType = cteType,
+    cteBusName = cteBusName,
+    commodity = commodity,
+    commodityVariety = commodityVariety,
+    tlc = tlc,
+    quantity = quantity,
+    unitOfMeasure=unitOfMeasure,
+    prodDesc = prodDesc,
+    shipToLocation = shipToLocation,
+    shipFromLocation = shipFromLocation,
+    shipDate = shipDate,
+    tlcSource = tlcSource,
+    tlcSourceReference = tlcSourceReference,
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
+)
