@@ -32,8 +32,8 @@ data class CteTrans(
     override val cteBusName: Business,
 
     @Enumerated(EnumType.STRING)
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -47,16 +47,16 @@ data class CteTrans(
     // (a)(1)(i) The traceability lot code for the food;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val usedTlc: TraceLotCode,  // from Initial Packer or previous Transformer
+    val inputTlc: TraceLotCode,  // from Initial Packer or previous Transformer
 
     // (a)(1)(ii) The product description for the food to which the traceability
     // lot code applies; and
-    val usedProdDesc: String, // from Initial Packer or previous Transformer
+    val inputFoodDesc: String, // from Initial Packer or previous Transformer
 
     // (a)(1)(iii) For each traceability lot used, the quantity and unit of measure
     // of the food used from that lot.
-    val usedQuantity: Double,   // from Initial Packer
-    val usedUnitOfMeasure: UnitOfMeasure,   // from Initial Packer
+    val inputQuantity: Double,   // from Initial Packer
+    val inputUnitOfMeasure: UnitOfMeasure,   // from Initial Packer
 
     // (a)(2) For the food produced through transformation, the following
     // information:
@@ -64,27 +64,28 @@ data class CteTrans(
     // (a)(2)(i) The new traceability lot code for the food;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val transTlc: TraceLotCode,  // the new Tlc
+    val newTlc: TraceLotCode,  // the new Tlc
 
     // (a)(2)(ii) The location description for where you transformed
     // the food (i.e., the traceability lot code source),
     // and (if applicable) the traceability lot code source reference;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val transTlcLocation: Location,
-    val transTlcSourceReference: String? = null,
+    val newTlcLocation: Location,
+    val newTlcSourceReference: String? = null,
 
     // (a)(2)(iii) The date transformation was completed;
     val transDate: LocalDate,
 
     // (a)(2)(iv) The product description for the food;
-    val transProdDesc: String,
+    override val foodDesc: String,
 
+    // For the transformed food
     // (a)(2)(v) The quantity and unit of measure of the
     // food (e.g., 6 cases, 25 reusable plastic containers,
     // 100 tanks, 200 pounds); and
-    val transQuantity: Double,
-    val transUnitOfMeasure: UnitOfMeasure,
+    override val quantity: Double,
+    override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(2)(vi) The reference document type and reference document
     // number for the transformation event.
@@ -114,19 +115,19 @@ data class CteTransDto(
     val id: Long,
     val cteType: CteType,
     val cteBusNameId: Long,
-    val commodity: FtlItem,
-    val commodityVariety: String,
-    val usedTlcId: Long,  // from Initial Packer or previous Transformer
-    val usedProdDesc: String, // from Initial Packer or previous Transformer
-    val usedQuantity: Double,   // from Initial Packer
-    val usedUnitOfMeasure: UnitOfMeasure,   // from Initial Packer
-    val transTlcId: Long,  // the new Tlc
-    val transTlcLocationId: Long,
-    val transTlcSourceReference: String? = null,
+    val foodItem: FtlItem,
+    val variety: String,
+    val inputTlcId: Long,  // from Initial Packer or previous Transformer
+    val inputFoodDesc: String, // from Initial Packer or previous Transformer
+    val inputQuantity: Double,   // from Initial Packer
+    val inputUnitOfMeasure: UnitOfMeasure,   // from Initial Packer
+    val newTlcId: Long,  // the new Tlc
+    val newTlcLocationId: Long,
+    val newTlcSourceReference: String? = null,
     val transDate: LocalDate,
-    val transProdDesc: String,
-    val transQuantity: Double,
-    val transUnitOfMeasure: UnitOfMeasure,
+    val foodDesc: String,
+    val quantity: Double,
+    val unitOfMeasure: UnitOfMeasure,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
     val dateCreated: OffsetDateTime,
@@ -139,19 +140,19 @@ fun CteTrans.toCteTransDto() = CteTransDto(
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
-    usedTlcId = usedTlc.id,  // from Initial Packer or previous Transformer
-    usedProdDesc = usedProdDesc, // from Initial Packer or previous Transformer
-    usedQuantity = usedQuantity,   // from Initial Packer
-    usedUnitOfMeasure = usedUnitOfMeasure,   // from Initial Packer
-    transTlcId = transTlc.id,  // the new Tlc
-    transTlcLocationId = transTlcLocation.id,
-    transTlcSourceReference = transTlcSourceReference,
+    foodItem = foodItem,
+    variety = variety,
+    inputTlcId = inputTlc.id,  // from Initial Packer or previous Transformer
+    inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
+    inputQuantity = inputQuantity,   // from Initial Packer
+    inputUnitOfMeasure = inputUnitOfMeasure,   // from Initial Packer
+    newTlcId = newTlc.id,  // the new Tlc
+    newTlcLocationId = newTlcLocation.id,
+    newTlcSourceReference = newTlcSourceReference,
     transDate = transDate,
-    transProdDesc = transProdDesc,
-    transQuantity = transQuantity,
-    transUnitOfMeasure = transUnitOfMeasure,
+    foodDesc = foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
     dateCreated = dateCreated,
@@ -162,26 +163,26 @@ fun CteTrans.toCteTransDto() = CteTransDto(
 
 fun CteTransDto.toCteTrans(
     cteBusName:Business,
-    usedTlc: TraceLotCode,
-    transTlc:TraceLotCode,
-    transTlcLocation:Location,
+    inputTlc: TraceLotCode,
+    newTlc:TraceLotCode,
+    newTlcLocation:Location,
 ) = CteTrans(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
-    usedTlc = usedTlc,  // from Initial Packer or previous Transformer
-    usedProdDesc = usedProdDesc, // from Initial Packer or previous Transformer
-    usedQuantity = usedQuantity,   // from Initial Packer
-    usedUnitOfMeasure = usedUnitOfMeasure,   // from Initial Packer
-    transTlc = transTlc,  // the new Tlc
-    transTlcLocation = transTlcLocation,
-    transTlcSourceReference = transTlcSourceReference,
+    foodItem = foodItem,
+    variety = variety,
+    inputTlc = inputTlc,  // from Initial Packer or previous Transformer
+    inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
+    inputQuantity = inputQuantity,   // from Initial Packer
+    inputUnitOfMeasure = inputUnitOfMeasure,   // from Initial Packer
+    newTlc = newTlc,  // the new Tlc
+    newTlcLocation = newTlcLocation,
+    newTlcSourceReference = newTlcSourceReference,
     transDate = transDate,
-    transProdDesc = transProdDesc,
-    transQuantity = transQuantity,
-    transUnitOfMeasure = transUnitOfMeasure,
+    foodDesc = foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
     dateCreated = dateCreated,

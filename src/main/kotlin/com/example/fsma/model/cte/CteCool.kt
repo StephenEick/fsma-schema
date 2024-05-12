@@ -40,12 +40,13 @@ data class CteCool(
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
+    override val foodDesc: String,
 
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
-    val quantity: Double,
-    val unitOfMeasure: UnitOfMeasure,
+    override val quantity: Double,
+    override val unitOfMeasure: UnitOfMeasure,
 
     // (1)(iv) The location description for where you cooled the food;
     @ManyToOne @JoinColumn
@@ -84,11 +85,12 @@ data class CteCool(
 ) : CteBase<CteCool>()
 
 data class CteCoolDto(
-    val id: Long ,
+    val id: Long,
     val cteType: CteType = CteType.Cool,
     val subsequentRecipientId: Long,
-    val commodity: FtlItem,
-    val commodityVariety: String,
+    val foodItem: FtlItem,
+    val variety: String,
+    val foodDesc: String,
     val quantity: Double,
     val unitOfMeasure: UnitOfMeasure,
     val coolLocation: Location,
@@ -108,8 +110,9 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
     id = id,
     cteType = cteType,
     subsequentRecipientId = subsequentRecipient.id,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    foodItem = foodItem,
+    variety = variety,
+    foodDesc = foodDesc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     coolLocation = coolLocation,
@@ -132,8 +135,9 @@ fun CteCoolDto.toCteCool(
     id = id,
     cteType = cteType,
     subsequentRecipient = subsequentRecipient,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    foodItem = foodItem,
+    variety = variety,
+    foodDesc = foodDesc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     coolLocation = coolLocation,

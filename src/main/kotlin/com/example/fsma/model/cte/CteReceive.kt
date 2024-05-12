@@ -32,8 +32,8 @@ data class CteReceive(
     override val cteBusName: Business,
 
     @Enumerated(EnumType.STRING)
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -48,11 +48,11 @@ data class CteReceive(
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    val quantity: Double,
-    val unitOfMeasure: UnitOfMeasure,
+    override val quantity: Double,
+    override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(3) The product description for the food;
-    val prodDesc: String,
+    override val foodDesc: String,
 
     // (a)(4) The location description for the immediate previous source
     // (other than a transporter) for the food;
@@ -121,12 +121,12 @@ data class CteReceiveDto(
     val id: Long,
     val cteType: CteType,
     val cteBusNameId: Long,
-    val commodity: FtlItem,
-    val commodityVariety: String,
+    val foodItem: FtlItem,
+    val variety: String,
     val tlcId: Long,
     val quantity: Double,
     val unitOfMeasure: UnitOfMeasure,
-    val prodDesc: String,
+    val foodDesc: String,
     val shipFromLocationId: Long,
     val shipToLocationId: Long,
     val receiveDate: LocalDate,
@@ -144,12 +144,12 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    foodItem = foodItem,
+    variety = variety,
     tlcId = tlc.id,
     quantity = quantity,
     unitOfMeasure=unitOfMeasure,
-    prodDesc = prodDesc,
+    foodDesc = foodDesc,
     shipFromLocationId = shipFromLocation.id,
     shipToLocationId = shipToLocation.id,
     receiveDate = receiveDate,
@@ -173,12 +173,12 @@ fun CteReceiveDto.toCteReceive(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    foodItem = foodItem,
+    variety = variety,
     tlc = tlc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
-    prodDesc = prodDesc,
+    foodDesc = foodDesc,
     shipFromLocation = shipFromLocation,
     shipToLocation = shipToLocation,
     receiveDate = receiveDate,

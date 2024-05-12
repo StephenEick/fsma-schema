@@ -32,8 +32,8 @@ data class CteShip(
     override val cteBusName: Business,
 
     @Enumerated(EnumType.STRING)
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
@@ -47,11 +47,11 @@ data class CteShip(
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    val quantity: Double,   // from Initial Packer or Transformer
-    val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
+    override val quantity: Double,   // from Initial Packer or Transformer
+    override val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
 
     // (a)(3) The product description for the food;
-    val prodDesc: String,
+    override val foodDesc: String,
 
     // (a)(4) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
@@ -99,12 +99,12 @@ data class CteShipDto(
     val id: Long,
     val cteType: CteType,
     val cteBusNameId: Long,
-    val commodity: FtlItem,
-    val commodityVariety: String,
+    val foodItem: FtlItem,
+    val variety: String,
     val tlcId: Long,
     val quantity: Double,
     val unitOfMeasure: UnitOfMeasure,
-    val prodDesc: String,
+    val foodDesc: String,
     val shipToLocationId: Long,
     val shipFromLocationId: Long,
     val shipDate: LocalDate,
@@ -122,12 +122,12 @@ fun CteShip.toCteShipDto() = CteShipDto(
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    foodItem = foodItem,
+    variety = variety,
     tlcId = tlc.id,
     quantity = quantity,
     unitOfMeasure=unitOfMeasure,
-    prodDesc = prodDesc,
+    foodDesc = foodDesc,
     shipToLocationId = shipToLocation.id,
     shipFromLocationId = shipFromLocation.id,
     shipDate = shipDate,
@@ -151,12 +151,12 @@ fun CteShipDto.toCteShip(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    foodItem = foodItem,
+    variety = variety,
     tlc = tlc,
     quantity = quantity,
     unitOfMeasure=unitOfMeasure,
-    prodDesc = prodDesc,
+    foodDesc = foodDesc,
     shipToLocation = shipToLocation,
     shipFromLocation = shipFromLocation,
     shipDate = shipDate,

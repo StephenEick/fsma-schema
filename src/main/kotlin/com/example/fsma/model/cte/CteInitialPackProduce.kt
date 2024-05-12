@@ -41,8 +41,8 @@ data class CteInitialPackProduce(
 
     // (a)(1) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    override val foodItem: FtlItem, // or commodity
+    override val variety: String,
 
     // (a)(2) The date you received the food;
     val receiveDate: LocalDate,
@@ -88,15 +88,16 @@ data class CteInitialPackProduce(
 
     // (a)(11) The traceability lot code you assigned;
     @ManyToOne @JoinColumn
-    val packTlc: TraceLotCode,
+    val tlc: TraceLotCode,
 
     // (a)(12) The product description of the packed food;
-    val packProdDesc: String,
+    override val foodDesc: String,
 
+    // Quantity packed and pack unit of measure.
     // (a)(13) The quantity and unit of measure of the packed food (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    val packQuantity: Double,
+    override val quantity: Double,
     @Enumerated(EnumType.STRING)
-    val packUnitOfMeasure: UnitOfMeasure,
+    override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(14) The location description for where you initially packed the food
     // (i.e., the traceability lot code source), and (if applicable) the traceability
@@ -141,9 +142,9 @@ data class CteInitialPackProduceDto(
     val coolLocationId: Long?,
     val coolDate: LocalDate?,
     val packTlcId: Long,
-    val packProdDesc: String,
-    val packQuantity: Double,
-    val packUnitOfMeasure: UnitOfMeasure,
+    val foodDesc: String,
+    val quantity: Double,
+    val unitOfMeasure: UnitOfMeasure,
     val packTlcSourceId: Long?,
     val packTlcSourceReference: String? = null,
     val packDate: LocalDate,
@@ -159,8 +160,8 @@ fun CteInitialPackProduce.toCteInitialPackProduceDto() = CteInitialPackProduceDt
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    commodity = foodItem,
+    commodityVariety = variety,
     receiveDate = receiveDate,
     receiveQuantity = receiveQuantity,
     receiveUnitOfMeasure = receiveUnitOfMeasure,
@@ -173,10 +174,10 @@ fun CteInitialPackProduce.toCteInitialPackProduceDto() = CteInitialPackProduceDt
     harvestDate = harvestDate,
     coolLocationId = coolLocation?.id,
     coolDate = coolDate,
-    packTlcId = packTlc.id,
-    packProdDesc = packProdDesc,
-    packQuantity = packQuantity,
-    packUnitOfMeasure = packUnitOfMeasure,
+    packTlcId = tlc.id,
+    foodDesc = foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
     packTlcSourceId = packTlcSource?.id,
     packTlcSourceReference = packTlcSourceReference,
     packDate = packDate,
@@ -199,8 +200,8 @@ fun CteInitialPackProduceDto.toCteInitialPackProduce(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
+    foodItem = commodity,
+    variety = commodityVariety,
     receiveDate = receiveDate,
     receiveQuantity = receiveQuantity,
     receiveUnitOfMeasure = receiveUnitOfMeasure,
@@ -213,10 +214,10 @@ fun CteInitialPackProduceDto.toCteInitialPackProduce(
     harvestDate = harvestDate,
     coolLocation = coolLocation,
     coolDate = coolDate,
-    packTlc = packTlc,
-    packProdDesc = packProdDesc,
-    packQuantity = packQuantity,
-    packUnitOfMeasure = packUnitOfMeasure,
+    tlc = packTlc,
+    foodDesc = foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
     packTlcSource = packTlcSource,
     packTlcSourceReference = packTlcSourceReference,
     packDate = packDate,

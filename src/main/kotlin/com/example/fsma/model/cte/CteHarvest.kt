@@ -34,21 +34,27 @@ data class CteHarvest(
 
     // (1)(i) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
-    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val subsequentRecipient: Location,
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val commodity: FtlItem,
-    override val commodityVariety: String,
+    override val foodItem: FtlItem, // of commodity
+    override val variety: String,   // variety of commodity
 
+    // Not required by Rule 204
+    override val foodDesc: String,
+
+    // The harvest quantity and unit of measure
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
-    val harvestQuantity: Double,
+    override val quantity: Double,
     @Enumerated(EnumType.STRING)
-    val harvestUnitOfMeasure: UnitOfMeasure,
+    override val unitOfMeasure: UnitOfMeasure,
 
     // (1)(iv) The location description for the farm where the food was harvested;
-    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val harvestLocation: Location,
 
     // (1)(v) For produce, the name of the field or other growing area from which the
@@ -82,7 +88,8 @@ data class CteHarvest(
     // or through the supply chain.
 
     // Harvest business name, e.g. creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     override val cteBusName: Business,
 
     @Column(updatable = false)
@@ -98,8 +105,9 @@ data class CteHarvestDto(
     val subsequentRecipientId: Long,
     val commodity: FtlItem,
     val commodityVariety: String,
-    val harvestQuantity: Double,
-    val harvestUnitOfMeasure: UnitOfMeasure,
+    val foodDesc: String,
+    val quantity: Double,
+    val unitOfMeasure: UnitOfMeasure,
     val harvestLocationId: Long,
     val fieldName: String,
     val fieldDesc: String,
@@ -119,10 +127,11 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
     id = id,
     cteType = cteType,
     subsequentRecipientId = subsequentRecipient.id,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
-    harvestQuantity = harvestQuantity,
-    harvestUnitOfMeasure = harvestUnitOfMeasure,
+    commodity = foodItem,
+    commodityVariety = variety,
+    foodDesc = foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
     harvestLocationId = harvestLocation.id,
     fieldName = fieldName,
     fieldDesc = fieldDesc,
@@ -146,10 +155,11 @@ fun CteHarvestDto.toCteHarvest(
     id = id,
     cteType = cteType,
     subsequentRecipient = subsequentRecipient,
-    commodity = commodity,
-    commodityVariety = commodityVariety,
-    harvestQuantity = harvestQuantity,
-    harvestUnitOfMeasure = harvestUnitOfMeasure,
+    foodItem = commodity,
+    variety = commodityVariety,
+    foodDesc=foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
     harvestLocation = harvestLocation,
     fieldName = fieldName,
     fieldDesc = fieldDesc,
