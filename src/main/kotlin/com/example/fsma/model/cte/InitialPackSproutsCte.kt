@@ -2,6 +2,7 @@ package com.example.fsma.model.cte
 
 import com.example.fsma.model.Business
 import com.example.fsma.util.CteType
+import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
 import jakarta.persistence.*
 
@@ -25,6 +26,10 @@ data class InitialPackSproutsCte(
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     override val cteBusName: Business,
+
+    @Enumerated(EnumType.STRING)
+    override val commodity: FtlItem,
+    override val commodityVariety: String,
 
     // ************** KDEs *************
 

@@ -2,12 +2,14 @@ package com.example.fsma.model.cte
 
 import com.example.fsma.model.Business
 import com.example.fsma.model.Location
-import com.example.fsma.model.TraceabilityLotCode
+import com.example.fsma.model.TraceLotCode
 import com.example.fsma.util.CteType
+import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.OffsetDateTime
 
 /**
 https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
@@ -18,8 +20,8 @@ https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/su
 Food Traceability List?
  **/
 
-//@Entity
-data class ReceiveCte(
+@Entity
+data class CteReceive(
     @Id @GeneratedValue override val id: Long = 0,
 
     override val cteType: CteType = CteType.Receive,
@@ -29,6 +31,10 @@ data class ReceiveCte(
     @JoinColumn
     override val cteBusName: Business,
 
+    @Enumerated(EnumType.STRING)
+    override val commodity: FtlItem,
+    override val commodityVariety: String,
+
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
     // for each traceability lot of a food on the Food Traceability List
@@ -36,9 +42,9 @@ data class ReceiveCte(
     // information and linking this information to the traceability lot:
 
     // (a)(1) The traceability lot code for the food;
-    @OneToOne(cascade = [CascadeType.ALL])
+    @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val tlc: TraceabilityLotCode,
+    val tlc: TraceLotCode,
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
@@ -50,9 +56,13 @@ data class ReceiveCte(
 
     // (a)(4) The location description for the immediate previous source
     // (other than a transporter) for the food;
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val shipFromLocation: Location,
 
     // (a)(5) The location description for where the food was received;
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val shipToLocation: Location,
 
     // (a)(6) The date you received the food;
@@ -60,12 +70,20 @@ data class ReceiveCte(
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     val tlcSource: Location,
     val tlcSourceReference: String? = null,
 
     // (a)(8) The reference document type and reference document number.
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
+
+    @Column(updatable = false)
+    override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
+    override var dateModified: OffsetDateTime = OffsetDateTime.now(),
+    override var isDeleted: Boolean = false,
+    override var dateDeleted: OffsetDateTime? = null,
 
     //(b) For each traceability lot of a food on the Food Traceability List
     // you receive from a person to whom this subpart does not apply,
@@ -97,4 +115,79 @@ data class ReceiveCte(
     // commodity not obtained from a fishing vessel) or to the receipt
     // of a food by the first land-based receiver (if the food is obtained
     // from a fishing vessel).
-) : CteBase<ReceiveCte>()
+) : CteBase<CteReceive>()
+
+data class CteReceiveDto(
+    val id: Long,
+    val cteType: CteType,
+    val cteBusNameId: Long,
+    val commodity: FtlItem,
+    val commodityVariety: String,
+    val tlcId: Long,
+    val quantity: Double,
+    val unitOfMeasure: UnitOfMeasure,
+    val prodDesc: String,
+    val shipFromLocationId: Long,
+    val shipToLocationId: Long,
+    val receiveDate: LocalDate,
+    val tlcSourceId: Long,
+    val tlcSourceReference: String? = null,
+    val referenceDocumentType: ReferenceDocumentType,
+    val referenceDocumentNum: String,
+    val dateCreated: OffsetDateTime,
+    val dateModified: OffsetDateTime,
+    val isDeleted: Boolean,
+    val dateDeleted: OffsetDateTime?,
+)
+
+fun CteReceive.toCteReceiveDto() = CteReceiveDto(
+    id = id,
+    cteType = cteType,
+    cteBusNameId = cteBusName.id,
+    commodity = commodity,
+    commodityVariety = commodityVariety,
+    tlcId = tlc.id,
+    quantity = quantity,
+    unitOfMeasure=unitOfMeasure,
+    prodDesc = prodDesc,
+    shipFromLocationId = shipFromLocation.id,
+    shipToLocationId = shipToLocation.id,
+    receiveDate = receiveDate,
+    tlcSourceId = tlcSource.id,
+    tlcSourceReference = tlcSourceReference,
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
+)
+
+fun CteReceiveDto.toCteReceive(
+    cteBusName: Business,
+    tlc: TraceLotCode,
+    shipFromLocation:Location,
+    shipToLocation:Location,
+    tlcSource: Location,
+) = CteReceive(
+    id = id,
+    cteType = cteType,
+    cteBusName = cteBusName,
+    commodity = commodity,
+    commodityVariety = commodityVariety,
+    tlc = tlc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
+    prodDesc = prodDesc,
+    shipFromLocation = shipFromLocation,
+    shipToLocation = shipToLocation,
+    receiveDate = receiveDate,
+    tlcSource = tlcSource,
+    tlcSourceReference = tlcSourceReference,
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted,
+)

@@ -2,7 +2,7 @@ package com.example.fsma.model.cte
 
 import com.example.fsma.model.Business
 import com.example.fsma.model.Location
-import com.example.fsma.model.TraceabilityLotCode
+import com.example.fsma.model.TraceLotCode
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
@@ -28,6 +28,10 @@ data class CteInitialPackProduce(
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.InitialPack,
 
+    // Pack business name, e.g. creator of this CTE
+    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
+    override val cteBusName: Business,
+
     // ************** KDEs *************
     // (a) Except as specified in paragraph (c) of this section, for each traceability
     // lot of a raw agricultural commodity (other than a food obtained from a fishing vessel)
@@ -37,8 +41,8 @@ data class CteInitialPackProduce(
 
     // (a)(1) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    val commodity: FtlItem,
-    val commodityVariety: String,
+    override val commodity: FtlItem,
+    override val commodityVariety: String,
 
     // (a)(2) The date you received the food;
     val receiveDate: LocalDate,
@@ -84,7 +88,7 @@ data class CteInitialPackProduce(
 
     // (a)(11) The traceability lot code you assigned;
     @ManyToOne @JoinColumn
-    val packTlc: TraceabilityLotCode,
+    val packTlc: TraceLotCode,
 
     // (a)(12) The product description of the packed food;
     val packProdDesc: String,
@@ -97,8 +101,8 @@ data class CteInitialPackProduce(
     // (a)(14) The location description for where you initially packed the food
     // (i.e., the traceability lot code source), and (if applicable) the traceability
     // lot code source reference;
-    // TODO: either the tlcSource or the tlcSourceReference should be null.
-    // TODO: only one of these should be populated in production
+    // Either the tlcSource or the tlcSourceReference should be null.
+    // Only one of these should be populated in production
     @ManyToOne @JoinColumn
     val packTlcSource: Location? = null,    // i.e., the packLocation since TLC is created at this CTE
     val packTlcSourceReference: String? = null,
@@ -111,10 +115,6 @@ data class CteInitialPackProduce(
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 
-    // Harvest business name, e.g. creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
-    override val cteBusName: Business,
-
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
@@ -125,6 +125,7 @@ data class CteInitialPackProduce(
 data class CteInitialPackProduceDto(
     val id: Long,
     val cteType: CteType,
+    val cteBusNameId: Long,
     val commodity: FtlItem,
     val commodityVariety: String,
     val receiveDate: LocalDate,
@@ -148,7 +149,6 @@ data class CteInitialPackProduceDto(
     val packDate: LocalDate,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
-    val cteBusNameId: Long,
     val dateCreated: OffsetDateTime,
     val dateModified: OffsetDateTime,
     val isDeleted: Boolean,
@@ -158,6 +158,7 @@ data class CteInitialPackProduceDto(
 fun CteInitialPackProduce.toCteInitialPackProduceDto() = CteInitialPackProduceDto(
     id = id,
     cteType = cteType,
+    cteBusNameId = cteBusName.id,
     commodity = commodity,
     commodityVariety = commodityVariety,
     receiveDate = receiveDate,
@@ -181,7 +182,6 @@ fun CteInitialPackProduce.toCteInitialPackProduceDto() = CteInitialPackProduceDt
     packDate = packDate,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    cteBusNameId = cteBusName.id,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -189,15 +189,16 @@ fun CteInitialPackProduce.toCteInitialPackProduceDto() = CteInitialPackProduceDt
 )
 
 fun CteInitialPackProduceDto.toCteInitialPackProduce(
+    cteBusName : Business,
     harvestLocation: Location,
     harvestBusiness: Business,
     coolLocation: Location,
-    packTlc: TraceabilityLotCode,
+    packTlc: TraceLotCode,
     packTlcSource: Location?,
-    cteBusName : Business,
 ) = CteInitialPackProduce(
     id = id,
     cteType = cteType,
+    cteBusName = cteBusName,
     commodity = commodity,
     commodityVariety = commodityVariety,
     receiveDate = receiveDate,
@@ -221,7 +222,6 @@ fun CteInitialPackProduceDto.toCteInitialPackProduce(
     packDate = packDate,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    cteBusName = cteBusName,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

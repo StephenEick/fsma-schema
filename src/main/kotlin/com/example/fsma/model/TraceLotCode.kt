@@ -7,7 +7,7 @@ import jakarta.persistence.Id
 import java.time.OffsetDateTime
 
 @Entity
-data class TraceabilityLotCode(
+data class TraceLotCode(
     @Id @GeneratedValue override val id: Long = 0,
     val tlc: String,
     val desc: String,
@@ -17,4 +17,4 @@ data class TraceabilityLotCode(
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null
-) : BaseModel<Location>()
+) : BaseModel<TraceLotCode>()

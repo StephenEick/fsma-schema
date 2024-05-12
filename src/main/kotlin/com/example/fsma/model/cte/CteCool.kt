@@ -40,8 +40,8 @@ data class CteCool(
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    val commodity: FtlItem,
-    val commodityVariety: String,
+    override val commodity: FtlItem,
+    override val commodityVariety: String,
 
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     val quantity: Double,

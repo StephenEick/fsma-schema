@@ -60,7 +60,7 @@ class CteHarvestController : BaseController() {
 //        @AuthenticationPrincipal fsaUser: FsaUser
     ): ResponseEntity<CteHarvestDto> {
         if (cteHarvestDto.id <= 0L || cteHarvestDto.id != id)
-            throw UnauthorizedRequestException("Conflicting CtcHaarvest Ids specified: $id != ${cteHarvestDto.id}")
+            throw UnauthorizedRequestException("Conflicting CteHarvest Ids specified: $id != ${cteHarvestDto.id}")
 
         val subsequentRecipient = locationService.findById(cteHarvestDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteHarvestDto.subsequentRecipientId}")

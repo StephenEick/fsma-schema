@@ -2,8 +2,9 @@ package com.example.fsma.model.cte
 
 import com.example.fsma.model.Business
 import com.example.fsma.model.Location
-import com.example.fsma.model.TraceabilityLotCode
+import com.example.fsma.model.TraceLotCode
 import com.example.fsma.util.CteType
+import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
@@ -29,6 +30,10 @@ data class TransformCte(
     @JoinColumn
     override val cteBusName: Business,
 
+    @Enumerated(EnumType.STRING)
+    override val commodity: FtlItem,
+    override val commodityVariety: String,
+
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
     // for each new traceability lot of food you produce through transformation
@@ -41,7 +46,7 @@ data class TransformCte(
     // (a)(1)(i) The traceability lot code for the food;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val usedTlc: TraceabilityLotCode,  // from Initial Packer or previous Transformer
+    val usedTlc: TraceLotCode,  // from Initial Packer or previous Transformer
 
     // (a)(1)(ii) The product description for the food to which the traceability
     // lot code applies; and
@@ -58,7 +63,7 @@ data class TransformCte(
     // (a)(2)(i) The new traceability lot code for the food;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val transformTlc: TraceabilityLotCode,  // the new Tlc
+    val transformTlc: TraceLotCode,  // the new Tlc
 
     // (a)(2)(ii) The location description for where you transformed
     // the food (i.e., the traceability lot code source),

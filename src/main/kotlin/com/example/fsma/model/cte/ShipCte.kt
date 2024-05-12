@@ -2,8 +2,9 @@ package com.example.fsma.model.cte
 
 import com.example.fsma.model.Business
 import com.example.fsma.model.Location
-import com.example.fsma.model.TraceabilityLotCode
+import com.example.fsma.model.TraceLotCode
 import com.example.fsma.util.CteType
+import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 import jakarta.persistence.*
@@ -29,6 +30,10 @@ data class ShipCte(
     @JoinColumn
     override val cteBusName: Business,
 
+    @Enumerated(EnumType.STRING)
+    override val commodity: FtlItem,
+    override val commodityVariety: String,
+
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
     // you ship, you must maintain records containing the following information
@@ -37,7 +42,7 @@ data class ShipCte(
     // (a)(1) The traceability lot code for the food;
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val tlc: TraceabilityLotCode,  // from Initial Packer or Transformer
+    val tlc: TraceLotCode,  // from Initial Packer or Transformer
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);

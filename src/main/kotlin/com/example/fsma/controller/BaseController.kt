@@ -24,9 +24,11 @@ class BaseController {
     @Autowired protected lateinit var addressService: AddressService
     @Autowired protected lateinit var businessService: BusinessService
     @Autowired protected lateinit var locationService: LocationService
+    @Autowired protected lateinit var traceLotCodeService: TraceLotCodeService
 
     @Autowired protected lateinit var cteCoolService: CteCoolService
     @Autowired protected lateinit var cteHarvestService: CteHarvestService
+    @Autowired protected lateinit var cteReceiveService: CteReceiveService
 
 //    fun getFsaUser(id: Long, authPrincipal: FsaUser): FsaUser {
 //        val fsaUser = fsaUserService.findById(id)
