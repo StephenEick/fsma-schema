@@ -32,8 +32,8 @@ data class CteShip(
     override val cteBusName: Business,
 
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
+    val foodItem: FtlItem,
+    val variety: String,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
@@ -51,7 +51,7 @@ data class CteShip(
     override val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
 
     // (a)(3) The product description for the food;
-    override val foodDesc: String,
+    val foodDesc: String,
 
     // (a)(4) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
@@ -126,7 +126,7 @@ fun CteShip.toCteShipDto() = CteShipDto(
     variety = variety,
     tlcId = tlc.id,
     quantity = quantity,
-    unitOfMeasure=unitOfMeasure,
+    unitOfMeasure = unitOfMeasure,
     foodDesc = foodDesc,
     shipToLocationId = shipToLocation.id,
     shipFromLocationId = shipFromLocation.id,
@@ -144,8 +144,8 @@ fun CteShip.toCteShipDto() = CteShipDto(
 fun CteShipDto.toCteShip(
     cteBusName: Business,
     tlc: TraceLotCode,
-    shipToLocation:Location,
-    shipFromLocation:Location,
+    shipToLocation: Location,
+    shipFromLocation: Location,
     tlcSource: Location,
 ) = CteShip(
     id = id,
@@ -155,7 +155,7 @@ fun CteShipDto.toCteShip(
     variety = variety,
     tlc = tlc,
     quantity = quantity,
-    unitOfMeasure=unitOfMeasure,
+    unitOfMeasure = unitOfMeasure,
     foodDesc = foodDesc,
     shipToLocation = shipToLocation,
     shipFromLocation = shipFromLocation,

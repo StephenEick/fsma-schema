@@ -3,7 +3,6 @@ package com.example.fsma.model.cte
 import com.example.fsma.model.BaseModel
 import com.example.fsma.model.Business
 import com.example.fsma.util.CteType
-import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
 import com.example.fsma.util.UnitOfMeasure
 
@@ -16,9 +15,10 @@ abstract class CteBase<T> : BaseModel<T>() {
     // Business name for the creator of this CTE
     abstract val cteBusName: Business
 
-    abstract val foodItem: FtlItem
-    abstract val variety: String
-    abstract val foodDesc: String
+    // TODO: remove unneeded lines
+//    abstract val foodItem: FtlItem  // or commodity
+//    abstract val variety: String
+//    abstract val foodDesc: String
 
     // quantity & unitOfMeasure is the amount after CTE is finished
     abstract val quantity: Double   // from Initial Packer or Transformer

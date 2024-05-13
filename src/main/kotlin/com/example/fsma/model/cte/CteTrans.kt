@@ -32,8 +32,8 @@ data class CteTrans(
     override val cteBusName: Business,
 
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
+    val foodItem: FtlItem,
+    val variety: String,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -78,7 +78,7 @@ data class CteTrans(
     val transDate: LocalDate,
 
     // (a)(2)(iv) The product description for the food;
-    override val foodDesc: String,
+    val newFoodDesc: String,
 
     // For the transformed food
     // (a)(2)(v) The quantity and unit of measure of the
@@ -125,7 +125,7 @@ data class CteTransDto(
     val newTlcLocationId: Long,
     val newTlcSourceReference: String? = null,
     val transDate: LocalDate,
-    val foodDesc: String,
+    val newFoodDesc: String,
     val quantity: Double,
     val unitOfMeasure: UnitOfMeasure,
     val referenceDocumentType: ReferenceDocumentType,
@@ -146,11 +146,11 @@ fun CteTrans.toCteTransDto() = CteTransDto(
     inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
     inputQuantity = inputQuantity,   // from Initial Packer
     inputUnitOfMeasure = inputUnitOfMeasure,   // from Initial Packer
-    newTlcId = newTlc.id,  // the new Tlc
+    newTlcId = newTlc.id,  // the new Tlc after transformation
     newTlcLocationId = newTlcLocation.id,
     newTlcSourceReference = newTlcSourceReference,
     transDate = transDate,
-    foodDesc = foodDesc,
+    newFoodDesc = newFoodDesc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     referenceDocumentType = referenceDocumentType,
@@ -162,10 +162,10 @@ fun CteTrans.toCteTransDto() = CteTransDto(
 )
 
 fun CteTransDto.toCteTrans(
-    cteBusName:Business,
+    cteBusName: Business,
     inputTlc: TraceLotCode,
-    newTlc:TraceLotCode,
-    newTlcLocation:Location,
+    newTlc: TraceLotCode,
+    newTlcLocation: Location,
 ) = CteTrans(
     id = id,
     cteType = cteType,
@@ -180,7 +180,7 @@ fun CteTransDto.toCteTrans(
     newTlcLocation = newTlcLocation,
     newTlcSourceReference = newTlcSourceReference,
     transDate = transDate,
-    foodDesc = foodDesc,
+    newFoodDesc = newFoodDesc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     referenceDocumentType = referenceDocumentType,

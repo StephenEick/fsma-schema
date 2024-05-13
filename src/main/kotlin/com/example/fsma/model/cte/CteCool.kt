@@ -40,9 +40,9 @@ data class CteCool(
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
-    override val foodDesc: String,
+    val commodity: FtlItem,
+    val variety: String,
+    val foodDesc: String,
 
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     override val quantity: Double,
@@ -88,7 +88,7 @@ data class CteCoolDto(
     val id: Long,
     val cteType: CteType = CteType.Cool,
     val subsequentRecipientId: Long,
-    val foodItem: FtlItem,
+    val commodity: FtlItem,
     val variety: String,
     val foodDesc: String,
     val quantity: Double,
@@ -110,7 +110,7 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
     id = id,
     cteType = cteType,
     subsequentRecipientId = subsequentRecipient.id,
-    foodItem = foodItem,
+    commodity = commodity,
     variety = variety,
     foodDesc = foodDesc,
     quantity = quantity,
@@ -135,7 +135,7 @@ fun CteCoolDto.toCteCool(
     id = id,
     cteType = cteType,
     subsequentRecipient = subsequentRecipient,
-    foodItem = foodItem,
+    commodity = commodity,
     variety = variety,
     foodDesc = foodDesc,
     quantity = quantity,

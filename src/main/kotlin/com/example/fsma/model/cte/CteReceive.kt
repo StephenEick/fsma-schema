@@ -32,8 +32,8 @@ data class CteReceive(
     override val cteBusName: Business,
 
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
+    val foodItem: FtlItem,
+    val variety: String,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -52,7 +52,7 @@ data class CteReceive(
     override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(3) The product description for the food;
-    override val foodDesc: String,
+    val foodDesc: String,
 
     // (a)(4) The location description for the immediate previous source
     // (other than a transporter) for the food;
@@ -148,7 +148,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     variety = variety,
     tlcId = tlc.id,
     quantity = quantity,
-    unitOfMeasure=unitOfMeasure,
+    unitOfMeasure = unitOfMeasure,
     foodDesc = foodDesc,
     shipFromLocationId = shipFromLocation.id,
     shipToLocationId = shipToLocation.id,
@@ -166,8 +166,8 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
 fun CteReceiveDto.toCteReceive(
     cteBusName: Business,
     tlc: TraceLotCode,
-    shipFromLocation:Location,
-    shipToLocation:Location,
+    shipFromLocation: Location,
+    shipToLocation: Location,
     tlcSource: Location,
 ) = CteReceive(
     id = id,

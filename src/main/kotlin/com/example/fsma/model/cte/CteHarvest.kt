@@ -40,11 +40,9 @@ data class CteHarvest(
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem, // of commodity
-    override val variety: String,   // variety of commodity
-
-    // Not required by Rule 204
-    override val foodDesc: String,
+    val commodity: FtlItem, // of commodity
+    val variety: String,    // variety of commodity
+    val foodDesc: String,   // Not required by Rule 204
 
     // The harvest quantity and unit of measure
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
@@ -127,7 +125,7 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
     id = id,
     cteType = cteType,
     subsequentRecipientId = subsequentRecipient.id,
-    commodity = foodItem,
+    commodity = commodity,
     commodityVariety = variety,
     foodDesc = foodDesc,
     quantity = quantity,
@@ -155,7 +153,7 @@ fun CteHarvestDto.toCteHarvest(
     id = id,
     cteType = cteType,
     subsequentRecipient = subsequentRecipient,
-    foodItem = commodity,
+    commodity = commodity,
     variety = commodityVariety,
     foodDesc=foodDesc,
     quantity = quantity,

@@ -29,9 +29,9 @@ data class InitialPackExemptCte(
     override val cteBusName: Business,
 
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
-    override val foodDesc: String,
+    val foodItem: FtlItem,
+    val variety: String,
+    val foodDesc: String,
 
     override val quantity: Double,
     @Enumerated(EnumType.STRING)
