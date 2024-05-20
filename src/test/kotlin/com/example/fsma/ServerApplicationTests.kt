@@ -259,7 +259,7 @@ class ServerApplicationTests {
     // ------------------------------------------------------------------------
     // -- Location tests
 
-    fun addLocation(): Long {
+    fun addLocation(): Pair<Long, Long> {
 //        val accessToken: String? = authenticate()
         val serviceAddressId = addAddress()
         val businessId = addBusiness()
@@ -276,13 +276,14 @@ class ServerApplicationTests {
             status { isCreated() }
             content { contentType(MediaType.APPLICATION_JSON) }
         }.andReturn()
-        return JsonPath.read(mvcResult.response.contentAsString, "$.id")
+        val locationId: Long = JsonPath.read(mvcResult.response.contentAsString, "$.id")
+        return Pair(locationId, serviceAddressId)
     }
 
     @Test
     fun `get location`() {
 //        val accessToken: String? = authenticate()
-        val locationId = addLocation()
+        val (locationId, serviceAddressId) = addLocation()
         mockMvc.get("/api/v1/location/$locationId") {
 //            header("Authorization", "Bearer $accessToken")
         }.andExpect {
@@ -291,7 +292,7 @@ class ServerApplicationTests {
             jsonPath("$.id") { value(locationId) }
             jsonPath("$.contactName") { value("Steve") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
-            jsonPath("$.serviceAddressId") { value(1) }
+            jsonPath("$.serviceAddressId") { value(serviceAddressId) }
         }
     }
 
@@ -299,7 +300,7 @@ class ServerApplicationTests {
     fun `update location`() {
 //        addFsaUsers()
 //        val accessToken: String? = authenticate()
-        val locationId = addLocation()
+        val (locationId, serviceAddressId) = addLocation()
         locationDtoUpdated = locationDtoUpdated.copy(id = locationId)
         mockMvc.put("/api/v1/location/$locationId") {
 //            header("Authorization", "Bearer $accessToken")
@@ -317,7 +318,7 @@ class ServerApplicationTests {
     @Test
     fun `delete location`() {
 //        val accessToken: String? = authenticate()
-        val locationId = addLocation()
+        val (locationId, serviceAddressId) = addLocation()
         mockMvc.delete("/api/v1/location/$locationId") {
 //            header("Authorization", "Bearer $accessToken")
         }.andExpect {
