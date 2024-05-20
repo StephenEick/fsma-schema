@@ -4,4 +4,4 @@ import com.example.fsma.model.cte.CteTrans
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CteTransformRepository : BaseRepository<CteTrans>
+interface CteTransRepository : BaseRepository<CteTrans>

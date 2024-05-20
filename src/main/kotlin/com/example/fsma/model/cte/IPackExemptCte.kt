@@ -18,10 +18,10 @@ Food Traceability List?
  **/
 
 //@Entity
-data class InitialPackExemptCte(
+data class IPackExemptCte(
     @Id @GeneratedValue override val id: Long = 0,
 
-    override val cteType: CteType = CteType.InitialPack,
+    override val cteType: CteType = CteType.InitPackProduce,
 
     // Packer business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
@@ -76,4 +76,4 @@ data class InitialPackExemptCte(
 
     // (c)(10) The reference document type and reference document number.
 
-) : CteBase<InitialPackExemptCte>()
+) : CteBase<IPackExemptCte>()

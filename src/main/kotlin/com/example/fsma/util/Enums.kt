@@ -11,12 +11,12 @@ enum class Country {
 enum class CteType {
     Harvest,
     Cool,
-    InitialPack,
+    InitPackProduce,
+    InitPackSprouts,
     FirstLandReceive,
     Ship,
     Receive,
     Transform,
-    TraceabilityPlan,
 }
 
 enum class FtlItem {

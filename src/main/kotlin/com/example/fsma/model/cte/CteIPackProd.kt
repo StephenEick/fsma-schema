@@ -22,11 +22,12 @@ Food Traceability List?
  **/
 
 @Entity
-data class CteInitialPackProduce(
+@Table(name="cte_ipack_prod")
+data class CteIPackProd(
     @Id @GeneratedValue override val id: Long = 0,
 
     @Enumerated(EnumType.STRING)
-    override val cteType: CteType = CteType.InitialPack,
+    override val cteType: CteType = CteType.InitPackProduce,
 
     // Pack business name, e.g. creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
@@ -121,9 +122,9 @@ data class CteInitialPackProduce(
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null
-) : CteBase<CteInitialPackProduce>()
+) : CteBase<CteIPackProd>()
 
-data class CteInitialPackProduceDto(
+data class CteIPackProdDto(
     val id: Long,
     val cteType: CteType,
     val cteBusNameId: Long,
@@ -156,7 +157,7 @@ data class CteInitialPackProduceDto(
     val dateDeleted: OffsetDateTime?,
 )
 
-fun CteInitialPackProduce.toCteInitialPackProduceDto() = CteInitialPackProduceDto(
+fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
@@ -189,14 +190,14 @@ fun CteInitialPackProduce.toCteInitialPackProduceDto() = CteInitialPackProduceDt
     dateDeleted = dateDeleted,
 )
 
-fun CteInitialPackProduceDto.toCteInitialPackProduce(
+fun CteIPackProdDto.toCteIPackProd(
     cteBusName : Business,
     harvestLocation: Location,
     harvestBusiness: Business,
     coolLocation: Location,
     packTlc: TraceLotCode,
     packTlcSource: Location?,
-) = CteInitialPackProduce(
+) = CteIPackProd(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
