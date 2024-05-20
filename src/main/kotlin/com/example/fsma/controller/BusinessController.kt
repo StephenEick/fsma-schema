@@ -1,9 +1,8 @@
 package com.example.fsma.controller
 
-import com.example.fsma.model.BusinessRequestDto
-import com.example.fsma.model.BusinessResponseDto
+import com.example.fsma.model.BusinessDto
 import com.example.fsma.model.toBusiness
-import com.example.fsma.model.toBusinessResponseDto
+import com.example.fsma.model.toBusinessDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
 import jakarta.validation.Valid
@@ -24,23 +23,23 @@ class BusinessController : BaseController() {
     fun findById(
         @PathVariable(value = "id") id: Long,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<BusinessResponseDto> {
+    ): ResponseEntity<BusinessDto> {
         val business = businessService.findById(id)
             ?: throw EntityNotFoundException("business not found = $id")
 //        assertResellerClientMatchesToken(fsaUser, business.resellerId)
-        return ResponseEntity.ok(business.toBusinessResponseDto())
+        return ResponseEntity.ok(business.toBusinessDto())
     }
 
     // -- Create a new business
     @PostMapping
     fun create(
-        @Valid @RequestBody businessRequestDto: BusinessRequestDto,
+        @Valid @RequestBody businessDto: BusinessDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<BusinessResponseDto> {
-        val mainAddress = addressService.findById(businessRequestDto.mainAddressId)
-            ?: throw EntityNotFoundException("Address not found: ${businessRequestDto.mainAddressId}")
-        val business = businessRequestDto.toBusiness(mainAddress = mainAddress)
-        val businessResponse = businessService.insert(business).toBusinessResponseDto()
+    ): ResponseEntity<BusinessDto> {
+        val mainAddress = addressService.findById(businessDto.mainAddressId)
+            ?: throw EntityNotFoundException("Address not found: ${businessDto.mainAddressId}")
+        val business = businessDto.toBusiness(mainAddress = mainAddress)
+        val businessResponse = businessService.insert(business).toBusinessDto()
         return ResponseEntity.created(URI.create(BUSINESS_BASE_URL.plus("/${businessResponse.id}")))
             .body(businessResponse)
     }
@@ -49,15 +48,15 @@ class BusinessController : BaseController() {
     @PutMapping("/{id}")
     fun update(
         @PathVariable id: Long,
-        @Valid @RequestBody businessRequestDto: BusinessRequestDto,
+        @Valid @RequestBody businessDto: BusinessDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<BusinessResponseDto> {
-        if (businessRequestDto.id <= 0L || businessRequestDto.id != id)
-            throw UnauthorizedRequestException("Conflicting BusinessIds specified: $id != ${businessRequestDto.id}")
-        val mainAddress = addressService.findById(businessRequestDto.mainAddressId)
-            ?: throw EntityNotFoundException("Address not found: ${businessRequestDto.mainAddressId}")
-        val business = businessRequestDto.toBusiness(mainAddress = mainAddress)
-        val businessResponseDto = businessService.update(business).toBusinessResponseDto()
+    ): ResponseEntity<BusinessDto> {
+        if (businessDto.id <= 0L || businessDto.id != id)
+            throw UnauthorizedRequestException("Conflicting BusinessIds specified: $id != ${businessDto.id}")
+        val mainAddress = addressService.findById(businessDto.mainAddressId)
+            ?: throw EntityNotFoundException("Address not found: ${businessDto.mainAddressId}")
+        val business = businessDto.toBusiness(mainAddress = mainAddress)
+        val businessResponseDto = businessService.update(business).toBusinessDto()
         return ResponseEntity.ok().body(businessResponseDto)
     }
 

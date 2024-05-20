@@ -21,27 +21,19 @@ data class Business(
     override var dateDeleted: OffsetDateTime? = null
 ) : BaseModel<Business>()
 
-data class BusinessRequestDto(
+data class BusinessDto(
     val id: Long = 0,
     val contactName: String? = null,
     val contactPhone: String? = null,
     val mainAddressId: Long,
     val name: String,
+    val dateCreated: OffsetDateTime= OffsetDateTime.now(),
+    val dateModified: OffsetDateTime= OffsetDateTime.now(),
+    val isDeleted: Boolean = false,
+    val dateDeleted: OffsetDateTime? = null,
 )
 
-data class BusinessResponseDto(
-    val id: Long = 0,
-    val contactName: String? = null,
-    val contactPhone: String? = null,
-    val mainAddressId: Long,
-    val name: String,
-    val dateCreated: OffsetDateTime,
-    val dateModified: OffsetDateTime,
-    val isDeleted: Boolean,
-    val dateDeleted: OffsetDateTime?,
-)
-
-fun Business.toBusinessResponseDto() = BusinessResponseDto(
+fun Business.toBusinessDto() = BusinessDto(
     id = id,
     contactName = contactName,
     contactPhone = contactPhone,
@@ -53,7 +45,7 @@ fun Business.toBusinessResponseDto() = BusinessResponseDto(
     dateDeleted = dateDeleted,
 )
 
-fun BusinessRequestDto.toBusiness(mainAddress: Address) = Business(
+fun BusinessDto.toBusiness(mainAddress: Address) = Business(
     id = id,
     contactName = contactName,
     contactPhone = contactPhone,

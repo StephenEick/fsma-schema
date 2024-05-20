@@ -1,8 +1,8 @@
 package com.example.fsma
 
-import com.example.fsma.model.AddressRequestDto
-import com.example.fsma.model.BusinessRequestDto
-import com.example.fsma.model.LocationRequestDto
+import com.example.fsma.model.AddressDto
+import com.example.fsma.model.BusinessDto
+import com.example.fsma.model.LocationDto
 import com.example.fsma.util.Country
 import com.example.fsma.util.UsaCanadaState
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -28,19 +28,19 @@ class ServerApplicationTests {
     // ------------------------------------------------------------------------
     // Test setup
 
-    private lateinit var addressRequestDto: AddressRequestDto
-    private lateinit var addressRequestDtoUpdated: AddressRequestDto
-    private lateinit var businessRequestDto: BusinessRequestDto
-    private lateinit var businessRequestDtoUpdated: BusinessRequestDto
-    private lateinit var locationRequestDto: LocationRequestDto
-    private lateinit var locationRequestDtoUpdated: LocationRequestDto
+    private lateinit var addressDto: AddressDto
+    private lateinit var addressDtoUpdated: AddressDto
+    private lateinit var businessDto: BusinessDto
+    private lateinit var businessDtoUpdated: BusinessDto
+    private lateinit var locationDto: LocationDto
+    private lateinit var locationDtoUpdated: LocationDto
 
 
     @BeforeEach
     fun setup() {
 
         // -- Address
-        addressRequestDto = AddressRequestDto(
+        addressDto = AddressDto(
             id = 0,
             street = "1413 Durness Court",
             street2 = "Apt-101",
@@ -51,7 +51,7 @@ class ServerApplicationTests {
             lat = 41.742220,
             lng = -88.162270
         )
-        addressRequestDtoUpdated = AddressRequestDto(
+        addressDtoUpdated = AddressDto(
             id = 9,
             street = "1413 Durness Court",
             street2 = "Changed",
@@ -63,7 +63,7 @@ class ServerApplicationTests {
             lng = -88.162270
         )
 
-        businessRequestDto = BusinessRequestDto(
+        businessDto = BusinessDto(
             id = 0,
             mainAddressId = 1,
             contactName = "Steve",
@@ -71,7 +71,7 @@ class ServerApplicationTests {
             name = "Fred's Restaurant",
         )
 
-        businessRequestDtoUpdated = BusinessRequestDto(
+        businessDtoUpdated = BusinessDto(
             id = 0,
             mainAddressId = 1,
             contactName = "NewContact",
@@ -79,7 +79,7 @@ class ServerApplicationTests {
             name = "Fred's Restaurant",
         )
 
-        locationRequestDto = LocationRequestDto(
+        locationDto = LocationDto(
             id = 0,
             businessId = 1,
             contactName = "Steve",
@@ -87,7 +87,7 @@ class ServerApplicationTests {
             serviceAddressId = 1,
         )
 
-        locationRequestDtoUpdated = LocationRequestDto(
+        locationDtoUpdated = LocationDto(
             id = 0,
             businessId = 1,
             contactName = "NewContact",
@@ -103,7 +103,7 @@ class ServerApplicationTests {
 //        val accessToken: String? = authenticate()
         val mvcResult = mockMvc.post("/api/v1/address") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(addressRequestDto)
+            content = objectMapper.writeValueAsString(addressDto)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isCreated() }
@@ -119,19 +119,19 @@ class ServerApplicationTests {
 //        val accessToken: String? = authenticate()
         mockMvc.post("/api/v1/address") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(addressRequestDto)
+            content = objectMapper.writeValueAsString(addressDto)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isCreated() }
             content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.street") { value(addressRequestDto.street) }
-            jsonPath("$.street2") { value(addressRequestDto.street2) }
-            jsonPath("$.city") { value(addressRequestDto.city) }
-            jsonPath("$.state") { value(addressRequestDto.state.name) }
-            jsonPath("$.postalCode") { value(addressRequestDto.postalCode) }
-            jsonPath("$.country") { value(addressRequestDto.country.name) }
-            jsonPath("$.lat") { value(addressRequestDto.lat) }
-            jsonPath("$.lng") { value(addressRequestDto.lng) }
+            jsonPath("$.street") { value(addressDto.street) }
+            jsonPath("$.street2") { value(addressDto.street2) }
+            jsonPath("$.city") { value(addressDto.city) }
+            jsonPath("$.state") { value(addressDto.state.name) }
+            jsonPath("$.postalCode") { value(addressDto.postalCode) }
+            jsonPath("$.country") { value(addressDto.country.name) }
+            jsonPath("$.lat") { value(addressDto.lat) }
+            jsonPath("$.lng") { value(addressDto.lng) }
         }
     }
 
@@ -161,23 +161,23 @@ class ServerApplicationTests {
 //        addFsaUsers()
 //        val accessToken: String? = authenticate()
         val addressId: Long = addAddress()
-        addressRequestDtoUpdated = addressRequestDtoUpdated.copy(id = addressId)
+        addressDtoUpdated = addressDtoUpdated.copy(id = addressId)
         mockMvc.put("/api/v1/address/$addressId") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(addressRequestDtoUpdated)
+            content = objectMapper.writeValueAsString(addressDtoUpdated)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
             jsonPath("$.id") { value(addressId) }
-            jsonPath("$.street") { value(addressRequestDtoUpdated.street) }
-            jsonPath("$.street2") { value(addressRequestDtoUpdated.street2) }
-            jsonPath("$.city") { value(addressRequestDtoUpdated.city) }
-            jsonPath("$.state") { value(addressRequestDtoUpdated.state.name) }
-            jsonPath("$.postalCode") { value(addressRequestDtoUpdated.postalCode) }
-            jsonPath("$.country") { value(addressRequestDtoUpdated.country.name) }
-            jsonPath("$.lat") { value(addressRequestDtoUpdated.lat) }
-            jsonPath("$.lng") { value(addressRequestDtoUpdated.lng) }
+            jsonPath("$.street") { value(addressDtoUpdated.street) }
+            jsonPath("$.street2") { value(addressDtoUpdated.street2) }
+            jsonPath("$.city") { value(addressDtoUpdated.city) }
+            jsonPath("$.state") { value(addressDtoUpdated.state.name) }
+            jsonPath("$.postalCode") { value(addressDtoUpdated.postalCode) }
+            jsonPath("$.country") { value(addressDtoUpdated.country.name) }
+            jsonPath("$.lat") { value(addressDtoUpdated.lat) }
+            jsonPath("$.lng") { value(addressDtoUpdated.lng) }
         }
     }
 
@@ -200,7 +200,7 @@ class ServerApplicationTests {
         val mainAddressId = addAddress()
         val mvcResult = mockMvc.post("/api/v1/business") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(businessRequestDto.copy(mainAddressId = mainAddressId))
+            content = objectMapper.writeValueAsString(businessDto.copy(mainAddressId = mainAddressId))
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isCreated() }
@@ -230,10 +230,10 @@ class ServerApplicationTests {
 //        addFsaUsers()
 //        val accessToken: String? = authenticate()
         val businessId: Long = addBusiness()
-        businessRequestDtoUpdated = businessRequestDtoUpdated.copy(id = businessId)
+        businessDtoUpdated = businessDtoUpdated.copy(id = businessId)
         mockMvc.put("/api/v1/business/$businessId") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(businessRequestDtoUpdated)
+            content = objectMapper.writeValueAsString(businessDtoUpdated)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
@@ -266,7 +266,7 @@ class ServerApplicationTests {
         val mvcResult = mockMvc.post("/api/v1/location") {
 //            header("Authorization", "Bearer $accessToken")
             content = objectMapper.writeValueAsString(
-                locationRequestDto.copy(
+                locationDto.copy(
                     businessId = businessId,
                     serviceAddressId = serviceAddressId
                 )
@@ -300,10 +300,10 @@ class ServerApplicationTests {
 //        addFsaUsers()
 //        val accessToken: String? = authenticate()
         val locationId = addLocation()
-        locationRequestDtoUpdated = locationRequestDtoUpdated.copy(id = locationId)
+        locationDtoUpdated = locationDtoUpdated.copy(id = locationId)
         mockMvc.put("/api/v1/location/$locationId") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(locationRequestDtoUpdated)
+            content = objectMapper.writeValueAsString(locationDtoUpdated)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }

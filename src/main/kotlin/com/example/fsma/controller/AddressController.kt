@@ -1,9 +1,8 @@
 package com.example.fsma.controller
 
-import com.example.fsma.model.AddressRequestDto
-import com.example.fsma.model.AddressResponseDto
+import com.example.fsma.model.AddressDto
 import com.example.fsma.model.toAddress
-import com.example.fsma.model.toAddressResponseDto
+import com.example.fsma.model.toAddressDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
 import jakarta.validation.Valid
@@ -24,21 +23,21 @@ class AddressController : BaseController() {
     fun findById(
         @PathVariable(value = "id") id: Long,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<AddressResponseDto> {
+    ): ResponseEntity<AddressDto> {
         val address = addressService.findById(id)
             ?: throw EntityNotFoundException("Address not found = $id")
 //        assertResellerClientMatchesToken(fsaUser, address.resellerId)
-        return ResponseEntity.ok(address.toAddressResponseDto())
+        return ResponseEntity.ok(address.toAddressDto())
     }
 
     // -- Create a new Address
     @PostMapping
     fun create(
-        @Valid @RequestBody addressRequestDto: AddressRequestDto,
+        @Valid @RequestBody addressDto: AddressDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<AddressResponseDto> {
-        val address = addressRequestDto.toAddress()
-        val addressResponse = addressService.insert(address).toAddressResponseDto()
+    ): ResponseEntity<AddressDto> {
+        val address = addressDto.toAddress()
+        val addressResponse = addressService.insert(address).toAddressDto()
         return ResponseEntity
             .created(URI.create(ADDRESS_BASE_URL.plus("/${addressResponse.id}")))
             .body(addressResponse)
@@ -48,13 +47,13 @@ class AddressController : BaseController() {
     @PutMapping("/{id}")
     fun update(
         @PathVariable id: Long,
-        @Valid @RequestBody addressRequestDto: AddressRequestDto,
+        @Valid @RequestBody addressDto: AddressDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
-    ): ResponseEntity<AddressResponseDto> {
-        if (addressRequestDto.id <= 0L || addressRequestDto.id != id)
-            throw UnauthorizedRequestException("Conflicting AddressIds specified: $id != ${addressRequestDto.id}")
-        val address = addressRequestDto.toAddress()
-        val addressResponse = addressService.update(address).toAddressResponseDto()
+    ): ResponseEntity<AddressDto> {
+        if (addressDto.id <= 0L || addressDto.id != id)
+            throw UnauthorizedRequestException("Conflicting AddressIds specified: $id != ${addressDto.id}")
+        val address = addressDto.toAddress()
+        val addressResponse = addressService.update(address).toAddressDto()
         return ResponseEntity.ok().body(addressResponse)
     }
 
