@@ -1,0 +1,29 @@
+[versions]
+v-kotlin = "1.9.23"
+v-postgresql-driver = "42.7.3"
+v-spring-boot = "3.2.4"
+v-springdependency = "1.1.4"
+
+[libraries]
+h2database = { module = "com.h2database:h2" }
+jackson = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "v-postgresql-driver" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-mustache = { module = "org.springframework.boot:spring-boot-starter-mustache" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+
+[bundles]
+
+[plugins]
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "v-kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "v-kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "v-kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "v-spring-boot" }
+spring-dependency = { id = "io.spring.dependency-management", version.ref = "v-springdependency" }
+
