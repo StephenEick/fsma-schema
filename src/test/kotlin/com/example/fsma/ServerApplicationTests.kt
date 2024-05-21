@@ -3,6 +3,7 @@ package com.example.fsma
 import com.example.fsma.model.AddressDto
 import com.example.fsma.model.BusinessDto
 import com.example.fsma.model.LocationDto
+import com.example.fsma.model.TraceLotCodeDto
 import com.example.fsma.util.Country
 import com.example.fsma.util.UsaCanadaState
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -34,7 +35,7 @@ class ServerApplicationTests {
     private lateinit var businessDtoUpdated: BusinessDto
     private lateinit var locationDto: LocationDto
     private lateinit var locationDtoUpdated: LocationDto
-
+    private lateinit var traceLotCodeDto: TraceLotCodeDto
 
     @BeforeEach
     fun setup() {
@@ -68,7 +69,7 @@ class ServerApplicationTests {
             mainAddressId = 1,
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
-            name = "Fred's Restaurant",
+            businessName = "Fred's Restaurant",
         )
 
         businessDtoUpdated = BusinessDto(
@@ -76,7 +77,7 @@ class ServerApplicationTests {
             mainAddressId = 1,
             contactName = "NewContact",
             contactPhone = "1-800-555-1212",
-            name = "Fred's Restaurant",
+            businessName = "Fred's Restaurant",
         )
 
         locationDto = LocationDto(
@@ -94,6 +95,12 @@ class ServerApplicationTests {
             contactPhone = "0-000-000-0000",
             serviceAddressId = 1,
         )
+
+        traceLotCodeDto = TraceLotCodeDto(
+            tlc = "trace lot code 1",
+            desc = "desc trace lot code 1",
+        )
+
     }
 
     // ------------------------------------------------------------------------
@@ -111,8 +118,6 @@ class ServerApplicationTests {
         }.andReturn()
         return JsonPath.read(mvcResult.response.contentAsString, "$.id")
     }
-
-// ---
 
     @Test
     fun `add address`() {
@@ -221,7 +226,7 @@ class ServerApplicationTests {
             jsonPath("$.id") { value(businessId) }
             jsonPath("$.contactName") { value("Steve") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
-            jsonPath("$.name") { value("Fred's Restaurant") }
+            jsonPath("$.businessName") { value("Fred's Restaurant") }
         }
     }
 
@@ -241,7 +246,7 @@ class ServerApplicationTests {
             jsonPath("$.id") { value(businessId) }
             jsonPath("$.contactName") { value("NewContact") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
-            jsonPath("$.name") { value("Fred's Restaurant") }
+            jsonPath("$.businessName") { value("Fred's Restaurant") }
         }
     }
 
@@ -323,6 +328,37 @@ class ServerApplicationTests {
 //            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isNoContent() }
+        }
+    }
+
+    // ------------------------------------------------------------------------
+    // -- TraceLotCodes tests
+
+    fun addTraceLotCode(): Long {
+//        val accessToken: String? = authenticate()
+        val mvcResult = mockMvc.post("/api/v1/tlc") {
+//            header("Authorization", "Bearer $accessToken")
+            content = objectMapper.writeValueAsString(traceLotCodeDto)
+            contentType = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isCreated() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+        }.andReturn()
+        return JsonPath.read(mvcResult.response.contentAsString, "$.id")
+    }
+
+    @Test
+    fun `get trace lot code`() {
+//        val accessToken: String? = authenticate()
+        val traceLotCodeId = addTraceLotCode()
+        mockMvc.get("/api/v1/tlc/$traceLotCodeId") {
+//            header("Authorization", "Bearer $accessToken")
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.id") { value(traceLotCodeId) }
+            jsonPath("$.tlc") { value("trace lot code 1") }
+            jsonPath("$.desc") { value("desc trace lot code 1") }
         }
     }
 }

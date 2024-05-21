@@ -194,7 +194,7 @@ fun CteIPackProdDto.toCteIPackProd(
     cteBusName : Business,
     harvestLocation: Location,
     harvestBusiness: Business,
-    coolLocation: Location,
+    coolLocation: Location?,
     packTlc: TraceLotCode,
     packTlcSource: Location?,
 ) = CteIPackProd(

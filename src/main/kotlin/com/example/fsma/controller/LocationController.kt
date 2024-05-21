@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*
 import java.net.URI
 
 private const val LOCATION_BASE_URL = "/api/v1/location"
+private const val LOCATION_ALT_BASE_URL = "/api/v1/loc"
 
 @RestController
-@RequestMapping(LOCATION_BASE_URL)
+@RequestMapping(value=[LOCATION_BASE_URL,LOCATION_ALT_BASE_URL])
 //@SecurityRequirement(name = "bearerAuth")
 class LocationController : BaseController() {
 

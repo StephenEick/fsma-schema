@@ -12,9 +12,10 @@ import java.net.URI
 
 private const val CTE_TRANSFORM_BASE_URL = "/api/v1/ctetransform"
 private const val CTE_TRANSFORM_ALT_BASE_URL = "/api/v1/cte-transform"
+private const val CTE_TRANSFORM_ALT2_BASE_URL = "/api/v1/ctetrans"
 
 @RestController
-@RequestMapping(value = [CTE_TRANSFORM_BASE_URL, CTE_TRANSFORM_ALT_BASE_URL])
+@RequestMapping(value = [CTE_TRANSFORM_BASE_URL, CTE_TRANSFORM_ALT_BASE_URL,CTE_TRANSFORM_ALT2_BASE_URL])
 //@SecurityRequirement(name = "bearerAuth")
 class CteTransController : BaseController() {
 

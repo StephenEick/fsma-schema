@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------
 package com.example.fsma.controller
 
-//import com.example.fsma.service.CteCoolService
 import com.example.fsma.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component

@@ -12,7 +12,7 @@ data class Business(
 
     @ManyToOne @JoinColumn
     val mainAddress: Address,
-    val name: String,
+    val businessName: String,
 
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
@@ -26,7 +26,7 @@ data class BusinessDto(
     val contactName: String? = null,
     val contactPhone: String? = null,
     val mainAddressId: Long,
-    val name: String,
+    val businessName: String,
     val dateCreated: OffsetDateTime= OffsetDateTime.now(),
     val dateModified: OffsetDateTime= OffsetDateTime.now(),
     val isDeleted: Boolean = false,
@@ -38,7 +38,7 @@ fun Business.toBusinessDto() = BusinessDto(
     contactName = contactName,
     contactPhone = contactPhone,
     mainAddressId = mainAddress.id,
-    name = name,
+    businessName = businessName,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -50,5 +50,5 @@ fun BusinessDto.toBusiness(mainAddress: Address) = Business(
     contactName = contactName,
     contactPhone = contactPhone,
     mainAddress = mainAddress,
-    name = name,
+    businessName = businessName,
 )

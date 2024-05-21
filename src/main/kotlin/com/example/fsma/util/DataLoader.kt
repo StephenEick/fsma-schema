@@ -44,6 +44,8 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("DELETE FROM address CASCADE;")
         jdbcTemplate.execute("DELETE FROM business CASCADE;")
         jdbcTemplate.execute("DELETE FROM location CASCADE;")
+        jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
+
         jdbcTemplate.execute("DELETE FROM cte_cool CASCADE;")
         jdbcTemplate.execute("DELETE FROM cte_harvest CASCADE;")
         jdbcTemplate.execute("DELETE FROM cte_ipack_prod CASCADE;")
@@ -54,6 +56,8 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS address_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS business_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
+
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_cool_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_harvest_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ipack_prod_seq RESTART;")
@@ -79,7 +83,7 @@ class DataLoader : ApplicationRunner {
 
         var business = Business(
             mainAddress = address,
-            name = "KaleidoscopeInc",
+            businessName = "KaleidoscopeInc",
             contactName = "Joe Smith",
             contactPhone = "800-555-1212",
         )
