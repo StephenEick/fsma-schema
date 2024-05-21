@@ -16,6 +16,11 @@ java {
     sourceCompatibility = JavaVersion.VERSION_21
 }
 
+repositories {
+//    gradlePluginPortal()
+    mavenCentral()
+}
+
 dependencies {
     implementation(libs.jackson)
     implementation(libs.kotlin.reflect)
