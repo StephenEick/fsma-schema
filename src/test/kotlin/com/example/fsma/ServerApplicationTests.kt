@@ -1,10 +1,11 @@
 package com.example.fsma
 
 import com.example.fsma.model.AddressDto
-import com.example.fsma.model.BusinessDto
+import com.example.fsma.model.FoodBusinessDto
 import com.example.fsma.model.LocationDto
 import com.example.fsma.model.TraceLotCodeDto
 import com.example.fsma.util.Country
+import com.example.fsma.util.FoodBusType
 import com.example.fsma.util.UsaCanadaState
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jayway.jsonpath.JsonPath
@@ -31,8 +32,8 @@ class ServerApplicationTests {
 
     private lateinit var addressDto: AddressDto
     private lateinit var addressDtoUpdated: AddressDto
-    private lateinit var businessDto: BusinessDto
-    private lateinit var businessDtoUpdated: BusinessDto
+    private lateinit var foodBusinessDto: FoodBusinessDto
+    private lateinit var foodBusinessDtoUpdated: FoodBusinessDto
     private lateinit var locationDto: LocationDto
     private lateinit var locationDtoUpdated: LocationDto
     private lateinit var traceLotCodeDto: TraceLotCodeDto
@@ -64,20 +65,22 @@ class ServerApplicationTests {
             lng = -88.162270
         )
 
-        businessDto = BusinessDto(
+        foodBusinessDto = FoodBusinessDto(
             id = 0,
             mainAddressId = 1,
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
             businessName = "Fred's Restaurant",
+            foodBusType = FoodBusType.RfeRestaurant,
         )
 
-        businessDtoUpdated = BusinessDto(
+        foodBusinessDtoUpdated = FoodBusinessDto(
             id = 0,
             mainAddressId = 1,
             contactName = "NewContact",
             contactPhone = "1-800-555-1212",
             businessName = "Fred's Restaurant",
+            foodBusType = FoodBusType.RfeGrocer,
         )
 
         locationDto = LocationDto(
@@ -205,7 +208,7 @@ class ServerApplicationTests {
         val mainAddressId = addAddress()
         val mvcResult = mockMvc.post("/api/v1/business") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(businessDto.copy(mainAddressId = mainAddressId))
+            content = objectMapper.writeValueAsString(foodBusinessDto.copy(mainAddressId = mainAddressId))
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isCreated() }
@@ -227,6 +230,7 @@ class ServerApplicationTests {
             jsonPath("$.contactName") { value("Steve") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
             jsonPath("$.businessName") { value("Fred's Restaurant") }
+            jsonPath("$.foodBusType") { value("RfeRestaurant") }
         }
     }
 
@@ -235,10 +239,10 @@ class ServerApplicationTests {
 //        addFsaUsers()
 //        val accessToken: String? = authenticate()
         val businessId: Long = addBusiness()
-        businessDtoUpdated = businessDtoUpdated.copy(id = businessId)
+        foodBusinessDtoUpdated = foodBusinessDtoUpdated.copy(id = businessId)
         mockMvc.put("/api/v1/business/$businessId") {
 //            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(businessDtoUpdated)
+            content = objectMapper.writeValueAsString(foodBusinessDtoUpdated)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
@@ -247,6 +251,7 @@ class ServerApplicationTests {
             jsonPath("$.contactName") { value("NewContact") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
             jsonPath("$.businessName") { value("Fred's Restaurant") }
+            jsonPath("$.foodBusType") { value("RfeGrocer") }
         }
     }
 

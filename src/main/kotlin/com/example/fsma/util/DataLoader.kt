@@ -2,7 +2,7 @@ package com.example.fsma.util
 
 import com.example.fsma.model.Address
 import com.example.fsma.model.AddressDto
-import com.example.fsma.model.Business
+import com.example.fsma.model.FoodBusiness
 import com.example.fsma.model.toAddress
 import com.example.fsma.service.AddressService
 import com.example.fsma.service.BusinessService
@@ -32,7 +32,7 @@ class DataLoader : ApplicationRunner {
 
     @Autowired
     private lateinit var businessService: BusinessService
-    private val businessList: MutableList<Business> = mutableListOf()
+    private val foodBusinessList: MutableList<FoodBusiness> = mutableListOf()
 
     override fun run(args: ApplicationArguments?) {
         deleteAllData()
@@ -42,7 +42,7 @@ class DataLoader : ApplicationRunner {
     @Suppress("LongMethod")
     private fun deleteAllData() {
         jdbcTemplate.execute("DELETE FROM address CASCADE;")
-        jdbcTemplate.execute("DELETE FROM business CASCADE;")
+        jdbcTemplate.execute("DELETE FROM food_business CASCADE;")
         jdbcTemplate.execute("DELETE FROM location CASCADE;")
         jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
 
@@ -54,7 +54,7 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("DELETE FROM cte_trans CASCADE;")
 
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS address_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS business_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_business_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
 
@@ -81,13 +81,14 @@ class DataLoader : ApplicationRunner {
         var address = addressDto.toAddress()
         addressList.add(addressService.insert(address))
 
-        var business = Business(
+        var foodBusiness = FoodBusiness(
             mainAddress = address,
             businessName = "KaleidoscopeInc",
             contactName = "Joe Smith",
             contactPhone = "800-555-1212",
+            foodBusType = FoodBusType.RfeRestaurant
         )
-        businessList.add(businessService.insert(business))
+        foodBusinessList.add(businessService.insert(foodBusiness))
 
 //        resellerId = 2L
 //        addressDto = AddressRequestDto(

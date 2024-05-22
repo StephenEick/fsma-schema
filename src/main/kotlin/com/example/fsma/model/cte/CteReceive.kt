@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.Business
+import com.example.fsma.model.FoodBusiness
 import com.example.fsma.model.Location
 import com.example.fsma.model.TraceLotCode
 import com.example.fsma.util.CteType
@@ -29,7 +29,7 @@ data class CteReceive(
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: Business,
+    override val cteBusName: FoodBusiness,
 
     @Enumerated(EnumType.STRING)
     val foodItem: FtlItem,
@@ -164,7 +164,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
 )
 
 fun CteReceiveDto.toCteReceive(
-    cteBusName: Business,
+    cteBusName: FoodBusiness,
     tlc: TraceLotCode,
     shipFromLocation: Location,
     shipToLocation: Location,

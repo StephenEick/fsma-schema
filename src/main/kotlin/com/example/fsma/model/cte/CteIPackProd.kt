@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.Business
+import com.example.fsma.model.FoodBusiness
 import com.example.fsma.model.Location
 import com.example.fsma.model.TraceLotCode
 import com.example.fsma.util.CteType
@@ -31,7 +31,7 @@ data class CteIPackProd(
 
     // Pack business name, e.g. creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
-    override val cteBusName: Business,
+    override val cteBusName: FoodBusiness,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraph (c) of this section, for each traceability
@@ -74,7 +74,7 @@ data class CteIPackProd(
 
     // (a)(7) The business name and phone number for the harvester of the food
     @ManyToOne @JoinColumn
-    val harvestBusiness: Business,
+    val harvestFoodBusiness: FoodBusiness,
 
     // (a)(8) The date of harvesting;
     val harvestDate: LocalDate,
@@ -171,7 +171,7 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
     fieldDesc = fieldDesc,
     containerName = containerName,
     containerDesc = containerDesc,
-    harvestBusinessId = harvestBusiness.id,
+    harvestBusinessId = harvestFoodBusiness.id,
     harvestDate = harvestDate,
     coolLocationId = coolLocation?.id,
     coolDate = coolDate,
@@ -191,9 +191,9 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
 )
 
 fun CteIPackProdDto.toCteIPackProd(
-    cteBusName : Business,
+    cteBusName : FoodBusiness,
     harvestLocation: Location,
-    harvestBusiness: Business,
+    harvestFoodBusiness: FoodBusiness,
     coolLocation: Location?,
     packTlc: TraceLotCode,
     packTlcSource: Location?,
@@ -211,7 +211,7 @@ fun CteIPackProdDto.toCteIPackProd(
     fieldDesc = fieldDesc,
     containerName = containerName,
     containerDesc = containerDesc,
-    harvestBusiness = harvestBusiness,
+    harvestFoodBusiness = harvestFoodBusiness,
     harvestDate = harvestDate,
     coolLocation = coolLocation,
     coolDate = coolDate,

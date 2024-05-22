@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.Business
+import com.example.fsma.model.FoodBusiness
 import com.example.fsma.model.Location
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
@@ -88,7 +88,7 @@ data class CteHarvest(
     // Harvest business name, e.g. creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: Business,
+    override val cteBusName: FoodBusiness,
 
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
@@ -148,7 +148,7 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
 fun CteHarvestDto.toCteHarvest(
     subsequentRecipient: Location,
     harvestLocation: Location,
-    cteBusName: Business,
+    cteBusName: FoodBusiness,
 ) = CteHarvest(
     id = id,
     cteType = cteType,

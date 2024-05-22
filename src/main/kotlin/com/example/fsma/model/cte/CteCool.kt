@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.Business
+import com.example.fsma.model.FoodBusiness
 import com.example.fsma.model.Location
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
@@ -75,7 +75,7 @@ data class CteCool(
 
     // Cooler business name
     @ManyToOne  @JoinColumn
-    override val cteBusName: Business,
+    override val cteBusName: FoodBusiness,
 
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
@@ -130,7 +130,7 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
 
 fun CteCoolDto.toCteCool(
     subsequentRecipient: Location,
-    cteBusName: Business,
+    cteBusName: FoodBusiness,
 ) = CteCool(
     id = id,
     cteType = cteType,
