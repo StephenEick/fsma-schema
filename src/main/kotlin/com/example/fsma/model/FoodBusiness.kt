@@ -6,7 +6,8 @@ import java.time.OffsetDateTime
 
 @Entity
 data class FoodBusiness(
-    @Id @GeneratedValue override val id: Long = 0,
+    @Id @GeneratedValue
+    override val id: Long = 0,
 
     val contactName: String? = null,
     val contactPhone: String? = null,

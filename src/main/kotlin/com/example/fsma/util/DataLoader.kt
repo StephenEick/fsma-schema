@@ -45,15 +45,15 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("DELETE FROM address CASCADE;")
         jdbcTemplate.execute("DELETE FROM food_business CASCADE;")
         jdbcTemplate.execute("DELETE FROM location CASCADE;")
-        jdbcTemplate.execute("DELETE FROM reseller CASCADE;")
-        jdbcTemplate.execute("DELETE FROM reseller_property CASCADE;")
+        jdbcTemplate.execute("DELETE FROM franchisor CASCADE;")
+        jdbcTemplate.execute("DELETE FROM franchisor_property CASCADE;")
         jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
 
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS address_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_business_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS reseller_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS reseller_property_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_property_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
 
         jdbcTemplate.execute("DELETE FROM cte_cool CASCADE;")
@@ -134,7 +134,7 @@ class DataLoader : ApplicationRunner {
         foodBusinessList.add(businessService.insert(foodBusiness))
     }
 
-//        resellerId = 2L
+//        franchisorId = 2L
 //        addressDto = AddressRequestDto(
 //            id = 0,
 //            street = "1413 Durness Court",
@@ -146,25 +146,25 @@ class DataLoader : ApplicationRunner {
 //            lat = 41.742220,
 //            lng = -88.162270
 //        )
-//        address = addressDto.toAddress(resellerId)
+//        address = addressDto.toAddress(franchisorId)
 //        billingAddress = address.copy()
-//        reseller = Reseller()
-//        reseller.address = address
-//        reseller.businessName = "ACME GPS Tracking"
-//        reseller.firstName = "Joe"
-//        reseller.lastName = "Smith"
-//        reseller.mainContactName = "Frank Scott"
-//        reseller.mainContactPhone = "800-555-1212"
-//        reseller.mainContactEmail = "fscott@example.com"
-//        reseller.billingContactName = "James Scott"
-//        reseller.billingContactPhone = "800-555-1212"
-//        reseller.billingContactEmail = "jscott@example.com"
-//        reseller.billingAddress = billingAddress
-//        reseller.accountRep = "John Doe"
+//        franchisor = Franchisor()
+//        franchisor.address = address
+//        franchisor.businessName = "ACME GPS Tracking"
+//        franchisor.firstName = "Joe"
+//        franchisor.lastName = "Smith"
+//        franchisor.mainContactName = "Frank Scott"
+//        franchisor.mainContactPhone = "800-555-1212"
+//        franchisor.mainContactEmail = "fscott@example.com"
+//        franchisor.billingContactName = "James Scott"
+//        franchisor.billingContactPhone = "800-555-1212"
+//        franchisor.billingContactEmail = "jscott@example.com"
+//        franchisor.billingAddress = billingAddress
+//        franchisor.accountRep = "John Doe"
 //
-//        resellerList.add(resellerService.insert(reseller))
+//        franchisorList.add(franchisorService.insert(franchisor))
 //
-//        resellerId = 3L
+//        franchisorId = 3L
 //        addressDto = AddressRequestDto(
 //            id = 0,
 //            street = "1234 Flanders St",
@@ -176,30 +176,30 @@ class DataLoader : ApplicationRunner {
 //            lat = 39.0,
 //            lng = -87.0
 //        )
-//        address = addressDto.toAddress(resellerId)
+//        address = addressDto.toAddress(franchisorId)
 //        billingAddress = address.copy()
-//        reseller = Reseller()
-//        reseller.address = address
-//        reseller.businessName = "Trucking Telematics, LLC"
-//        reseller.firstName = "Joe"
-//        reseller.lastName = "Smith"
-//        reseller.mainContactName = "Jake Jones"
-//        reseller.mainContactPhone = "800-555-1212"
-//        reseller.mainContactEmail = "jjones@example.com"
-//        reseller.billingContactName = "Allen Hamel"
-//        reseller.billingContactPhone = "800-555-1212"
-//        reseller.billingContactEmail = "ahamel@example.com"
-//        reseller.billingAddress = billingAddress
-//        reseller.accountRep = "Jane Doe"
+//        franchisor = Franchisor()
+//        franchisor.address = address
+//        franchisor.businessName = "Trucking Telematics, LLC"
+//        franchisor.firstName = "Joe"
+//        franchisor.lastName = "Smith"
+//        franchisor.mainContactName = "Jake Jones"
+//        franchisor.mainContactPhone = "800-555-1212"
+//        franchisor.mainContactEmail = "jjones@example.com"
+//        franchisor.billingContactName = "Allen Hamel"
+//        franchisor.billingContactPhone = "800-555-1212"
+//        franchisor.billingContactEmail = "ahamel@example.com"
+//        franchisor.billingAddress = billingAddress
+//        franchisor.accountRep = "Jane Doe"
 //
-//        resellerList.add(resellerService.insert(reseller))
+//        franchisorList.add(franchisorService.insert(franchisor))
     }
 
 //    fun addClients() {
-//        // -- resellerId=1
+//        // -- franchisorId=1
 //        var addressRequestDto = AddressRequestDto(
 //            id = 0,
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            street = "1622 Central Ave",
 //            city = "Memphis",
 //            state = UsaCanadaState.TN,
@@ -212,7 +212,7 @@ class DataLoader : ApplicationRunner {
 //            addressDto = addressRequestDto,
 //            timeZone = TimeZone.getTimeZone("US/Central"),
 //            businessName = "KaleidoscopeInc",
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            firstName = "Joe",
 //            lastName = "Smith",
 //            mainContactName = "Willian Oxley",
@@ -227,11 +227,11 @@ class DataLoader : ApplicationRunner {
 //                SkillSet("ChainSaw-Master", "ChainSaw-Master description")
 //            )
 //        )
-//        var client = clientRequestDto.toClient(resellerList[0])
+//        var client = clientRequestDto.toClient(franchisorList[0])
 //        clientList.add(clientService.insert(client))
 //
 //        addressRequestDto = AddressRequestDto(
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            street = "1234 Nichol Blvd",
 //            street2 = "#2994",
 //            city = "Apple Tree",
@@ -245,7 +245,7 @@ class DataLoader : ApplicationRunner {
 //            addressDto = addressRequestDto,
 //            timeZone = TimeZone.getTimeZone("US/Central"),
 //            businessName = "Acme Tree Service, Inc.",
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            firstName = "Joe",
 //            lastName = "Smith",
 //            mainContactName = "Joe Malone",
@@ -260,11 +260,11 @@ class DataLoader : ApplicationRunner {
 //                SkillSet("ChainSaw-Master", "ChainSaw-Master description")
 //            )
 //        )
-//        client = clientRequestDto.toClient(resellerList[0])
+//        client = clientRequestDto.toClient(franchisorList[0])
 //        clientList.add(clientService.insert(client)) // 1
 //
 //        addressRequestDto = AddressRequestDto(
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            street = "2345 Smith Hill Rd",
 //            city = "Johnsonville",
 //            state = UsaCanadaState.TX,
@@ -277,7 +277,7 @@ class DataLoader : ApplicationRunner {
 //            addressDto = addressRequestDto,
 //            timeZone = TimeZone.getTimeZone("US/Central"),
 //            businessName = "AAA Plumbing Service, Inc.",
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            firstName = "Joe",
 //            lastName = "Smith",
 //            mainContactName = "Joseph Mason",
@@ -292,7 +292,7 @@ class DataLoader : ApplicationRunner {
 //                SkillSet("Plumbing-Master", "Plumbing-Master description")
 //            )
 //        )
-//        client = clientRequestDto.toClient(resellerList[0])
+//        client = clientRequestDto.toClient(franchisorList[0])
 //        clientList.add(clientService.insert(client)) // 2
 //    }
 //
@@ -300,7 +300,7 @@ class DataLoader : ApplicationRunner {
 //        // Kscope as Root Admin
 //        val rootAdminDto = FsaUserRequestDto(
 //            clientId = 1, // KscopeInc
-//            resellerId = 1, // KscopeInc
+//            franchisorId = 1, // KscopeInc
 //            password = "12345",
 //            firstname = "Root",
 //            lastname = "Admin",
@@ -314,27 +314,27 @@ class DataLoader : ApplicationRunner {
 //        var response = authService.createNewFsaUser(rootAdminDto)
 //        fsaUserList.add(fsaUserService.findById(response.fsaUserId) ?: throw Exception("Not found"))
 //
-//        // Kscope as Reseller Admin
-//        val resellerAdminDto = FsaUserRequestDto(
+//        // Kscope as Franchisor Admin
+//        val franchisorAdminDto = FsaUserRequestDto(
 //            clientId = 1,
-//            resellerId = 1,
+//            franchisorId = 1,
 //            password = "54321",
-//            firstname = "Reseller",
+//            firstname = "Franchisor",
 //            lastname = "Admin",
-//            email = "resellerAdmin@example.com",
-//            notes = "KscopeInc as Reseller Admin",
-//            roles = listOf(Role.ResellerAdmin),
+//            email = "franchisorAdmin@example.com",
+//            notes = "KscopeInc as Franchisor Admin",
+//            roles = listOf(Role.FranchisorAdmin),
 //            phone = "630-777-1234",
 //            photoId = null,
 //            isTech = false,
 //        )
-//        response = authService.createNewFsaUser(resellerAdminDto)
+//        response = authService.createNewFsaUser(franchisorAdminDto)
 //        fsaUserList.add(fsaUserService.findById(response.fsaUserId) ?: throw Exception("Not found"))
 //
-//        // Kscope as Reseller Admin
+//        // Kscope as Franchisor Admin
 //        val clientAdminDto = FsaUserRequestDto(
 //            clientId = 1,
-//            resellerId = 1,
+//            franchisorId = 1,
 //            password = "54321",
 //            firstname = "Client",
 //            lastname = "Admin",
@@ -350,7 +350,7 @@ class DataLoader : ApplicationRunner {
 //
 //        val tech1Dto = FsaUserRequestDto(
 //            clientId = 1,
-//            resellerId = 1,
+//            franchisorId = 1,
 //            password = "12345",
 //            firstname = "Mobile1",
 //            lastname = "User1",
@@ -371,7 +371,7 @@ class DataLoader : ApplicationRunner {
 //
 //        val tech2Dto = FsaUserRequestDto(
 //            clientId = 1,
-//            resellerId = 1,
+//            franchisorId = 1,
 //            password = "12345",
 //            firstname = "Mobile2",
 //            lastname = "User2",
@@ -392,7 +392,7 @@ class DataLoader : ApplicationRunner {
 //
 //        val tech3Dto = FsaUserRequestDto(
 //            clientId = 1,
-//            resellerId = 1,
+//            franchisorId = 1,
 //            password = "Default@123",
 //            firstname = "TestFlight",
 //            lastname = "TestFlight",
@@ -410,7 +410,7 @@ class DataLoader : ApplicationRunner {
 //
 //    fun addCustomers() {
 //        tenantIdentifierResolver.setCurrentTenant("1")
-//        // -- resellerId, clientId
+//        // -- franchisorId, clientId
 //        var addressRequestDto = AddressRequestDto(
 //            id = 0,
 //            street = "1800 Copperville Rd",
@@ -486,10 +486,10 @@ class DataLoader : ApplicationRunner {
 //
 //    fun addServLocs() {
 //        tenantIdentifierResolver.setCurrentTenant("1")
-//        // -- resellerId, clientId, customerId
+//        // -- franchisorId, clientId, customerId
 //        var addressRequestDto = AddressRequestDto(
 //            id = 0,
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            street = "1234 Jenkins Ct",
 //            street2 = "#238",
 //            city = "Jamestown",
@@ -512,7 +512,7 @@ class DataLoader : ApplicationRunner {
 //
 //        addressRequestDto = AddressRequestDto(
 //            id = 0,
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            street = "85664 Lake Arrowhead Ln",
 //            street2 = "#7433",
 //            city = "Georgetown",
@@ -536,7 +536,7 @@ class DataLoader : ApplicationRunner {
 //
 //    fun addDatastores() {
 //        var datastoreRequestDto = DatastoreRequestDto(
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            clientId = clientList[0].id,
 //            workRequestId = workRequestList[0].id,
 //            dataName = DUMMY_IMAGE_NAME,
@@ -548,12 +548,12 @@ class DataLoader : ApplicationRunner {
 //            imageWidth = 250,
 //            imageHeight = 167,
 //        )
-//        var datastore = datastoreRequestDto.toDatastore(resellerList[0], clientList[0], workRequestList[0])
+//        var datastore = datastoreRequestDto.toDatastore(franchisorList[0], clientList[0], workRequestList[0])
 //        datastoreList.add(datastoreService.save(datastore))
 //
 //        datastoreRequestDto = DatastoreRequestDto(
 //            clientId = clientList[0].id,
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            workRequestId = workRequestList[0].id,
 //            dataName = DUMMY_IMAGE_NAME,
 //            description = "Dummy Image 1",
@@ -564,12 +564,12 @@ class DataLoader : ApplicationRunner {
 //            imageWidth = 250,
 //            imageHeight = 167,
 //        )
-//        datastore = datastoreRequestDto.toDatastore(resellerList[0], clientList[0], workRequestList[0])
+//        datastore = datastoreRequestDto.toDatastore(franchisorList[0], clientList[0], workRequestList[0])
 //        datastoreList.add(datastoreService.save(datastore))
 //
 //        datastoreRequestDto = DatastoreRequestDto(
 //            clientId = clientList[0].id,
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            workRequestId = workRequestList[0].id,
 //            dataName = DUMMY_IMAGE_NAME,
 //            description = "Dummy Image 2",
@@ -580,12 +580,12 @@ class DataLoader : ApplicationRunner {
 //            imageWidth = 250,
 //            imageHeight = 167,
 //        )
-//        datastore = datastoreRequestDto.toDatastore(resellerList[0], clientList[0], workRequestList[0])
+//        datastore = datastoreRequestDto.toDatastore(franchisorList[0], clientList[0], workRequestList[0])
 //        datastoreList.add(datastoreService.save(datastore))
 //
 //        datastoreRequestDto = DatastoreRequestDto(
 //            clientId = clientList[0].id,
-//            resellerId = resellerList[0].id,
+//            franchisorId = franchisorList[0].id,
 //            workRequestId = workRequestList[0].id,
 //            dataName = DUMMY_IMAGE_NAME,
 //            description = "Dummy Image 3",
@@ -596,7 +596,7 @@ class DataLoader : ApplicationRunner {
 //            imageWidth = 250,
 //            imageHeight = 167,
 //        )
-//        datastore = datastoreRequestDto.toDatastore(resellerList[0], clientList[0], workRequestList[0])
+//        datastore = datastoreRequestDto.toDatastore(franchisorList[0], clientList[0], workRequestList[0])
 //        datastoreList.add(datastoreService.save(datastore))
 //    }
 //
@@ -615,7 +615,7 @@ class DataLoader : ApplicationRunner {
 //
 //    fun addWorkRequests() {
 //        tenantIdentifierResolver.setCurrentTenant("1")
-//        // -- resellerId, clientId, customerId, servlocId
+//        // -- franchisorId, clientId, customerId, servlocId
 //        var workRequestRequestDto = WorkRequestRequestDto(
 //            id = 0, // must be zero for insert
 //            servLocId = servLocList[0].id,

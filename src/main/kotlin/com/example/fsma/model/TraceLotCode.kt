@@ -8,7 +8,8 @@ import java.time.OffsetDateTime
 
 @Entity
 data class TraceLotCode(
-    @Id @GeneratedValue override val id: Long = 0,
+    @Id @GeneratedValue
+    override val id: Long = 0,
     val tlc: String,
     val desc: String,
 

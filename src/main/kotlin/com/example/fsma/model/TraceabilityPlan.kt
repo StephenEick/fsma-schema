@@ -5,7 +5,8 @@ import jakarta.persistence.Id
 
 //@Entity
 data class TraceabilityPlan(
-    @Id @GeneratedValue override val id: Long = 0,
+    @Id @GeneratedValue
+    override val id: Long = 0,
     val descRecordMaintenance: String,
     val descIdentifyFoods: String,
     val descTraceabilityLotCodes: String,

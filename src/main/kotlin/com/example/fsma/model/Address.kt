@@ -8,7 +8,8 @@ import java.time.OffsetDateTime
 @Entity
 //@EntityListeners(BaseModelEntityListener::class)
 data class Address(
-    @Id @GeneratedValue override val id: Long = 0,
+    @Id @GeneratedValue
+    override val id: Long = 0,
 
 //    @ManyToOne @JoinColumn // (name = "reseller_id")
 //    val resellerId: Long = 0,
