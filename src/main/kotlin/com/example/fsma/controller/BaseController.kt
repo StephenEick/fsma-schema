@@ -22,15 +22,15 @@ class BaseController {
 
     @Autowired protected lateinit var addressService: AddressService
     @Autowired protected lateinit var businessService: BusinessService
-    @Autowired protected lateinit var locationService: LocationService
-    @Autowired protected lateinit var traceLotCodeService: TraceLotCodeService
-
     @Autowired protected lateinit var cteCoolService: CteCoolService
     @Autowired protected lateinit var cteHarvestService: CteHarvestService
     @Autowired protected lateinit var cteIPackProdService: CteIPackProdService
     @Autowired protected lateinit var cteReceiveService: CteReceiveService
     @Autowired protected lateinit var cteShipService: CteShipService
     @Autowired protected lateinit var cteTransformService: CteTransformService
+    @Autowired protected lateinit var franchisorService: FranchisorService
+    @Autowired protected lateinit var locationService: LocationService
+    @Autowired protected lateinit var traceLotCodeService: TraceLotCodeService
 
 //    fun getFsaUser(id: Long, authPrincipal: FsaUser): FsaUser {
 //        val fsaUser = fsaUserService.findById(id)

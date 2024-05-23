@@ -72,6 +72,7 @@ class ServerApplicationTests {
             contactPhone = "1-800-555-1212",
             businessName = "Fred's Restaurant",
             foodBusType = FoodBusType.RfeRestaurant,
+            franchisorId = null,
         )
 
         foodBusinessDtoUpdated = FoodBusinessDto(
@@ -81,6 +82,7 @@ class ServerApplicationTests {
             contactPhone = "1-800-555-1212",
             businessName = "Fred's Restaurant",
             foodBusType = FoodBusType.RfeGrocer,
+            franchisorId = null,
         )
 
         locationDto = LocationDto(

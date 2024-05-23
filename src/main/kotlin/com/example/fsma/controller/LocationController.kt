@@ -9,9 +9,9 @@ import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
-
 private const val LOCATION_BASE_URL = "/api/v1/location"
 private const val LOCATION_ALT_BASE_URL = "/api/v1/loc"
+
 
 @RestController
 @RequestMapping(value=[LOCATION_BASE_URL,LOCATION_ALT_BASE_URL])

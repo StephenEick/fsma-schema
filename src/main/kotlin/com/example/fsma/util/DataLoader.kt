@@ -36,6 +36,7 @@ class DataLoader : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
         deleteAllData()
+        addAddresses()
         addBusiness()
     }
 
@@ -44,7 +45,16 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("DELETE FROM address CASCADE;")
         jdbcTemplate.execute("DELETE FROM food_business CASCADE;")
         jdbcTemplate.execute("DELETE FROM location CASCADE;")
+        jdbcTemplate.execute("DELETE FROM reseller CASCADE;")
+        jdbcTemplate.execute("DELETE FROM reseller_property CASCADE;")
         jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
+
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS address_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_business_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS reseller_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS reseller_property_seq RESTART;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
 
         jdbcTemplate.execute("DELETE FROM cte_cool CASCADE;")
         jdbcTemplate.execute("DELETE FROM cte_harvest CASCADE;")
@@ -52,11 +62,6 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("DELETE FROM cte_receive CASCADE;")
         jdbcTemplate.execute("DELETE FROM cte_ship CASCADE;")
         jdbcTemplate.execute("DELETE FROM cte_trans CASCADE;")
-
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS address_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_business_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
 
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_cool_seq RESTART;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_harvest_seq RESTART;")
@@ -66,9 +71,8 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_trans_seq RESTART;")
     }
 
-    fun addBusiness() {
+    fun addAddresses() {
         var addressDto = AddressDto(
-            id = 0,
             street = "1622 Central Ave",
             city = "Memphis",
             state = UsaCanadaState.TN,
@@ -81,14 +85,54 @@ class DataLoader : ApplicationRunner {
         var address = addressDto.toAddress()
         addressList.add(addressService.insert(address))
 
+
+        addressDto = AddressDto(
+            street = "1413 Durness Ct.",
+            city = "Naperville",
+            state = UsaCanadaState.IL,
+            postalCode = "60565",
+            country = Country.USA,
+            lat = 35.1268133,
+            lng = -90.0087413
+        )
+
+        address = addressDto.toAddress()
+        addressList.add(addressService.insert(address))
+
+        addressDto = AddressDto(
+            street = "630 N. Main",
+            city = "Naperville",
+            state = UsaCanadaState.IL,
+            postalCode = "60563",
+            country = Country.USA,
+            lat = 35.1268133,
+            lng = -90.0087413
+        )
+
+        address = addressDto.toAddress()
+        addressList.add(addressService.insert(address))
+    }
+
+    fun addBusiness() {
+
         var foodBusiness = FoodBusiness(
-            mainAddress = address,
+            mainAddress = addressList[0],
             businessName = "KaleidoscopeInc",
             contactName = "Joe Smith",
             contactPhone = "800-555-1212",
             foodBusType = FoodBusType.RfeRestaurant
         )
         foodBusinessList.add(businessService.insert(foodBusiness))
+
+        foodBusiness = FoodBusiness(
+            mainAddress = addressList[0],
+            businessName = "630 N. Main",
+            contactName = "Ted Podolak",
+            contactPhone = "800-555-1212",
+            foodBusType = FoodBusType.RfeRestaurant
+        )
+        foodBusinessList.add(businessService.insert(foodBusiness))
+    }
 
 //        resellerId = 2L
 //        addressDto = AddressRequestDto(
@@ -1183,4 +1227,3 @@ class DataLoader : ApplicationRunner {
 //        workTypeItem = workTypeItemService.insert(workTypeItem)
 //        workTypeItemList.add(workTypeItem)
 //    }
-}

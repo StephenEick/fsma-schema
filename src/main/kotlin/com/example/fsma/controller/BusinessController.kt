@@ -38,7 +38,12 @@ class BusinessController : BaseController() {
     ): ResponseEntity<FoodBusinessDto> {
         val mainAddress = addressService.findById(foodBusinessDto.mainAddressId)
             ?: throw EntityNotFoundException("Address not found: ${foodBusinessDto.mainAddressId}")
-        val business = foodBusinessDto.toBusiness(mainAddress = mainAddress)
+
+        val franchisor = if (foodBusinessDto.franchisorId == null) null
+            else franchisorService.findById(foodBusinessDto.franchisorId)
+                ?: throw EntityNotFoundException("Franchisor not found: ${foodBusinessDto.franchisorId}")
+
+        val business = foodBusinessDto.toBusiness(mainAddress,franchisor)
         val businessResponse = businessService.insert(business).toFoodBusinessDto()
         return ResponseEntity.created(URI.create(BUSINESS_BASE_URL.plus("/${businessResponse.id}")))
             .body(businessResponse)
@@ -55,7 +60,11 @@ class BusinessController : BaseController() {
             throw UnauthorizedRequestException("Conflicting BusinessIds specified: $id != ${foodBusinessDto.id}")
         val mainAddress = addressService.findById(foodBusinessDto.mainAddressId)
             ?: throw EntityNotFoundException("Address not found: ${foodBusinessDto.mainAddressId}")
-        val business = foodBusinessDto.toBusiness(mainAddress = mainAddress)
+        val franchisor = if (foodBusinessDto.franchisorId == null) null
+        else franchisorService.findById(foodBusinessDto.franchisorId)
+            ?: throw EntityNotFoundException("Franchisor not found: ${foodBusinessDto.franchisorId}")
+
+        val business = foodBusinessDto.toBusiness(mainAddress,franchisor)
         val businessResponseDto = businessService.update(business).toFoodBusinessDto()
         return ResponseEntity.ok().body(businessResponseDto)
     }
