@@ -5,7 +5,7 @@ import jakarta.persistence.*
 import java.time.OffsetDateTime
 
 @Entity
-data class FoodBusiness(
+data class FoodBus(
     @Id @GeneratedValue
     override val id: Long = 0,
 
@@ -15,62 +15,69 @@ data class FoodBusiness(
 
     @ManyToOne @JoinColumn
     val mainAddress: Address,
-    val businessName: String,
+    val foodBusName: String,
+
+    @Enumerated(EnumType.STRING)
     val foodBusType: FoodBusType,
 
     // Is this a franchisee?
     @ManyToOne @JoinColumn
     val franchisor: Franchisor? = null,
 
+    val isEnabled: Boolean = true,
+
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null
-) : BaseModel<FoodBusiness>()
+) : BaseModel<FoodBus>() {
+    val isFranchisee: Boolean = franchisor != null
+}
 
-data class FoodBusinessDto(
+data class FoodBusDto(
     val id: Long = 0,
     val contactName: String? = null,
     val contactPhone: String? = null,
     val contactEmail: String? = null,
     val mainAddressId: Long,
-    val businessName: String,
+    val foodBusName: String,
     val foodBusType: FoodBusType,
     val franchisorId: Long? = null,
+    val isEnabled: Boolean = true,
     val dateCreated: OffsetDateTime = OffsetDateTime.now(),
     val dateModified: OffsetDateTime = OffsetDateTime.now(),
     val isDeleted: Boolean = false,
     val dateDeleted: OffsetDateTime? = null,
 )
 
-fun FoodBusiness.toFoodBusinessDto() = FoodBusinessDto(
+fun FoodBus.toFoodBusinessDto() = FoodBusDto(
     id = id,
     contactName = contactName,
     contactPhone = contactPhone,
     contactEmail = contactEmail,
     mainAddressId = mainAddress.id,
-    businessName = businessName,
+    foodBusName = foodBusName,
     foodBusType = foodBusType,
     franchisorId = franchisor?.id,
+    isEnabled = isEnabled,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
     dateDeleted = dateDeleted,
 )
 
-fun FoodBusinessDto.toBusiness(
+fun FoodBusDto.toBusiness(
     mainAddress: Address,
     franchisor: Franchisor?,
-) = FoodBusiness(
+) = FoodBus(
     id = id,
     contactName = contactName,
     contactPhone = contactPhone,
     contactEmail = contactEmail,
     mainAddress = mainAddress,
-    businessName = businessName,
+    foodBusName = foodBusName,
     foodBusType = foodBusType,
     franchisor = franchisor,
+    isEnabled = isEnabled,
 )
-
-fun FoodBusiness.isFranchisee() = franchisor != null

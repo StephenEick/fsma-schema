@@ -1,5 +1,6 @@
-package com.example.fsma.controller
+package com.example.fsma.controller.cte
 
+import com.example.fsma.controller.BaseController
 import com.example.fsma.model.cte.CteReceiveDto
 import com.example.fsma.model.cte.toCteReceive
 import com.example.fsma.model.cte.toCteReceiveDto
@@ -37,7 +38,7 @@ class CteReceiveController : BaseController() {
         @Valid @RequestBody cteReceiveDto: CteReceiveDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
     ): ResponseEntity<CteReceiveDto> {
-        val cteBusName = businessService.findById(cteReceiveDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteReceiveDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.cteBusNameId}")
 
         val traceLotCode = traceLotCodeService.findById(cteReceiveDto.tlcId)
@@ -68,7 +69,7 @@ class CteReceiveController : BaseController() {
         if (cteReceiveDto.id <= 0L || cteReceiveDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteReceive Ids specified: $id != ${cteReceiveDto.id}")
 
-        val cteBusName = businessService.findById(cteReceiveDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteReceiveDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.cteBusNameId}")
 
         val traceLotCode = traceLotCodeService.findById(cteReceiveDto.tlcId)

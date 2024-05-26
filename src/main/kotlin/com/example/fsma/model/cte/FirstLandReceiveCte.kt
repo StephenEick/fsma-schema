@@ -1,6 +1,6 @@
 package com.example.fsma.model.cte
 
-import com.example.fsma.model.FoodBusiness
+import com.example.fsma.model.FoodBus
 import com.example.fsma.util.CteType
 import com.example.fsma.util.FtlItem
 import com.example.fsma.util.ReferenceDocumentType
@@ -15,7 +15,7 @@ data class FirstLandReceiveCte(
     @Id @GeneratedValue override val id: Long = 0,
 
     override val cteType: CteType = CteType.Receive,
-    override val cteBusName: FoodBusiness,
+    override val cteBusName: FoodBus,
 
     @Enumerated(EnumType.STRING)
     val foodItem: FtlItem,

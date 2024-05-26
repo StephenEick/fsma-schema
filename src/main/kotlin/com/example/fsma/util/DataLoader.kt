@@ -1,11 +1,10 @@
 package com.example.fsma.util
 
-import com.example.fsma.model.Address
-import com.example.fsma.model.AddressDto
-import com.example.fsma.model.FoodBusiness
-import com.example.fsma.model.toAddress
+import com.example.fsma.auth.AuthService
+import com.example.fsma.model.*
 import com.example.fsma.service.AddressService
-import com.example.fsma.service.BusinessService
+import com.example.fsma.service.FoodBusService
+import com.example.fsma.service.FsmaUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -20,8 +19,8 @@ class DataLoader : ApplicationRunner {
     @Autowired
     private lateinit var jdbcTemplate: JdbcTemplate
 
-//    @Autowired
-//    private lateinit var authService: AuthService
+    @Autowired
+    private lateinit var authService: AuthService
 
 //    @Autowired
 //    private lateinit var tenantIdentifierResolver: TenantIdentifierResolver
@@ -31,43 +30,51 @@ class DataLoader : ApplicationRunner {
     private val addressList: MutableList<Address> = mutableListOf()
 
     @Autowired
-    private lateinit var businessService: BusinessService
-    private val foodBusinessList: MutableList<FoodBusiness> = mutableListOf()
+    //TODO: change to FoodBusiness
+    private lateinit var foodBusService: FoodBusService
+    private val foodBusList: MutableList<FoodBus> = mutableListOf()
+
+    @Autowired
+    private lateinit var fsmaUserService: FsmaUserService
+    private val fsmaUserList: MutableList<FsmaUser> = mutableListOf()
+
 
     override fun run(args: ApplicationArguments?) {
         deleteAllData()
         addAddresses()
-        addBusiness()
+        addFoodBusinesses()
+        addFsmaUsers()
     }
 
     @Suppress("LongMethod")
     private fun deleteAllData() {
         jdbcTemplate.execute("DELETE FROM address CASCADE;")
-        jdbcTemplate.execute("DELETE FROM food_business CASCADE;")
-        jdbcTemplate.execute("DELETE FROM location CASCADE;")
-        jdbcTemplate.execute("DELETE FROM franchisor CASCADE;")
-        jdbcTemplate.execute("DELETE FROM franchisor_property CASCADE;")
-        jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
-
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS address_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_business_seq RESTART;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM food_bus CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_bus_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM franchisor CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM franchisor_property CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_property_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM fsma_user CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS fsma_user_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM location CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
 
-        jdbcTemplate.execute("DELETE FROM cte_cool CASCADE;")
-        jdbcTemplate.execute("DELETE FROM cte_harvest CASCADE;")
-        jdbcTemplate.execute("DELETE FROM cte_ipack_prod CASCADE;")
-        jdbcTemplate.execute("DELETE FROM cte_receive CASCADE;")
-        jdbcTemplate.execute("DELETE FROM cte_ship CASCADE;")
-        jdbcTemplate.execute("DELETE FROM cte_trans CASCADE;")
 
+        jdbcTemplate.execute("DELETE FROM cte_cool CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_cool_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM cte_harvest CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_harvest_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM cte_ipack_prod CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ipack_prod_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM cte_receive CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_receive_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM cte_ship CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ship_seq RESTART;")
+        jdbcTemplate.execute("DELETE FROM cte_trans CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_trans_seq RESTART;")
     }
 
@@ -113,25 +120,55 @@ class DataLoader : ApplicationRunner {
         addressList.add(addressService.insert(address))
     }
 
-    fun addBusiness() {
+    fun addFoodBusinesses() {
 
-        var foodBusiness = FoodBusiness(
+        var foodBus = FoodBus(
             mainAddress = addressList[0],
-            businessName = "KaleidoscopeInc",
+            foodBusName = "KaleidoscopeInc",
             contactName = "Joe Smith",
             contactPhone = "800-555-1212",
             foodBusType = FoodBusType.RfeRestaurant
         )
-        foodBusinessList.add(businessService.insert(foodBusiness))
+        foodBusList.add(foodBusService.insert(foodBus))
 
-        foodBusiness = FoodBusiness(
+        foodBus = FoodBus(
             mainAddress = addressList[0],
-            businessName = "630 N. Main",
+            foodBusName = "630 N. Main",
             contactName = "Ted Podolak",
             contactPhone = "800-555-1212",
             foodBusType = FoodBusType.RfeRestaurant
         )
-        foodBusinessList.add(businessService.insert(foodBusiness))
+        foodBusList.add(foodBusService.insert(foodBus))
+    }
+
+    fun addFsmaUsers() {
+        var fsmaUserDto = FsmaUserRequestDto(
+            foodBusinessId = foodBusList[0].id,
+            email = "User0@restaurant0.com",
+            password = "123",
+            roles = listOf(Role.RootAdmin),
+            firstname = "Root",
+            lastname = "User0",
+        )
+        var response = authService.createNewFsmaUser(fsmaUserDto)
+        fsmaUserList.add(
+            fsmaUserService.findById(response.fsmaUserId)
+                ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
+        )
+
+        fsmaUserDto = FsmaUserRequestDto(
+            foodBusinessId = foodBusList[0].id,
+            email = "User1@Restaurant0.com",
+            password = "123",
+            roles = listOf(Role.FranchisorAdmin, Role.FoodBusinessUser),
+            firstname = "Steve",
+            lastname = "User1",
+        )
+        response = authService.createNewFsmaUser(fsmaUserDto)
+        fsmaUserList.add(
+            fsmaUserService.findById(response.fsmaUserId)
+                ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
+        )
     }
 
 //        franchisorId = 2L
@@ -193,7 +230,7 @@ class DataLoader : ApplicationRunner {
 //        franchisor.accountRep = "Jane Doe"
 //
 //        franchisorList.add(franchisorService.insert(franchisor))
-    }
+}
 
 //    fun addClients() {
 //        // -- franchisorId=1

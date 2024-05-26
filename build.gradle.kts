@@ -1,11 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.spring.boot)
-    alias(libs.plugins.spring.dependency)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.kotlin.jpa)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency)
     kotlin("kapt") version "1.9.23"
 }
 
@@ -22,16 +23,23 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.commons.csv)
     implementation(libs.jackson)
+    implementation(libs.jsonwebtoken)
+    implementation(libs.jsonwebtoken.impl)
+    implementation(libs.jsonwebtoken.jackson)
     implementation(libs.kotlin.reflect)
     implementation(libs.postgresql.driver)
     implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.mustache)
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.data.jpa)
-//    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.security)
     developmentOnly(libs.spring.boot.devtools)
+    implementation(libs.springdoc.common)
+    implementation(libs.springdoc.webmvc)
     runtimeOnly(libs.h2database)
     testImplementation(libs.spring.boot.starter.test) {
         exclude(module = "mockito-core")

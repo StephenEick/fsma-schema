@@ -6,17 +6,18 @@ import com.example.fsma.model.toFranchisor
 import com.example.fsma.model.toFranchisorDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
 private const val FRANCHISOR_BASE_URL = "/api/v1/franchisor"
-private const val FRANCHISOR_ALT_BASE_URL = "/api/v1/franchi"
+private const val FRANCHISOR_ALT_BASE_URL = "/api/v1/fran"
 
 @RestController
 @RequestMapping(value = [FRANCHISOR_BASE_URL, FRANCHISOR_ALT_BASE_URL])
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class FranchisorController : BaseController() {
 
     // -- Return a specific Franchisor
@@ -43,8 +44,8 @@ class FranchisorController : BaseController() {
 
         var billingAddress: Address? = null
         if (franchisorDto.billingAddressId != null)
-            billingAddress = businessService.findById(franchisorDto.billingAddressId)?.let {
-                throw EntityNotFoundException("ServiceAddress not found: $it")
+            billingAddress = foodBusService.findById(franchisorDto.billingAddressId)?.let {
+                throw EntityNotFoundException("BillingAddress not found: $it")
             }
         val franchisor = franchisorDto.toFranchisor(address, billingAddress)
         val franchisorResponse = franchisorService.insert(franchisor).toFranchisorDto()
@@ -66,7 +67,7 @@ class FranchisorController : BaseController() {
             ?: throw EntityNotFoundException("Franchisor Address not found: ${franchisorDto.addressId}")
         var billingAddress: Address? = null
         if (franchisorDto.billingAddressId != null)
-            billingAddress = businessService.findById(franchisorDto.billingAddressId)?.let {
+            billingAddress = foodBusService.findById(franchisorDto.billingAddressId)?.let {
                 throw EntityNotFoundException("ServiceAddress not found: $it")
             }
         val franchisor = franchisorDto.toFranchisor(address, billingAddress)

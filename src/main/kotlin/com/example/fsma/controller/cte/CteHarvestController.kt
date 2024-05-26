@@ -1,5 +1,6 @@
-package com.example.fsma.controller
+package com.example.fsma.controller.cte
 
+import com.example.fsma.controller.BaseController
 import com.example.fsma.model.cte.CteHarvestDto
 import com.example.fsma.model.cte.toCteHarvest
 import com.example.fsma.model.cte.toCteHarvestDto
@@ -43,7 +44,7 @@ class CteHarvestController : BaseController() {
         val harvestLocation = locationService.findById(cteHarvestDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteHarvestDto.harvestLocationId}")
 
-        val cteBusName = businessService.findById(cteHarvestDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteHarvestDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteHarvestDto.cteBusNameId}")
 
         val cteHarvest = cteHarvestDto.toCteHarvest(subsequentRecipient, harvestLocation, cteBusName)
@@ -68,7 +69,7 @@ class CteHarvestController : BaseController() {
         val harvestLocation = locationService.findById(cteHarvestDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteHarvestDto.harvestLocationId}")
 
-        val cteBusName = businessService.findById(cteHarvestDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteHarvestDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName Business not found: ${cteHarvestDto.cteBusNameId}")
 
         val cteHarvest = cteHarvestDto.toCteHarvest(subsequentRecipient, harvestLocation, cteBusName)

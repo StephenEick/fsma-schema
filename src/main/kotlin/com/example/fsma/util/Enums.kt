@@ -60,6 +60,17 @@ enum class ReferenceDocumentType {
     OTHER, // TODO: fill in later
 }
 
+// SGE: The order of the Roles is important - highest permissions last
+enum class Role {
+    Mobile,
+    FoodBusinessUser,
+    FoodBusinessAdmin,
+    FranchisorAdmin, // GPS Tracking
+    RootAdmin, // FoodTrace204
+}
+
+fun maxRole(roles: List<Role>) = roles.maxBy { it.ordinal }
+
 // The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
 enum class UnitOfMeasure {
     Bin,
@@ -137,4 +148,8 @@ enum class UsaCanadaState(val stateName: String) {
     SK("Saskatchewan"),
     YT("Yukon"),
 }
+
+inline fun <reified T : Enum<*>> enumValueOrNull(name: String?): T? =
+    if (name != null) T::class.java.enumConstants.firstOrNull { it.name == name }
+    else null
 

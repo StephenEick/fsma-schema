@@ -8,7 +8,7 @@ data class Location(
     @Id @GeneratedValue override val id: Long = 0,
 
     @ManyToOne @JoinColumn
-    val foodBusiness: FoodBusiness,
+    val foodBus: FoodBus,
 
     val contactName: String? = null,
     val contactPhone: String? = null,
@@ -25,7 +25,7 @@ data class Location(
 
 data class LocationDto(
     val id: Long = 0,
-    val businessId: Long,
+    val foodBusId: Long,
     val contactName: String? = null,
     val contactPhone: String? = null,
     val serviceAddressId: Long,
@@ -37,7 +37,7 @@ data class LocationDto(
 
 fun Location.toLocationDto() = LocationDto(
     id = id,
-    businessId = foodBusiness.id,
+    foodBusId = foodBus.id,
     contactName = contactName,
     contactPhone = contactPhone,
     serviceAddressId = serviceAddress.id,
@@ -48,11 +48,11 @@ fun Location.toLocationDto() = LocationDto(
 )
 
 fun LocationDto.toLocation(
-    foodBusiness: FoodBusiness,
+    foodBus: FoodBus,
     serviceAddress: Address,
 ) = Location(
     id = id,
-    foodBusiness = foodBusiness,
+    foodBus = foodBus,
     contactName = contactName,
     contactPhone = contactPhone,
     serviceAddress = serviceAddress,

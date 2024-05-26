@@ -39,7 +39,7 @@ class LocationController : BaseController() {
     ): ResponseEntity<LocationDto> {
         val serviceAddress = addressService.findById(locationDto.serviceAddressId)
             ?: throw EntityNotFoundException("Service Address not found: ${locationDto.serviceAddressId}")
-        val business = businessService.findById(locationDto.businessId)
+        val business = foodBusService.findById(locationDto.foodBusId)
             ?: throw EntityNotFoundException("ServiceAddress not found: ${locationDto.serviceAddressId}")
         val location = locationDto.toLocation( business, serviceAddress)
         val locationResponse = locationService.insert(location).toLocationDto()
@@ -57,8 +57,8 @@ class LocationController : BaseController() {
         if (locationDto.id <= 0L || locationDto.id != id)
             throw UnauthorizedRequestException("Conflicting LocationIds specified: $id != ${locationDto.id}")
 
-        val business = businessService.findById(locationDto.businessId)
-            ?: throw EntityNotFoundException("Business not found: ${locationDto.businessId}")
+        val business = foodBusService.findById(locationDto.foodBusId)
+            ?: throw EntityNotFoundException("Business not found: ${locationDto.foodBusId}")
 
         val serviceAddress = addressService.findById(locationDto.serviceAddressId)
             ?: throw EntityNotFoundException("ServiceAddress not found: ${locationDto.serviceAddressId}")

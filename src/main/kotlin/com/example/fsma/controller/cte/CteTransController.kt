@@ -1,5 +1,6 @@
-package com.example.fsma.controller
+package com.example.fsma.controller.cte
 
+import com.example.fsma.controller.BaseController
 import com.example.fsma.model.cte.CteTransDto
 import com.example.fsma.model.cte.toCteTrans
 import com.example.fsma.model.cte.toCteTransDto
@@ -15,7 +16,7 @@ private const val CTE_TRANSFORM_ALT_BASE_URL = "/api/v1/cte-transform"
 private const val CTE_TRANSFORM_ALT2_BASE_URL = "/api/v1/ctetrans"
 
 @RestController
-@RequestMapping(value = [CTE_TRANSFORM_BASE_URL, CTE_TRANSFORM_ALT_BASE_URL,CTE_TRANSFORM_ALT2_BASE_URL])
+@RequestMapping(value = [CTE_TRANSFORM_BASE_URL, CTE_TRANSFORM_ALT_BASE_URL, CTE_TRANSFORM_ALT2_BASE_URL])
 //@SecurityRequirement(name = "bearerAuth")
 class CteTransController : BaseController() {
 
@@ -38,7 +39,7 @@ class CteTransController : BaseController() {
         @Valid @RequestBody cteTransDto: CteTransDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
     ): ResponseEntity<CteTransDto> {
-        val cteBusName = businessService.findById(cteTransDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteTransDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteTransDto.cteBusNameId}")
 
         val traceLotCode = traceLotCodeService.findById(cteTransDto.inputTlcId)
@@ -66,7 +67,7 @@ class CteTransController : BaseController() {
         if (cteTransDto.id <= 0L || cteTransDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteTransform Ids specified: $id != ${cteTransDto.id}")
 
-        val cteBusName = businessService.findById(cteTransDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteTransDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteTransDto.cteBusNameId}")
 
         val traceLotCode = traceLotCodeService.findById(cteTransDto.inputTlcId)

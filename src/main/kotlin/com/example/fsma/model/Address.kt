@@ -11,12 +11,6 @@ data class Address(
     @Id @GeneratedValue
     override val id: Long = 0,
 
-//    @ManyToOne @JoinColumn // (name = "reseller_id")
-//    val resellerId: Long = 0,
-
-//    @ManyToOne @JoinColumn // (name = "client_id")
-//    val clientId: Long,
-
     val street: String,
     val street2: String? = null,
     val city: String,

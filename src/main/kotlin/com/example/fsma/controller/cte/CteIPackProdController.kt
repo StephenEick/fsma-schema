@@ -1,5 +1,6 @@
-package com.example.fsma.controller
+package com.example.fsma.controller.cte
 
+import com.example.fsma.controller.BaseController
 import com.example.fsma.model.cte.CteIPackProdDto
 import com.example.fsma.model.cte.toCteIPackProd
 import com.example.fsma.model.cte.toCteIPackProdDto
@@ -38,13 +39,13 @@ class CteIPackProdController : BaseController() {
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
 //        @AuthenticationPrincipal fsaUser: FsaUser
     ): ResponseEntity<CteIPackProdDto> {
-        val cteBusName = businessService.findById(cteIPackProdDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
 
         val harvestLocation = locationService.findById(cteIPackProdDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteIPackProdDto.harvestLocationId}")
 
-        val harvestBusiness = businessService.findById(cteIPackProdDto.harvestBusinessId)
+        val harvestBusiness = foodBusService.findById(cteIPackProdDto.harvestBusinessId)
             ?: throw EntityNotFoundException("HarvestBusiness not found: ${cteIPackProdDto.harvestBusinessId}")
 
         val coolLocation = cteIPackProdDto.coolLocationId?.let {
@@ -76,13 +77,13 @@ class CteIPackProdController : BaseController() {
         if (cteIPackProdDto.id <= 0L || cteIPackProdDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteIPackProd Ids specified: $id != ${cteIPackProdDto.id}")
 
-        val cteBusName = businessService.findById(cteIPackProdDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
 
         val harvestLocation = locationService.findById(cteIPackProdDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteIPackProdDto.harvestLocationId}")
 
-        val harvestBusiness = businessService.findById(cteIPackProdDto.harvestBusinessId)
+        val harvestBusiness = foodBusService.findById(cteIPackProdDto.harvestBusinessId)
             ?: throw EntityNotFoundException("HarvestBusiness not found: ${cteIPackProdDto.harvestBusinessId}")
 
         val coolLocation = cteIPackProdDto.coolLocationId?.let {

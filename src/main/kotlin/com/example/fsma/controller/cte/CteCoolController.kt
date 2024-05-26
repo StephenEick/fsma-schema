@@ -1,5 +1,6 @@
-package com.example.fsma.controller
+package com.example.fsma.controller.cte
 
+import com.example.fsma.controller.BaseController
 import com.example.fsma.model.cte.CteCoolDto
 import com.example.fsma.model.cte.toCteCool
 import com.example.fsma.model.cte.toCteCoolDto
@@ -40,7 +41,7 @@ class CteCoolController : BaseController() {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
 
-        val cteBusName = businessService.findById(cteCoolDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteCoolDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.cteBusNameId}")
 
         val cteCool = cteCoolDto.toCteCool(subsequentRecipient, cteBusName)
@@ -62,7 +63,7 @@ class CteCoolController : BaseController() {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
 
-        val cteBusName = businessService.findById(cteCoolDto.cteBusNameId)
+        val cteBusName = foodBusService.findById(cteCoolDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.cteBusNameId}")
 
         val cteCool = cteCoolDto.toCteCool(subsequentRecipient, cteBusName)

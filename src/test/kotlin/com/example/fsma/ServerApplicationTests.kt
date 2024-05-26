@@ -1,7 +1,8 @@
 package com.example.fsma
 
+import com.example.fsma.auth.AuthLogin
 import com.example.fsma.model.AddressDto
-import com.example.fsma.model.FoodBusinessDto
+import com.example.fsma.model.FoodBusDto
 import com.example.fsma.model.LocationDto
 import com.example.fsma.model.TraceLotCodeDto
 import com.example.fsma.util.Country
@@ -32,11 +33,30 @@ class ServerApplicationTests {
 
     private lateinit var addressDto: AddressDto
     private lateinit var addressDtoUpdated: AddressDto
-    private lateinit var foodBusinessDto: FoodBusinessDto
-    private lateinit var foodBusinessDtoUpdated: FoodBusinessDto
+    private lateinit var foodBusDto: FoodBusDto
+    private lateinit var foodBusDtoUpdated: FoodBusDto
     private lateinit var locationDto: LocationDto
     private lateinit var locationDtoUpdated: LocationDto
     private lateinit var traceLotCodeDto: TraceLotCodeDto
+
+    val rootAuthLogin = AuthLogin(email = "User0@restaurant0.com", password = "123", refreshToken = null)
+    lateinit var accessToken: String
+    lateinit var refreshToken: String
+
+    fun myauthenticate(authLogin: AuthLogin): List<String> {
+        val mvcResult = mockMvc.post("/api/v1/auth/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(authLogin)
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+        }.andReturn()
+
+        return listOf(
+            JsonPath.read(mvcResult.response.contentAsString, "$.accessToken"),
+            JsonPath.read(mvcResult.response.contentAsString, "$.refreshToken"),
+        )
+    }
 
     @BeforeEach
     fun setup() {
@@ -65,29 +85,29 @@ class ServerApplicationTests {
             lng = -88.162270
         )
 
-        foodBusinessDto = FoodBusinessDto(
+        foodBusDto = FoodBusDto(
             id = 0,
             mainAddressId = 1,
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
-            businessName = "Fred's Restaurant",
+            foodBusName = "Fred's Restaurant",
             foodBusType = FoodBusType.RfeRestaurant,
             franchisorId = null,
         )
 
-        foodBusinessDtoUpdated = FoodBusinessDto(
+        foodBusDtoUpdated = FoodBusDto(
             id = 0,
             mainAddressId = 1,
             contactName = "NewContact",
             contactPhone = "1-800-555-1212",
-            businessName = "Fred's Restaurant",
+            foodBusName = "Fred's Restaurant",
             foodBusType = FoodBusType.RfeGrocer,
             franchisorId = null,
         )
 
         locationDto = LocationDto(
             id = 0,
-            businessId = 1,
+            foodBusId = 1,
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
             serviceAddressId = 1,
@@ -95,7 +115,7 @@ class ServerApplicationTests {
 
         locationDtoUpdated = LocationDto(
             id = 0,
-            businessId = 1,
+            foodBusId = 1,
             contactName = "NewContact",
             contactPhone = "0-000-000-0000",
             serviceAddressId = 1,
@@ -106,7 +126,11 @@ class ServerApplicationTests {
             desc = "desc trace lot code 1",
         )
 
+        val pair = myauthenticate(rootAuthLogin)
+        accessToken = pair[0]
+        refreshToken = pair[1]
     }
+
 
     // ------------------------------------------------------------------------
     // -- Address tests
@@ -114,7 +138,7 @@ class ServerApplicationTests {
     fun addAddress(): Long {
 //        val accessToken: String? = authenticate()
         val mvcResult = mockMvc.post("/api/v1/address") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
             content = objectMapper.writeValueAsString(addressDto)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -126,9 +150,8 @@ class ServerApplicationTests {
 
     @Test
     fun `add address`() {
-//        val accessToken: String? = authenticate()
         mockMvc.post("/api/v1/address") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
             content = objectMapper.writeValueAsString(addressDto)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -150,7 +173,7 @@ class ServerApplicationTests {
 //        val accessToken: String? = authenticate()
         val addressId: Long = addAddress()
         mockMvc.get("/api/v1/address/$addressId") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
@@ -173,7 +196,7 @@ class ServerApplicationTests {
         val addressId: Long = addAddress()
         addressDtoUpdated = addressDtoUpdated.copy(id = addressId)
         mockMvc.put("/api/v1/address/$addressId") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
             content = objectMapper.writeValueAsString(addressDtoUpdated)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -196,21 +219,21 @@ class ServerApplicationTests {
 //        val accessToken: String? = authenticate()
         val addressId: Long = addAddress()
         mockMvc.delete("/api/v1/address/$addressId") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isNoContent() }
         }
     }
 
     // ------------------------------------------------------------------------
-    // -- Business tests
+    // -- FoodBus tests
 
-    fun addBusiness(): Long {
+    fun addFoodBus(): Long {
 //        val accessToken: String? = authenticate()
         val mainAddressId = addAddress()
-        val mvcResult = mockMvc.post("/api/v1/business") {
-//            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(foodBusinessDto.copy(mainAddressId = mainAddressId))
+        val mvcResult = mockMvc.post("/api/v1/foodbus") {
+            header("Authorization", "Bearer $accessToken")
+            content = objectMapper.writeValueAsString(foodBusDto.copy(mainAddressId = mainAddressId))
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isCreated() }
@@ -220,39 +243,38 @@ class ServerApplicationTests {
     }
 
     @Test
-    fun `get business`() {
+    fun `get foodBus`() {
 //        val accessToken: String? = authenticate()
-        val businessId = addBusiness()
-        mockMvc.get("/api/v1/business/$businessId") {
-//            header("Authorization", "Bearer $accessToken")
+        val foodBusId = addFoodBus()
+        mockMvc.get("/api/v1/foodbus/$foodBusId") {
+            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.id") { value(businessId) }
+            jsonPath("$.id") { value(foodBusId) }
             jsonPath("$.contactName") { value("Steve") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
-            jsonPath("$.businessName") { value("Fred's Restaurant") }
+            jsonPath("$.foodBusName") { value("Fred's Restaurant") }
             jsonPath("$.foodBusType") { value("RfeRestaurant") }
         }
     }
 
     @Test
-    fun `update business`() {
-//        addFsaUsers()
+    fun `update foodBusiness`() {
 //        val accessToken: String? = authenticate()
-        val businessId: Long = addBusiness()
-        foodBusinessDtoUpdated = foodBusinessDtoUpdated.copy(id = businessId)
-        mockMvc.put("/api/v1/business/$businessId") {
-//            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(foodBusinessDtoUpdated)
+        val foodBusId: Long = addFoodBus()
+        foodBusDtoUpdated = foodBusDtoUpdated.copy(id = foodBusId)
+        mockMvc.put("/api/v1/foodbus/$foodBusId") {
+            header("Authorization", "Bearer $accessToken")
+            content = objectMapper.writeValueAsString(foodBusDtoUpdated)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.id") { value(businessId) }
+            jsonPath("$.id") { value(foodBusId) }
             jsonPath("$.contactName") { value("NewContact") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
-            jsonPath("$.businessName") { value("Fred's Restaurant") }
+            jsonPath("$.foodBusName") { value("Fred's Restaurant") }
             jsonPath("$.foodBusType") { value("RfeGrocer") }
         }
     }
@@ -260,9 +282,9 @@ class ServerApplicationTests {
     @Test
     fun `delete business`() {
 //        val accessToken: String? = authenticate()
-        val businessId: Long = addBusiness()
-        mockMvc.delete("/api/v1/business/$businessId") {
-//            header("Authorization", "Bearer $accessToken")
+        val foodBusId: Long = addFoodBus()
+        mockMvc.delete("/api/v1/foodbus/$foodBusId") {
+            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isNoContent() }
         }
@@ -274,12 +296,12 @@ class ServerApplicationTests {
     fun addLocation(): Pair<Long, Long> {
 //        val accessToken: String? = authenticate()
         val serviceAddressId = addAddress()
-        val businessId = addBusiness()
+        val foodBusId = addFoodBus()
         val mvcResult = mockMvc.post("/api/v1/location") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
             content = objectMapper.writeValueAsString(
                 locationDto.copy(
-                    businessId = businessId,
+                    foodBusId = foodBusId,
                     serviceAddressId = serviceAddressId
                 )
             )
@@ -297,7 +319,7 @@ class ServerApplicationTests {
 //        val accessToken: String? = authenticate()
         val (locationId, serviceAddressId) = addLocation()
         mockMvc.get("/api/v1/location/$locationId") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
@@ -315,7 +337,7 @@ class ServerApplicationTests {
         val (locationId, serviceAddressId) = addLocation()
         locationDtoUpdated = locationDtoUpdated.copy(id = locationId)
         mockMvc.put("/api/v1/location/$locationId") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
             content = objectMapper.writeValueAsString(locationDtoUpdated)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -332,7 +354,7 @@ class ServerApplicationTests {
 //        val accessToken: String? = authenticate()
         val (locationId, serviceAddressId) = addLocation()
         mockMvc.delete("/api/v1/location/$locationId") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isNoContent() }
         }
@@ -344,7 +366,7 @@ class ServerApplicationTests {
     fun addTraceLotCode(): Long {
 //        val accessToken: String? = authenticate()
         val mvcResult = mockMvc.post("/api/v1/tlc") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
             content = objectMapper.writeValueAsString(traceLotCodeDto)
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -359,7 +381,7 @@ class ServerApplicationTests {
 //        val accessToken: String? = authenticate()
         val traceLotCodeId = addTraceLotCode()
         mockMvc.get("/api/v1/tlc/$traceLotCodeId") {
-//            header("Authorization", "Bearer $accessToken")
+            header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }

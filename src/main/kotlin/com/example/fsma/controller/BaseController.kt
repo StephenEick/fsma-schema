@@ -3,7 +3,10 @@
 // ----------------------------------------------------------------------------
 package com.example.fsma.controller
 
+import com.example.fsma.auth.JwtService
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.service.*
+import com.example.fsma.util.BadRequestException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -20,19 +23,34 @@ class BaseController {
 
 //    internal val logger by LoggerDelegate()
 
-    @Autowired protected lateinit var addressService: AddressService
-    @Autowired protected lateinit var businessService: BusinessService
-    @Autowired protected lateinit var cteCoolService: CteCoolService
-    @Autowired protected lateinit var cteHarvestService: CteHarvestService
-    @Autowired protected lateinit var cteIPackProdService: CteIPackProdService
-    @Autowired protected lateinit var cteReceiveService: CteReceiveService
-    @Autowired protected lateinit var cteShipService: CteShipService
-    @Autowired protected lateinit var cteTransformService: CteTransformService
-    @Autowired protected lateinit var franchisorService: FranchisorService
-    @Autowired protected lateinit var locationService: LocationService
-    @Autowired protected lateinit var traceLotCodeService: TraceLotCodeService
+    @Autowired
+    protected lateinit var addressService: AddressService
+    @Autowired
+    protected lateinit var cteCoolService: CteCoolService
+    @Autowired
+    protected lateinit var cteHarvestService: CteHarvestService
+    @Autowired
+    protected lateinit var cteIPackProdService: CteIPackProdService
+    @Autowired
+    protected lateinit var cteReceiveService: CteReceiveService
+    @Autowired
+    protected lateinit var cteShipService: CteShipService
+    @Autowired
+    protected lateinit var cteTransformService: CteTransformService
+    @Autowired
+    protected lateinit var foodBusService: FoodBusService
+    @Autowired
+    protected lateinit var franchisorService: FranchisorService
+    @Autowired
+    protected lateinit var fsmaUserService: FsmaUserService
+    @Autowired
+    protected lateinit var jwtService: JwtService
+    @Autowired
+    protected lateinit var locationService: LocationService
+    @Autowired
+    protected lateinit var traceLotCodeService: TraceLotCodeService
 
-//    fun getFsaUser(id: Long, authPrincipal: FsaUser): FsaUser {
+    //    fun getFsaUser(id: Long, authPrincipal: FsaUser): FsaUser {
 //        val fsaUser = fsaUserService.findById(id)
 //            ?: throw EntityNotFoundException("FsaUser not found: $id")
 //
@@ -142,20 +160,25 @@ class BaseController {
 //
 //    // ----------------------------
 //
-//    protected fun assertResellerClientMatchesToken(
-//        authPrincipal: FsaUser,
-//        modelResellerId: Long,
-//        modelClientId: Long? = null
-//    ) {
-//        if (
-//            authPrincipal.isRootAdmin() ||
+    protected fun assertFoodBusinessMatchesToken(
+        authPrincipal: FsmaUser,
+        modelFoodBusinessId: Long,
+//    modelClientId: Long? = null
+    ) {
+        if (
+            authPrincipal.isRootAdmin() || isFoodBusinessCheck(authPrincipal, modelFoodBusinessId)
+
+        //TODO: remove
 //            isResellerCheck(authPrincipal, modelResellerId) ||
 //            isClientCheck(authPrincipal, modelResellerId, modelClientId)
-//        ) return
-//
-//        // Permissions are wrong
-//        throw BadRequestException("Invalid request")
-//    }
+        ) return
+
+        // Permissions are wrong
+        throw BadRequestException("Invalid request")
+    }
+
+    private fun isFoodBusinessCheck(authPrincipal: FsmaUser, modelFoodBusinessId: Long) =
+        authPrincipal.isFoodBusinessAdmin() && modelFoodBusinessId == authPrincipal.foodBus.id
 //
 //    private fun isResellerCheck(authPrincipal: FsaUser, modelResellerId: Long): Boolean {
 //        return authPrincipal.isResellerAdmin() && modelResellerId == authPrincipal.reseller.id

@@ -13,7 +13,8 @@ import java.time.OffsetDateTime
     ]
 )
 data class Franchisor(
-    @Id @GeneratedValue override val id: Long = 0,
+    @Id @GeneratedValue
+    override val id: Long = 0,
 
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
