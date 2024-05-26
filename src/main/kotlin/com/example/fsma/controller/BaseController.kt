@@ -50,7 +50,7 @@ class BaseController {
     @Autowired
     protected lateinit var traceLotCodeService: TraceLotCodeService
 
-    //    fun getFsaUser(id: Long, authPrincipal: FsaUser): FsaUser {
+    //    fun getFsaUser(id: Long, authPrincipal: FsmaUser): FsaUser {
 //        val fsaUser = fsaUserService.findById(id)
 //            ?: throw EntityNotFoundException("FsaUser not found: $id")
 //
@@ -68,21 +68,21 @@ class BaseController {
 //        return fsaUser
 //    }
 //
-//    fun getAddress(id: Long, authPrincipal: FsaUser): Address {
+//    fun getAddress(id: Long, authPrincipal: FsmaUser): Address {
 //        val address = addressService.findById(id)
 //            ?: throw EntityNotFoundException("Address not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, address.resellerId)
 //        return address
 //    }
 //
-//    fun getCustomer(id: Long, authPrincipal: FsaUser): Customer {
+//    fun getCustomer(id: Long, authPrincipal: FsmaUser): Customer {
 //        val customer = customerService.findById(id)
 //            ?: throw EntityNotFoundException("Customer not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, customer.resellerId, customer.client.id)
 //        return customer
 //    }
 //
-//    fun getScheduleItem(id: Long, authPrincipal: FsaUser): ScheduleItem {
+//    fun getScheduleItem(id: Long, authPrincipal: FsmaUser): ScheduleItem {
 //        val scheduleItem = scheduleItemService.findById(id)
 //            ?: throw EntityNotFoundException("ScheduleItem not found: $id")
 //        assertResellerClientMatchesToken(
@@ -93,49 +93,49 @@ class BaseController {
 //        return scheduleItem
 //    }
 //
-//    fun getServLoc(id: Long, authPrincipal: FsaUser): ServLoc {
+//    fun getServLoc(id: Long, authPrincipal: FsmaUser): ServLoc {
 //        val servLoc = servLocService.findById(id)
 //            ?: throw EntityNotFoundException("ServLoc not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, servLoc.reseller.id, servLoc.client.id)
 //        return servLoc
 //    }
 //
-//    fun getWorkRequest(id: Long, authPrincipal: FsaUser): WorkRequest {
+//    fun getWorkRequest(id: Long, authPrincipal: FsmaUser): WorkRequest {
 //        val workRequest = workRequestService.findById(id)
 //            ?: throw EntityNotFoundException("WorkRequest not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, workRequest.reseller.id, workRequest.client.id)
 //        return workRequest
 //    }
 //
-//    fun getWorkTypeItem(id: Long, authPrincipal: FsaUser): WorkTypeItem {
+//    fun getWorkTypeItem(id: Long, authPrincipal: FsmaUser): WorkTypeItem {
 //        val workTypeItem = workTypeItemService.findById(id)
 //            ?: throw EntityNotFoundException("WorkTypeItem not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, workTypeItem.reseller.id, workTypeItem.client.id)
 //        return workTypeItem
 //    }
 //
-//    fun getWorkRequestHistory(id: Long, authPrincipal: FsaUser): WorkRequestHistory {
+//    fun getWorkRequestHistory(id: Long, authPrincipal: FsmaUser): WorkRequestHistory {
 //        val workRequestHistory = workRequestHistoryService.findById(id)
 //            ?: throw EntityNotFoundException("WorkType not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, workRequestHistory.reseller.id, workRequestHistory.client.id)
 //        return workRequestHistory
 //    }
 //
-//    fun getWorkType(id: Long, authPrincipal: FsaUser): WorkType {
+//    fun getWorkType(id: Long, authPrincipal: FsmaUser): WorkType {
 //        val workType = workTypeService.findById(id)
 //            ?: throw EntityNotFoundException("WorkType not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, workType.reseller.id, workType.client.id)
 //        return workType
 //    }
 //
-//    fun getInvoice(id: Long, authPrincipal: FsaUser): Invoice {
+//    fun getInvoice(id: Long, authPrincipal: FsmaUser): Invoice {
 //        val invoice = invoiceService.findById(id)
 //            ?: throw EntityNotFoundException("Invoice not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, invoice.reseller.id, invoice.client.id)
 //        return invoice
 //    }
 //
-//    fun getEstimate(id: Long, authPrincipal: FsaUser): Estimate {
+//    fun getEstimate(id: Long, authPrincipal: FsmaUser): Estimate {
 //        val estimate = estimateService.findById(id)
 //            ?: throw EntityNotFoundException("Estimate not found: $id")
 //        assertResellerClientMatchesToken(authPrincipal, estimate.reseller.id, estimate.client.id)
@@ -144,7 +144,7 @@ class BaseController {
 //
 //    // ----------------------------
 //
-//    fun getDatastore(id: Long, authPrincipal: FsaUser): Datastore {
+//    fun getDatastore(id: Long, authPrincipal: FsmaUser): Datastore {
 //        val datastore = datastoreService.findById(id)
 //            ?: throw EntityNotFoundException("Datastore not found: $id")
 //        if (!authPrincipal.isRootAdmin()) {
@@ -180,17 +180,17 @@ class BaseController {
     private fun isFoodBusinessCheck(authPrincipal: FsmaUser, modelFoodBusinessId: Long) =
         authPrincipal.isFoodBusinessAdmin() && modelFoodBusinessId == authPrincipal.foodBus.id
 //
-//    private fun isResellerCheck(authPrincipal: FsaUser, modelResellerId: Long): Boolean {
+//    private fun isResellerCheck(authPrincipal: FsmaUser, modelResellerId: Long): Boolean {
 //        return authPrincipal.isResellerAdmin() && modelResellerId == authPrincipal.reseller.id
 //    }
 //
-//    private fun isClientCheck(authPrincipal: FsaUser, modelResellerId: Long, modelClientId: Long?): Boolean {
+//    private fun isClientCheck(authPrincipal: FsmaUser, modelResellerId: Long, modelClientId: Long?): Boolean {
 //        return (authPrincipal.isClientAdmin() || authPrincipal.isCoordinator() || authPrincipal.isMobile()) &&
 //            modelResellerId == authPrincipal.reseller.id && modelClientId != null && modelClientId == authPrincipal.client.id
 //    }
 //
 //    protected fun assertResellerMatchesToken(
-//        authPrincipal: FsaUser,
+//        authPrincipal: FsmaUser,
 //        modelResellerId: Long
 //    ) {
 //        if (

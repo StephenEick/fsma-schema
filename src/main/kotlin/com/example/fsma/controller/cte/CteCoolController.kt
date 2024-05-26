@@ -1,13 +1,16 @@
 package com.example.fsma.controller.cte
 
 import com.example.fsma.controller.BaseController
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.cte.CteCoolDto
 import com.example.fsma.model.cte.toCteCool
 import com.example.fsma.model.cte.toCteCoolDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -16,7 +19,7 @@ private const val CTE_COOL_ALT_BASE_URL = "/api/v1/cte-cool"
 
 @RestController
 @RequestMapping(value = [CTE_COOL_BASE_URL, CTE_COOL_ALT_BASE_URL])
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class CteCoolController : BaseController() {
 
     // -- Return a specific CteCool
@@ -24,7 +27,7 @@ class CteCoolController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteCoolDto> {
         val cteCool = cteCoolService.findById(id)
             ?: throw EntityNotFoundException("ServiceAddress not found = $id")
@@ -36,7 +39,7 @@ class CteCoolController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteCoolDto: CteCoolDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteCoolDto> {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
@@ -55,7 +58,7 @@ class CteCoolController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteCoolDto: CteCoolDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteCoolDto> {
         if (cteCoolDto.id <= 0L || cteCoolDto.id != id)
             throw UnauthorizedRequestException("Conflicting CtcCool Ids specified: $id != ${cteCoolDto.id}")
@@ -75,7 +78,7 @@ class CteCoolController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteCoolService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

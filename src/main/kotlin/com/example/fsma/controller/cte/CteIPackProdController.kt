@@ -1,13 +1,16 @@
 package com.example.fsma.controller.cte
 
 import com.example.fsma.controller.BaseController
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.cte.CteIPackProdDto
 import com.example.fsma.model.cte.toCteIPackProd
 import com.example.fsma.model.cte.toCteIPackProdDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -17,7 +20,7 @@ private const val CTE_IPACK_PROD_ALT2_BASE_URL = "/api/v1/cteipp"
 
 @RestController
 @RequestMapping(value = [CTE_IPACK_PROD_BASE_URL, CTE_IPACK_PROD_ALT_BASE_URL, CTE_IPACK_PROD_ALT2_BASE_URL])
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class CteIPackProdController : BaseController() {
 
     // -- Return a specific CteCool
@@ -25,7 +28,7 @@ class CteIPackProdController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
         val cteIPackProd = cteIPackProdService.findById(id)
             ?: throw EntityNotFoundException("CteIPackProd not found = $id")
@@ -37,7 +40,7 @@ class CteIPackProdController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
         val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
@@ -72,7 +75,7 @@ class CteIPackProdController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
         if (cteIPackProdDto.id <= 0L || cteIPackProdDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteIPackProd Ids specified: $id != ${cteIPackProdDto.id}")
@@ -108,7 +111,7 @@ class CteIPackProdController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteIPackProdService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

@@ -1,13 +1,16 @@
 package com.example.fsma.controller.cte
 
 import com.example.fsma.controller.BaseController
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.cte.CteReceiveDto
 import com.example.fsma.model.cte.toCteReceive
 import com.example.fsma.model.cte.toCteReceiveDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -16,7 +19,7 @@ private const val CTE_RECEIVE_ALT_BASE_URL = "/api/v1/cte-receive"
 
 @RestController
 @RequestMapping(value = [CTE_RECEIVE_BASE_URL, CTE_RECEIVE_ALT_BASE_URL])
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class CteReceiveController : BaseController() {
 
     // -- Return a specific CteCool
@@ -24,7 +27,7 @@ class CteReceiveController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
         val cteReceive = cteReceiveService.findById(id)
             ?: throw EntityNotFoundException("CteReceive not found = $id")
@@ -36,7 +39,7 @@ class CteReceiveController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteReceiveDto: CteReceiveDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
         val cteBusName = foodBusService.findById(cteReceiveDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.cteBusNameId}")
@@ -64,7 +67,7 @@ class CteReceiveController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteReceiveDto: CteReceiveDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
         if (cteReceiveDto.id <= 0L || cteReceiveDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteReceive Ids specified: $id != ${cteReceiveDto.id}")
@@ -93,7 +96,7 @@ class CteReceiveController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteReceiveService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

@@ -1,6 +1,7 @@
 package com.example.fsma.controller
 
 import com.example.fsma.model.FoodBusDto
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.toBusiness
 import com.example.fsma.model.toFoodBusinessDto
 import com.example.fsma.util.EntityNotFoundException
@@ -8,6 +9,7 @@ import com.example.fsma.util.UnauthorizedRequestException
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -24,7 +26,7 @@ class FoodBusController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FoodBusDto> {
         val business = foodBusService.findById(id)
             ?: throw EntityNotFoundException("FoodBusiness not found = $id")
@@ -36,7 +38,7 @@ class FoodBusController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody foodBusDto: FoodBusDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FoodBusDto> {
         val mainAddress = addressService.findById(foodBusDto.mainAddressId)
             ?: throw EntityNotFoundException("Address not found: ${foodBusDto.mainAddressId}")
@@ -56,7 +58,7 @@ class FoodBusController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody foodBusDto: FoodBusDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FoodBusDto> {
         if (foodBusDto.id <= 0L || foodBusDto.id != id)
             throw UnauthorizedRequestException("Conflicting BusinessIds specified: $id != ${foodBusDto.id}")
@@ -75,7 +77,7 @@ class FoodBusController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         foodBusService.findById(id)?.let { business ->
 //            assertResellerClientMatchesToken(fsaUser, business.resellerId)

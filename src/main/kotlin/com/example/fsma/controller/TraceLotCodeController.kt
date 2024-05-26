@@ -1,12 +1,15 @@
 package com.example.fsma.controller
 
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.TraceLotCodeDto
 import com.example.fsma.model.toTraceLotCode
 import com.example.fsma.model.toTraceLotCodeDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -16,7 +19,7 @@ private const val TRACE_LOT_CODE_ALT2_BASE_URL = "/api/v1/tlc"
 
 @RestController
 @RequestMapping(value = [TRACE_LOT_CODE_BASE_URL, TRACE_LOT_CODE_ALT_BASE_URL, TRACE_LOT_CODE_ALT2_BASE_URL])
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class TraceLotCodeController : BaseController() {
 
     // -- Return a specific TraceLotCode
@@ -24,7 +27,7 @@ class TraceLotCodeController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<TraceLotCodeDto> {
         val traceLotCode = traceLotCodeService.findById(id)
             ?: throw EntityNotFoundException("TraceLotCode not found = $id")
@@ -36,7 +39,7 @@ class TraceLotCodeController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody traceLotCodeDto: TraceLotCodeDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<TraceLotCodeDto> {
         val traceLotCode = traceLotCodeDto.toTraceLotCode()
         val traceLotCodeResponse = traceLotCodeService.insert(traceLotCode).toTraceLotCodeDto()
@@ -49,7 +52,7 @@ class TraceLotCodeController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody traceLotCodeDto: TraceLotCodeDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<TraceLotCodeDto> {
         if (traceLotCodeDto.id <= 0L || traceLotCodeDto.id != id)
             throw UnauthorizedRequestException("Conflicting TraceLotCodeIds specified: $id != ${traceLotCodeDto.id}")
@@ -62,7 +65,7 @@ class TraceLotCodeController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         traceLotCodeService.findById(id)?.let { traceLotCode ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

@@ -1,13 +1,16 @@
 package com.example.fsma.controller.cte
 
 import com.example.fsma.controller.BaseController
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.cte.CteTransDto
 import com.example.fsma.model.cte.toCteTrans
 import com.example.fsma.model.cte.toCteTransDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -17,7 +20,7 @@ private const val CTE_TRANSFORM_ALT2_BASE_URL = "/api/v1/ctetrans"
 
 @RestController
 @RequestMapping(value = [CTE_TRANSFORM_BASE_URL, CTE_TRANSFORM_ALT_BASE_URL, CTE_TRANSFORM_ALT2_BASE_URL])
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class CteTransController : BaseController() {
 
     // -- Return a specific CteCool
@@ -25,7 +28,7 @@ class CteTransController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteTransDto> {
         val cteTransform = cteTransformService.findById(id)
             ?: throw EntityNotFoundException("CteTransform not found = $id")
@@ -37,7 +40,7 @@ class CteTransController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteTransDto: CteTransDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteTransDto> {
         val cteBusName = foodBusService.findById(cteTransDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteTransDto.cteBusNameId}")
@@ -62,7 +65,7 @@ class CteTransController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteTransDto: CteTransDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteTransDto> {
         if (cteTransDto.id <= 0L || cteTransDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteTransform Ids specified: $id != ${cteTransDto.id}")
@@ -89,7 +92,7 @@ class CteTransController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteTransformService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

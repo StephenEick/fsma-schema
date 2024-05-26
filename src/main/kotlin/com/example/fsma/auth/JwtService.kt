@@ -70,8 +70,7 @@ class JwtService {
     private fun extractFsmaUserId(token: String) = extractWhichId(FSMA_USER_ID, token)
     private fun extractFoodBusinessId(token: String) = extractWhichId(FOOD_BUSINESS_ID, token)
 
-    //TODO: delete?
-    fun getResellerClientFsaUserIds(token: String) = Pair(
+    fun getFoodBusinessIdAndFsmaUserId(token: String) = Pair(
         extractFoodBusinessId(token),
         extractFsmaUserId(token)
     )

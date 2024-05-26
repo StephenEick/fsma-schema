@@ -2,7 +2,7 @@ package com.example.fsma
 
 import com.example.fsma.auth.AuthLogin
 import com.example.fsma.auth.AuthService
-import com.example.fsma.model.FsmaUserRequestDto
+import com.example.fsma.model.FsmaUserDto
 import com.example.fsma.service.FsmaUserService
 import com.example.fsma.util.Role
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,7 +32,7 @@ class TestsAuthController {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
-    // TODO: add password reset token logic
+    // TODO: add passwordreset token logic - we will need this
 //    @Autowired
 //    private lateinit var passwordResetTokenRepository: PasswordResetTokenRepository
 
@@ -56,7 +56,7 @@ class TestsAuthController {
 
     @Test
     fun `get root admin`() {
-        val root = FsmaUserRequestDto(
+        val root = FsmaUserDto(
             id = 1,
             foodBusinessId = 1,//foodBusinessList[0].id,
             email = "User0@restaurant0.com",

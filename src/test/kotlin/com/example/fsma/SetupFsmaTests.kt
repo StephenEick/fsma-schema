@@ -99,7 +99,7 @@ class SetupFsmaTests {
         }
 
         private fun addFsmaUsers() {
-            var fsmaUserDto = FsmaUserRequestDto(
+            var fsmaUserDto = FsmaUserDto(
                 foodBusinessId = foodBusList[0].id,
                 email = "User0@restaurant0.com",
                 password = "123",
@@ -113,7 +113,7 @@ class SetupFsmaTests {
                     ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
             )
 
-            fsmaUserDto = FsmaUserRequestDto(
+            fsmaUserDto = FsmaUserDto(
                 foodBusinessId = foodBusList[0].id,
                 email = "User1@Restaurant0.com",
                 password = "123",

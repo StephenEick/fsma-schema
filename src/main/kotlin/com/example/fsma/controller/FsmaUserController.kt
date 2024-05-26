@@ -1,6 +1,9 @@
 package com.example.fsma.controller
 
-import com.example.fsma.model.*
+import com.example.fsma.model.FsmaUser
+import com.example.fsma.model.FsmaUserDto
+import com.example.fsma.model.toFsmaUser
+import com.example.fsma.model.toFsmaUserDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -24,22 +27,22 @@ class FsmaUserController : BaseController() {
     fun findById(
         @PathVariable(value = "id") id: Long,
         @AuthenticationPrincipal authPrincipal: FsmaUser
-    ): ResponseEntity<FsmaUserResponseDto> {
+    ): ResponseEntity<FsmaUserDto> {
         val fsma = fsmaUserService.findById(id)
             ?: throw EntityNotFoundException("FsmaUser not found = $id")
-        return ResponseEntity.ok(fsma.toFsmaUserResponseDto())
+        return ResponseEntity.ok(fsma.toFsmaUserDto())
     }
 
     // -- Create a new FsmaUser
     @PostMapping
     fun create(
-        @Valid @RequestBody fsmaUserRequestDto: FsmaUserRequestDto,
+        @Valid @RequestBody fsmaUserDto: FsmaUserDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
-    ): ResponseEntity<FsmaUserResponseDto> {
-        val foodBusiness = foodBusService.findById(fsmaUserRequestDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserRequestDto.foodBusinessId}")
-        val fsmaUser = fsmaUserRequestDto.toFsmaUser(foodBusiness)
-        val fsmaUserResponse = fsmaUserService.insert(fsmaUser).toFsmaUserResponseDto()
+    ): ResponseEntity<FsmaUserDto> {
+        val foodBusiness = foodBusService.findById(fsmaUserDto.foodBusinessId)
+            ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserDto.foodBusinessId}")
+        val fsmaUser = fsmaUserDto.toFsmaUser(foodBusiness)
+        val fsmaUserResponse = fsmaUserService.insert(fsmaUser).toFsmaUserDto()
         return ResponseEntity.created(URI.create(FSMA_USER_BASE_URL.plus("/${fsmaUserResponse.id}")))
             .body(fsmaUserResponse)
     }
@@ -48,17 +51,17 @@ class FsmaUserController : BaseController() {
     @PutMapping("/{id}")
     fun update(
         @PathVariable id: Long,
-        @Valid @RequestBody fsmaUserRequestDto: FsmaUserRequestDto,
+        @Valid @RequestBody fsmaUserDto: FsmaUserDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
-    ): ResponseEntity<FsmaUserResponseDto> {
-        if (fsmaUserRequestDto.id <= 0L || fsmaUserRequestDto.id != id)
-            throw UnauthorizedRequestException("Conflicting FsmaUserIds specified: $id != ${fsmaUserRequestDto.id}")
+    ): ResponseEntity<FsmaUserDto> {
+        if (fsmaUserDto.id <= 0L || fsmaUserDto.id != id)
+            throw UnauthorizedRequestException("Conflicting FsmaUserIds specified: $id != ${fsmaUserDto.id}")
 
-        val foodBusiness = foodBusService.findById(fsmaUserRequestDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserRequestDto.foodBusinessId}")
+        val foodBusiness = foodBusService.findById(fsmaUserDto.foodBusinessId)
+            ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserDto.foodBusinessId}")
 
-        val fsma = fsmaUserRequestDto.toFsmaUser(foodBusiness)
-        val fsmaUserResponse = fsmaUserService.update(fsma).toFsmaUserResponseDto()
+        val fsma = fsmaUserDto.toFsmaUser(foodBusiness)
+        val fsmaUserResponse = fsmaUserService.update(fsma).toFsmaUserDto()
         return ResponseEntity.ok().body(fsmaUserResponse)
     }
 

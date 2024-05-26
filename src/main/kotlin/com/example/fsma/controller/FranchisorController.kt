@@ -1,14 +1,12 @@
 package com.example.fsma.controller
 
-import com.example.fsma.model.Address
-import com.example.fsma.model.FranchisorDto
-import com.example.fsma.model.toFranchisor
-import com.example.fsma.model.toFranchisorDto
+import com.example.fsma.model.*
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -25,7 +23,7 @@ class FranchisorController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FranchisorDto> {
         val franchisor = franchisorService.findById(id)
             ?: throw EntityNotFoundException("Franchisor not found = $id")
@@ -37,7 +35,7 @@ class FranchisorController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody franchisorDto: FranchisorDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FranchisorDto> {
         val address = addressService.findById(franchisorDto.addressId)
             ?: throw EntityNotFoundException("Franchisor Address not found: ${franchisorDto.addressId}")
@@ -58,7 +56,7 @@ class FranchisorController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody franchisorDto: FranchisorDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FranchisorDto> {
         if (franchisorDto.id <= 0L || franchisorDto.id != id)
             throw UnauthorizedRequestException("Conflicting FranchisorIds specified: $id != ${franchisorDto.id}")
@@ -79,7 +77,7 @@ class FranchisorController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         franchisorService.findById(id)?.let { franchisor ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

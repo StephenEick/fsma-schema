@@ -1,13 +1,16 @@
 package com.example.fsma.controller.cte
 
 import com.example.fsma.controller.BaseController
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.cte.CteHarvestDto
 import com.example.fsma.model.cte.toCteHarvest
 import com.example.fsma.model.cte.toCteHarvestDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -16,7 +19,7 @@ private const val CTE_HARVEST_ALT_BASE_URL = "/api/v1/cte-harvest"
 
 @RestController
 @RequestMapping(value = [CTE_HARVEST_BASE_URL, CTE_HARVEST_ALT_BASE_URL])
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class CteHarvestController : BaseController() {
 
     // -- Return a specific CteCool
@@ -24,7 +27,7 @@ class CteHarvestController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteHarvestDto> {
         val cteHarvest = cteHarvestService.findById(id)
             ?: throw EntityNotFoundException("CteHarvest not found = $id")
@@ -36,7 +39,7 @@ class CteHarvestController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteHarvestDto: CteHarvestDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteHarvestDto> {
         val subsequentRecipient = locationService.findById(cteHarvestDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient not found: ${cteHarvestDto.subsequentRecipientId}")
@@ -58,7 +61,7 @@ class CteHarvestController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteHarvestDto: CteHarvestDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteHarvestDto> {
         if (cteHarvestDto.id <= 0L || cteHarvestDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteHarvest Ids specified: $id != ${cteHarvestDto.id}")
@@ -81,7 +84,7 @@ class CteHarvestController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteHarvestService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

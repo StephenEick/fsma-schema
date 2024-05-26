@@ -1,12 +1,15 @@
 package com.example.fsma.controller
 
 import com.example.fsma.model.AddressDto
+import com.example.fsma.model.FsmaUser
 import com.example.fsma.model.toAddress
 import com.example.fsma.model.toAddressDto
 import com.example.fsma.util.EntityNotFoundException
 import com.example.fsma.util.UnauthorizedRequestException
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
@@ -14,7 +17,7 @@ private const val ADDRESS_BASE_URL = "/api/v1/address"
 
 @RestController
 @RequestMapping(ADDRESS_BASE_URL)
-//@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth")
 class AddressController : BaseController() {
 
     // -- Return a specific Address
@@ -22,7 +25,7 @@ class AddressController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<AddressDto> {
         val address = addressService.findById(id)
             ?: throw EntityNotFoundException("Address not found = $id")
@@ -34,7 +37,7 @@ class AddressController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody addressDto: AddressDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<AddressDto> {
         val address = addressDto.toAddress()
         val addressResponse = addressService.insert(address).toAddressDto()
@@ -48,7 +51,7 @@ class AddressController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody addressDto: AddressDto,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<AddressDto> {
         if (addressDto.id <= 0L || addressDto.id != id)
             throw UnauthorizedRequestException("Conflicting AddressIds specified: $id != ${addressDto.id}")
@@ -61,7 +64,7 @@ class AddressController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-//        @AuthenticationPrincipal fsaUser: FsaUser
+@AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         addressService.findById(id)?.let { address ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

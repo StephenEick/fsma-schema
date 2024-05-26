@@ -66,7 +66,7 @@ data class FsmaUser(
     override fun isCredentialsNonExpired(): Boolean = isCredentialsNonExpired
 
     override fun isEnabled() = isEnabled && foodBus.isEnabled &&
-            (!foodBus.isFranchisee || (foodBus.isFranchisee && foodBus.franchisor!!.isEnabled))
+            (!foodBus.isFranchisee || foodBus.franchisor!!.isEnabled)
 
     fun isRootAdmin() = roles.contains(Role.RootAdmin)
 
@@ -77,33 +77,9 @@ data class FsmaUser(
     fun isFoodBusinessUser() = isFoodBusinessAdmin() || roles.contains(Role.FoodBusinessUser)
 
     fun isMobile() = isFoodBusinessUser() || roles.contains(Role.Mobile)
-
-    val fullname: String
-        get() = "$firstname $lastname"
 }
 
-//TODO: change FsmaUserRequestDto and FsmaUserResponseDto
-// to FsmaUserDto
-data class FsmaUserRequestDto(
-    val id: Long = 0,
-    val foodBusinessId: Long,
-    @field:Email(message = "A valid email is required")
-    val email: String,
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val password: String = "",
-    val isAccountNonExpired: Boolean = true,
-    val isAccountNonLocked: Boolean = true,
-    val isCredentialsNonExpired: Boolean = true,
-    var isEnabled: Boolean = true,
-    val roles: List<Role>,
-    // ************* User stuff goes here **************
-    val firstname: String,
-    val lastname: String,
-    val notes: String? = null,
-    val phone: String? = null,
-)
-
-data class FsmaUserResponseDto(
+data class FsmaUserDto(
     val id: Long = 0,
     val foodBusinessId: Long,
     @field:Email(message = "A valid email is required")
@@ -126,7 +102,7 @@ data class FsmaUserResponseDto(
     val dateDeleted: OffsetDateTime? = null,
 )
 
-fun FsmaUser.toFsmaUserResponseDto() = FsmaUserResponseDto(
+fun FsmaUser.toFsmaUserDto() = FsmaUserDto(
     id = id,
     foodBusinessId = foodBus.id,
     email = email,
@@ -146,7 +122,7 @@ fun FsmaUser.toFsmaUserResponseDto() = FsmaUserResponseDto(
     dateDeleted = dateDeleted,
 )
 
-fun FsmaUserRequestDto.toFsmaUser(foodBus: FoodBus) = FsmaUser(
+fun FsmaUserDto.toFsmaUser(foodBus: FoodBus) = FsmaUser(
     id = id,
     foodBus = foodBus,
     email = email,

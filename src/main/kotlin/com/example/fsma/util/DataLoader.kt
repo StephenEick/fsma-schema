@@ -30,7 +30,6 @@ class DataLoader : ApplicationRunner {
     private val addressList: MutableList<Address> = mutableListOf()
 
     @Autowired
-    //TODO: change to FoodBusiness
     private lateinit var foodBusService: FoodBusService
     private val foodBusList: MutableList<FoodBus> = mutableListOf()
 
@@ -142,7 +141,7 @@ class DataLoader : ApplicationRunner {
     }
 
     fun addFsmaUsers() {
-        var fsmaUserDto = FsmaUserRequestDto(
+        var fsmaUserDto = FsmaUserDto(
             foodBusinessId = foodBusList[0].id,
             email = "User0@restaurant0.com",
             password = "123",
@@ -156,7 +155,7 @@ class DataLoader : ApplicationRunner {
                 ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
         )
 
-        fsmaUserDto = FsmaUserRequestDto(
+        fsmaUserDto = FsmaUserDto(
             foodBusinessId = foodBusList[0].id,
             email = "User1@Restaurant0.com",
             password = "123",

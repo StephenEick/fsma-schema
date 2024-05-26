@@ -1,6 +1,6 @@
 package com.example.fsma.auth
 
-import com.example.fsma.model.FsmaUserRequestDto
+import com.example.fsma.model.FsmaUserDto
 import com.example.fsma.model.toFsmaUser
 import com.example.fsma.repository.FoodBusRepository
 import com.example.fsma.repository.FsmaUserRepository
@@ -42,7 +42,7 @@ class AuthService {
     private val expiresIn: Duration = 2.hours
 
     // Register a new user
-    fun createNewFsmaUser(newFsmaUserDto: FsmaUserRequestDto): AuthResponse {
+    fun createNewFsmaUser(newFsmaUserDto: FsmaUserDto): AuthResponse {
         // Check to make sure user does not already exist
         if (fsmaUserService.findByEmailIgnoreCase(newFsmaUserDto.email) != null)
             throw EntityExistsException("User already exists: ${newFsmaUserDto.email}")

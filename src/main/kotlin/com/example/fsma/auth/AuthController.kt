@@ -2,7 +2,7 @@ package com.example.fsma.auth
 
 import com.example.fsma.controller.BaseController
 import com.example.fsma.model.FsmaUser
-import com.example.fsma.model.FsmaUserRequestDto
+import com.example.fsma.model.FsmaUserDto
 import com.example.fsma.util.AuthorizationException
 import com.example.fsma.util.UnauthorizedRequestException
 import com.example.fsma.util.maxRole
@@ -97,7 +97,7 @@ class AuthController : BaseController() {
     @SecurityRequirement(name = "bearerAuth")
     fun createNewFsaUser(
         @AuthenticationPrincipal fsmaUser: FsmaUser,
-        @Valid @RequestBody newUserDto: FsmaUserRequestDto
+        @Valid @RequestBody newUserDto: FsmaUserDto
     ): ResponseEntity<AuthResponse> {
         // Make sure user has necessary permission
         // TODO: remove
