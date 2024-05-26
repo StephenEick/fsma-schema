@@ -27,7 +27,7 @@ class CteShipController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteShipDto> {
         val cteShip = cteShipService.findById(id)
             ?: throw EntityNotFoundException("CteShip not found = $id")
