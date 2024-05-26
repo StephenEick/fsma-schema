@@ -27,7 +27,7 @@ class CteCoolController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteCoolDto> {
         val cteCool = cteCoolService.findById(id)
             ?: throw EntityNotFoundException("ServiceAddress not found = $id")
@@ -39,7 +39,7 @@ class CteCoolController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteCoolDto: CteCoolDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteCoolDto> {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
@@ -58,7 +58,7 @@ class CteCoolController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteCoolDto: CteCoolDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteCoolDto> {
         if (cteCoolDto.id <= 0L || cteCoolDto.id != id)
             throw UnauthorizedRequestException("Conflicting CtcCool Ids specified: $id != ${cteCoolDto.id}")
@@ -78,7 +78,7 @@ class CteCoolController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteCoolService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

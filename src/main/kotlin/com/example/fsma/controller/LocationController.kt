@@ -12,12 +12,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
+
 private const val LOCATION_BASE_URL = "/api/v1/location"
 private const val LOCATION_ALT_BASE_URL = "/api/v1/loc"
 
 
 @RestController
-@RequestMapping(value=[LOCATION_BASE_URL,LOCATION_ALT_BASE_URL])
+@RequestMapping(value = [LOCATION_BASE_URL, LOCATION_ALT_BASE_URL])
 @SecurityRequirement(name = "bearerAuth")
 class LocationController : BaseController() {
 
@@ -26,7 +27,7 @@ class LocationController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<LocationDto> {
         val location = locationService.findById(id)
             ?: throw EntityNotFoundException("Location not found = $id")
@@ -38,13 +39,13 @@ class LocationController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody locationDto: LocationDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<LocationDto> {
         val serviceAddress = addressService.findById(locationDto.serviceAddressId)
             ?: throw EntityNotFoundException("Service Address not found: ${locationDto.serviceAddressId}")
         val business = foodBusService.findById(locationDto.foodBusId)
             ?: throw EntityNotFoundException("ServiceAddress not found: ${locationDto.serviceAddressId}")
-        val location = locationDto.toLocation( business, serviceAddress)
+        val location = locationDto.toLocation(business, serviceAddress)
         val locationResponse = locationService.insert(location).toLocationDto()
         return ResponseEntity.created(URI.create(LOCATION_BASE_URL.plus("/${locationResponse.id}")))
             .body(locationResponse)
@@ -55,7 +56,7 @@ class LocationController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody locationDto: LocationDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<LocationDto> {
         if (locationDto.id <= 0L || locationDto.id != id)
             throw UnauthorizedRequestException("Conflicting LocationIds specified: $id != ${locationDto.id}")
@@ -75,7 +76,7 @@ class LocationController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         locationService.findById(id)?.let { location ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

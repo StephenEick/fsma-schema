@@ -11,6 +11,7 @@ enum class Country {
 enum class CteType {
     Harvest,
     Cool,
+
     //TODO: are there different types of Pack or just one type?
     InitPackProduce,
     InitPackSprouts,
@@ -20,14 +21,14 @@ enum class CteType {
     Transform,
 }
 
-enum class FoodBusType(val myCteTypes:List<CteType>) {
+enum class FoodBusType(val myCteTypes: List<CteType>) {
     Farm(listOf(CteType.Harvest)),
     Cooler(listOf(CteType.Cool)),
     Packer(listOf(CteType.InitPackProduce, CteType.Ship)),
     Distributor(listOf(CteType.Receive, CteType.Ship)),
     RfeGrocer(listOf(CteType.Receive)),
-    Processor(listOf(CteType.Receive, CteType.Transform,CteType.Ship)),
-    RfeRestaurant(listOf(CteType.Receive, CteType.Transform,CteType.Ship)),
+    Processor(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
+    RfeRestaurant(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
 }
 
 enum class FtlItem {

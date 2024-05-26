@@ -28,7 +28,7 @@ class CteIPackProdController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
         val cteIPackProd = cteIPackProdService.findById(id)
             ?: throw EntityNotFoundException("CteIPackProd not found = $id")
@@ -40,7 +40,7 @@ class CteIPackProdController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
         val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
@@ -75,7 +75,7 @@ class CteIPackProdController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
         if (cteIPackProdDto.id <= 0L || cteIPackProdDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteIPackProd Ids specified: $id != ${cteIPackProdDto.id}")
@@ -111,7 +111,7 @@ class CteIPackProdController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteIPackProdService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)

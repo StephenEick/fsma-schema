@@ -25,28 +25,40 @@ class BaseController {
 
     @Autowired
     protected lateinit var addressService: AddressService
+
     @Autowired
     protected lateinit var cteCoolService: CteCoolService
+
     @Autowired
     protected lateinit var cteHarvestService: CteHarvestService
+
     @Autowired
     protected lateinit var cteIPackProdService: CteIPackProdService
+
     @Autowired
     protected lateinit var cteReceiveService: CteReceiveService
+
     @Autowired
     protected lateinit var cteShipService: CteShipService
+
     @Autowired
     protected lateinit var cteTransformService: CteTransformService
+
     @Autowired
     protected lateinit var foodBusService: FoodBusService
+
     @Autowired
     protected lateinit var franchisorService: FranchisorService
+
     @Autowired
     protected lateinit var fsmaUserService: FsmaUserService
+
     @Autowired
     protected lateinit var jwtService: JwtService
+
     @Autowired
     protected lateinit var locationService: LocationService
+
     @Autowired
     protected lateinit var traceLotCodeService: TraceLotCodeService
 

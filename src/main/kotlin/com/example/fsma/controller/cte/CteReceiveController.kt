@@ -27,7 +27,7 @@ class CteReceiveController : BaseController() {
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
         val cteReceive = cteReceiveService.findById(id)
             ?: throw EntityNotFoundException("CteReceive not found = $id")
@@ -39,7 +39,7 @@ class CteReceiveController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody cteReceiveDto: CteReceiveDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
         val cteBusName = foodBusService.findById(cteReceiveDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.cteBusNameId}")
@@ -56,7 +56,8 @@ class CteReceiveController : BaseController() {
         val tlcSource = locationService.findById(cteReceiveDto.tlcSourceId)
             ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
 
-        val cteReceive = cteReceiveDto.toCteReceive(cteBusName,traceLotCode, shipFromLocation, shipToLocation, tlcSource)
+        val cteReceive =
+            cteReceiveDto.toCteReceive(cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource)
         val cteReceiveResponse = cteReceiveService.insert(cteReceive).toCteReceiveDto()
         return ResponseEntity.created(URI.create(CTE_RECEIVE_BASE_URL.plus("/${cteReceiveResponse.id}")))
             .body(cteReceiveResponse)
@@ -67,7 +68,7 @@ class CteReceiveController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody cteReceiveDto: CteReceiveDto,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
         if (cteReceiveDto.id <= 0L || cteReceiveDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteReceive Ids specified: $id != ${cteReceiveDto.id}")
@@ -87,7 +88,8 @@ class CteReceiveController : BaseController() {
         val tlcSource = locationService.findById(cteReceiveDto.tlcSourceId)
             ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
 
-        val cteReceive = cteReceiveDto.toCteReceive(cteBusName,traceLotCode, shipFromLocation, shipToLocation, tlcSource)
+        val cteReceive =
+            cteReceiveDto.toCteReceive(cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource)
         val cteReceiveCto = cteReceiveService.update(cteReceive).toCteReceiveDto()
         return ResponseEntity.ok().body(cteReceiveCto)
     }
@@ -96,7 +98,7 @@ class CteReceiveController : BaseController() {
     @DeleteMapping("/{id}")
     fun deleteById(
         @PathVariable id: Long,
-@AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<Void> {
         cteReceiveService.findById(id)?.let { ctcCoolCto ->
 //            assertResellerClientMatchesToken(fsaUser, address.resellerId)
