@@ -59,11 +59,11 @@ class TestsAuthController {
         val root = FsmaUserDto(
             id = 1,
             foodBusinessId = 1,//foodBusinessList[0].id,
-            email = "User0@restaurant0.com",
+            email = "root@safefood204.com",
             password = "123",
             roles = listOf(Role.RootAdmin),
             firstname = "Root",
-            lastname = "User0",
+            lastname = "Root",
         )
         val rootAuthLogin = AuthLogin(email = root.email, password = root.password, refreshToken = null)
         val accessToken: String = authenticate(rootAuthLogin)[0]

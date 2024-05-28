@@ -29,6 +29,7 @@ enum class FoodBusType(val myCteTypes: List<CteType>) {
     RfeGrocer(listOf(CteType.Receive)),
     Processor(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
     RfeRestaurant(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
+    Other(emptyList()),
 }
 
 enum class FtlItem {

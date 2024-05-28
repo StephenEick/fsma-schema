@@ -120,8 +120,16 @@ class DataLoader : ApplicationRunner {
     }
 
     fun addFoodBusinesses() {
-
         var foodBus = FoodBus(
+            mainAddress = addressList[0],
+            foodBusName = "SafeFood204",
+            contactName = "Stephen Eick",
+            contactPhone = "630-561-7897",
+            foodBusType = FoodBusType.Other
+        )
+        foodBusList.add(foodBusService.insert(foodBus))
+
+        foodBus = FoodBus(
             mainAddress = addressList[0],
             foodBusName = "KaleidoscopeInc",
             contactName = "Joe Smith",
@@ -141,22 +149,36 @@ class DataLoader : ApplicationRunner {
     }
 
     fun addFsmaUsers() {
+        val rootDto = FsmaUserDto(
+            foodBusinessId = 1,
+            email = "root@safefood204.com",
+            password = "123",
+            roles = listOf(Role.RootAdmin),
+            firstname = "Root",
+            lastname = "Root",
+        )
+        var response = authService.createNewFsmaUser(rootDto)
+        fsmaUserList.add(
+            fsmaUserService.findById(response.fsmaUserId)
+                ?: throw Exception("Failed to create FsmaUser: ${rootDto.email}")
+        )
+
         var fsmaUserDto = FsmaUserDto(
-            foodBusinessId = foodBusList[0].id,
+            foodBusinessId = foodBusList[1].id,
             email = "User0@restaurant0.com",
             password = "123",
             roles = listOf(Role.RootAdmin),
             firstname = "Root",
             lastname = "User0",
         )
-        var response = authService.createNewFsmaUser(fsmaUserDto)
+        response = authService.createNewFsmaUser(fsmaUserDto)
         fsmaUserList.add(
             fsmaUserService.findById(response.fsmaUserId)
                 ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
         )
 
         fsmaUserDto = FsmaUserDto(
-            foodBusinessId = foodBusList[0].id,
+            foodBusinessId = foodBusList[2].id,
             email = "User1@Restaurant0.com",
             password = "123",
             roles = listOf(Role.FranchisorAdmin, Role.FoodBusinessUser),
