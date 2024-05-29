@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 import java.net.URI
 
 private const val CTE_HARVEST_BASE_URL = "/api/v1/cteharvest"
-private const val CTE_HARVEST_ALT_BASE_URL = "/api/v1/cte-harvest"
+private const val CTE_HARVEST_ALT_BASE_URL = "/api/v1/cte/harvest"
 
 @RestController
 @RequestMapping(value = [CTE_HARVEST_BASE_URL, CTE_HARVEST_ALT_BASE_URL])

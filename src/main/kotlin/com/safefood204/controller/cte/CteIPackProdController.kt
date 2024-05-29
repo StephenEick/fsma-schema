@@ -16,7 +16,7 @@ import java.net.URI
 
 private const val CTE_IPACK_PROD_BASE_URL = "/api/v1/cteipackprod"
 private const val CTE_IPACK_PROD_ALT_BASE_URL = "/api/v1/cte-ipack-prod"
-private const val CTE_IPACK_PROD_ALT2_BASE_URL = "/api/v1/cteipp"
+private const val CTE_IPACK_PROD_ALT2_BASE_URL = "/api/v1/cte/ipack"
 
 @RestController
 @RequestMapping(value = [CTE_IPACK_PROD_BASE_URL, CTE_IPACK_PROD_ALT_BASE_URL, CTE_IPACK_PROD_ALT2_BASE_URL])

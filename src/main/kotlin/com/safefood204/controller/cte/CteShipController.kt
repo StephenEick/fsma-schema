@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 import java.net.URI
 
 private const val CTE_SHIP_BASE_URL = "/api/v1/cteship"
-private const val CTE_SHIP_ALT_BASE_URL = "/api/v1/cte-ship"
+private const val CTE_SHIP_ALT_BASE_URL = "/api/v1/cte/ship"
 
 @RestController
 @RequestMapping(value = [CTE_SHIP_BASE_URL, CTE_SHIP_ALT_BASE_URL])

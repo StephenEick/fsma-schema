@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 SafeFood204, Inc. or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.safefood204.repository
 
 import com.safefood204.model.Address
