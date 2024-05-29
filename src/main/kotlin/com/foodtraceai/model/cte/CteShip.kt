@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.FoodBus
@@ -26,14 +29,14 @@ data class CteShip(
 
     override val cteType: CteType = CteType.Ship,
 
-    // Shipper business name for the creator of this CTE
+    // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     override val cteBusName: FoodBus,
 
     @Enumerated(EnumType.STRING)
-    val foodItem: FtlItem,
-    val variety: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
@@ -51,7 +54,7 @@ data class CteShip(
     override val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
 
     // (a)(3) The product description for the food;
-    val foodDesc: String,
+    override val foodDesc: String,
 
     // (a)(4) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;

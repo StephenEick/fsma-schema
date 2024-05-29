@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.FoodBus
@@ -32,8 +35,8 @@ data class CteReceive(
     override val cteBusName: FoodBus,
 
     @Enumerated(EnumType.STRING)
-    val foodItem: FtlItem,
-    val variety: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -52,7 +55,7 @@ data class CteReceive(
     override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(3) The product description for the food;
-    val foodDesc: String,
+    override val foodDesc: String,
 
     // (a)(4) The location description for the immediate previous source
     // (other than a transporter) for the food;

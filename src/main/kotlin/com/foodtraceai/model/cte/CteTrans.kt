@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.FoodBus
@@ -26,14 +29,16 @@ data class CteTrans(
 
     override val cteType: CteType = CteType.Transform,
 
-    // Packer business name for the creator of this CTE
+    // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     override val cteBusName: FoodBus,
 
     @Enumerated(EnumType.STRING)
-    val foodItem: FtlItem,
-    val variety: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
+    // Original food description before transformation
+    override val foodDesc: String,  // not required for this CTE
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -117,6 +122,7 @@ data class CteTransDto(
     val cteBusNameId: Long,
     val foodItem: FtlItem,
     val variety: String,
+    val foodDesc: String,
     val inputTlcId: Long,  // from Initial Packer or previous Transformer
     val inputFoodDesc: String, // from Initial Packer or previous Transformer
     val inputQuantity: Double,   // from Initial Packer
@@ -142,6 +148,7 @@ fun CteTrans.toCteTransDto() = CteTransDto(
     cteBusNameId = cteBusName.id,
     foodItem = foodItem,
     variety = variety,
+    foodDesc = foodDesc,
     inputTlcId = inputTlc.id,  // from Initial Packer or previous Transformer
     inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
     inputQuantity = inputQuantity,   // from Initial Packer
@@ -172,6 +179,7 @@ fun CteTransDto.toCteTrans(
     cteBusName = cteBusName,
     foodItem = foodItem,
     variety = variety,
+    foodDesc = foodDesc,
     inputTlc = inputTlc,  // from Initial Packer or previous Transformer
     inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
     inputQuantity = inputQuantity,   // from Initial Packer

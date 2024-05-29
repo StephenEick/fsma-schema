@@ -12,6 +12,9 @@ import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 import java.net.URI
 
 private const val CTE_COOL_BASE_URL = "/api/v1/ctecool"

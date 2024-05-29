@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.FoodBus
@@ -27,6 +30,10 @@ data class CteCool(
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Cool,
 
+    // Cooler business name
+    @ManyToOne @JoinColumn
+    override val cteBusName: FoodBus,
+
     // ************** KDEs *************
     // (1) For each raw agricultural commodity
     // (not obtained from a fishing vessel) on the Food Traceability List
@@ -40,9 +47,9 @@ data class CteCool(
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    val commodity: FtlItem,
-    val variety: String,
-    val foodDesc: String,
+    override val foodItem: FtlItem,  // Commodity
+    override val variety: String,
+    override val foodDesc: String,  // not required for this CTE
 
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     override val quantity: Double,
@@ -73,10 +80,6 @@ data class CteCool(
     // initial packer of the raw agricultural commodity you harvest, either directly
     // or through the supply chain.
 
-    // Cooler business name
-    @ManyToOne  @JoinColumn
-    override val cteBusName: FoodBus,
-
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
@@ -88,7 +91,7 @@ data class CteCoolDto(
     val id: Long,
     val cteType: CteType = CteType.Cool,
     val subsequentRecipientId: Long,
-    val commodity: FtlItem,
+    val foodItem: FtlItem,
     val variety: String,
     val foodDesc: String,
     val quantity: Double,
@@ -110,7 +113,7 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
     id = id,
     cteType = cteType,
     subsequentRecipientId = subsequentRecipient.id,
-    commodity = commodity,
+    foodItem = foodItem,
     variety = variety,
     foodDesc = foodDesc,
     quantity = quantity,
@@ -135,7 +138,7 @@ fun CteCoolDto.toCteCool(
     id = id,
     cteType = cteType,
     subsequentRecipient = subsequentRecipient,
-    commodity = commodity,
+    foodItem = foodItem,
     variety = variety,
     foodDesc = foodDesc,
     quantity = quantity,

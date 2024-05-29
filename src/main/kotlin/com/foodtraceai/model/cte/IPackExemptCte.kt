@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.FoodBus
@@ -29,9 +32,9 @@ data class IPackExemptCte(
     override val cteBusName: FoodBus,
 
     @Enumerated(EnumType.STRING)
-    val foodItem: FtlItem,
-    val variety: String,
-    val foodDesc: String,
+    override val foodItem: FtlItem,
+    override val variety: String,
+    override val foodDesc: String,
 
     override val quantity: Double,
     @Enumerated(EnumType.STRING)

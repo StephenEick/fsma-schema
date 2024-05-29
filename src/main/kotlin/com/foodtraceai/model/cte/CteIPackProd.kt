@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.FoodBus
@@ -22,7 +25,7 @@ Food Traceability List?
  **/
 
 @Entity
-@Table(name="cte_ipack_prod")
+@Table(name = "cte_ipack_prod")
 data class CteIPackProd(
     @Id @GeneratedValue override val id: Long = 0,
 
@@ -42,8 +45,9 @@ data class CteIPackProd(
 
     // (a)(1) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    val commodity: FtlItem, // or commodity
-    val variety: String,
+    override val foodItem: FtlItem, // or commodity
+    override val variety: String,
+    override val foodDesc: String,  // not required for this CTE
 
     // (a)(2) The date you received the food;
     val receiveDate: LocalDate,
@@ -128,8 +132,9 @@ data class CteIPackProdDto(
     val id: Long,
     val cteType: CteType,
     val cteBusNameId: Long,
-    val commodity: FtlItem,
+    val foodItem: FtlItem,
     val variety: String,
+    val foodDesc: String,
     val receiveDate: LocalDate,
     val receiveQuantity: Double,
     val receiveUnitOfMeasure: UnitOfMeasure,
@@ -161,8 +166,9 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
-    commodity = commodity,
+    foodItem = foodItem,
     variety = variety,
+    foodDesc = foodDesc,
     receiveDate = receiveDate,
     receiveQuantity = receiveQuantity,
     receiveUnitOfMeasure = receiveUnitOfMeasure,
@@ -191,7 +197,7 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
 )
 
 fun CteIPackProdDto.toCteIPackProd(
-    cteBusName : FoodBus,
+    cteBusName: FoodBus,
     harvestLocation: Location,
     harvestFoodBus: FoodBus,
     coolLocation: Location?,
@@ -201,8 +207,9 @@ fun CteIPackProdDto.toCteIPackProd(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
-    commodity = commodity,
+    foodItem = foodItem,
     variety = variety,
+    foodDesc = foodDesc,
     receiveDate = receiveDate,
     receiveQuantity = receiveQuantity,
     receiveUnitOfMeasure = receiveUnitOfMeasure,

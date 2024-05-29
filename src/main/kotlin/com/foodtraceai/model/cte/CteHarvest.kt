@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.FoodBus
@@ -40,9 +43,9 @@ data class CteHarvest(
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    val commodity: FtlItem, // of commodity
-    val variety: String,    // variety of commodity
-    val foodDesc: String,   // Not required by Rule 204
+    override val foodItem: FtlItem, // or commodity for Harvest CTEs
+    override val variety: String,    // variety of commodity
+    override val foodDesc: String,   // Not required by Rule 204
 
     // The harvest quantity and unit of measure
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
@@ -101,7 +104,7 @@ data class CteHarvestDto(
     val id: Long,
     val cteType: CteType,
     val subsequentRecipientId: Long,
-    val commodity: FtlItem,
+    val foodItem: FtlItem,
     val commodityVariety: String,
     val foodDesc: String,
     val quantity: Double,
@@ -125,7 +128,7 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
     id = id,
     cteType = cteType,
     subsequentRecipientId = subsequentRecipient.id,
-    commodity = commodity,
+    foodItem = foodItem,
     commodityVariety = variety,
     foodDesc = foodDesc,
     quantity = quantity,
@@ -153,9 +156,9 @@ fun CteHarvestDto.toCteHarvest(
     id = id,
     cteType = cteType,
     subsequentRecipient = subsequentRecipient,
-    commodity = commodity,
+    foodItem = foodItem,
     variety = commodityVariety,
-    foodDesc=foodDesc,
+    foodDesc = foodDesc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     harvestLocation = harvestLocation,
