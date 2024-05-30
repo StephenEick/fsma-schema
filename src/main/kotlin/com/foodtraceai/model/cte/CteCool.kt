@@ -47,7 +47,7 @@ data class CteCool(
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,  // Commodity
+    override val foodItem: FtlItem,  // Commodity harvested
     override val variety: String,
     override val foodDesc: String,  // not required for this CTE
 

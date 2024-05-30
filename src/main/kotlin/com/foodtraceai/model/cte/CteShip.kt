@@ -70,6 +70,7 @@ data class CteShip(
 
     // (a)(6) The date you shipped the food;
     val shipDate: LocalDate,
+    val shipTime: OffsetDateTime,   // Not required but possibly useful
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
@@ -111,6 +112,7 @@ data class CteShipDto(
     val shipToLocationId: Long,
     val shipFromLocationId: Long,
     val shipDate: LocalDate,
+    val shipTime: OffsetDateTime,
     val tlcSourceId: Long,
     val tlcSourceReference: String?,
     val referenceDocumentType: ReferenceDocumentType,
@@ -134,6 +136,7 @@ fun CteShip.toCteShipDto() = CteShipDto(
     shipToLocationId = shipToLocation.id,
     shipFromLocationId = shipFromLocation.id,
     shipDate = shipDate,
+    shipTime = shipTime,
     tlcSourceId = tlcSource.id,
     tlcSourceReference = tlcSourceReference,
     referenceDocumentType = referenceDocumentType,
@@ -163,6 +166,7 @@ fun CteShipDto.toCteShip(
     shipToLocation = shipToLocation,
     shipFromLocation = shipFromLocation,
     shipDate = shipDate,
+    shipTime = shipTime,
     tlcSource = tlcSource,
     tlcSourceReference = tlcSourceReference,
     referenceDocumentType = referenceDocumentType,

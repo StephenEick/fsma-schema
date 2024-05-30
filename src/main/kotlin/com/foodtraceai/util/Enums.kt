@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.util
 
 // -- ISO-3166 3-Letter Country codes
@@ -26,10 +29,10 @@ enum class FoodBusType(val myCteTypes: List<CteType>) {
     Cooler(listOf(CteType.Cool)),
     Packer(listOf(CteType.InitPackProduce, CteType.Ship)),
     Distributor(listOf(CteType.Receive, CteType.Ship)),
-    RfeGrocer(listOf(CteType.Receive)),
+    RFE(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),  // grocery, convenience, club stores, etc.
     Processor(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
-    RfeRestaurant(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
-    Other(emptyList()),
+    Restaurant(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
+    Other(emptyList()), // For administrative accounts
 }
 
 enum class FtlItem {

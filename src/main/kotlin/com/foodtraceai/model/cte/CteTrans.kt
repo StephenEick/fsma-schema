@@ -34,11 +34,10 @@ data class CteTrans(
     @JoinColumn
     override val cteBusName: FoodBus,
 
+    // Transformed (new) Food Item
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
-    // Original food description before transformation
-    override val foodDesc: String,  // not required for this CTE
+    override val foodItem: FtlItem, // new food item
+    override val variety: String,   // new variety
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -82,8 +81,8 @@ data class CteTrans(
     // (a)(2)(iii) The date transformation was completed;
     val transDate: LocalDate,
 
-    // (a)(2)(iv) The product description for the food;
-    val newFoodDesc: String,
+    // (a)(2)(iv) The product description for the new food;
+    override val foodDesc: String,  // new food description
 
     // For the transformed food
     // (a)(2)(v) The quantity and unit of measure of the
@@ -122,7 +121,6 @@ data class CteTransDto(
     val cteBusNameId: Long,
     val foodItem: FtlItem,
     val variety: String,
-    val foodDesc: String,
     val inputTlcId: Long,  // from Initial Packer or previous Transformer
     val inputFoodDesc: String, // from Initial Packer or previous Transformer
     val inputQuantity: Double,   // from Initial Packer
@@ -131,7 +129,7 @@ data class CteTransDto(
     val newTlcLocationId: Long,
     val newTlcSourceReference: String? = null,
     val transDate: LocalDate,
-    val newFoodDesc: String,
+    val foodDesc: String,
     val quantity: Double,
     val unitOfMeasure: UnitOfMeasure,
     val referenceDocumentType: ReferenceDocumentType,
@@ -148,7 +146,6 @@ fun CteTrans.toCteTransDto() = CteTransDto(
     cteBusNameId = cteBusName.id,
     foodItem = foodItem,
     variety = variety,
-    foodDesc = foodDesc,
     inputTlcId = inputTlc.id,  // from Initial Packer or previous Transformer
     inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
     inputQuantity = inputQuantity,   // from Initial Packer
@@ -157,7 +154,7 @@ fun CteTrans.toCteTransDto() = CteTransDto(
     newTlcLocationId = newTlcLocation.id,
     newTlcSourceReference = newTlcSourceReference,
     transDate = transDate,
-    newFoodDesc = newFoodDesc,
+    foodDesc = foodDesc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     referenceDocumentType = referenceDocumentType,
@@ -179,7 +176,6 @@ fun CteTransDto.toCteTrans(
     cteBusName = cteBusName,
     foodItem = foodItem,
     variety = variety,
-    foodDesc = foodDesc,
     inputTlc = inputTlc,  // from Initial Packer or previous Transformer
     inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
     inputQuantity = inputQuantity,   // from Initial Packer
@@ -188,7 +184,7 @@ fun CteTransDto.toCteTrans(
     newTlcLocation = newTlcLocation,
     newTlcSourceReference = newTlcSourceReference,
     transDate = transDate,
-    newFoodDesc = newFoodDesc,
+    foodDesc = foodDesc,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     referenceDocumentType = referenceDocumentType,

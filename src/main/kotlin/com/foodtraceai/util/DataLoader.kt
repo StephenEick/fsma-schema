@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.util
 
 import com.foodtraceai.auth.AuthService
@@ -49,32 +52,48 @@ class DataLoader : ApplicationRunner {
     private fun deleteAllData() {
         jdbcTemplate.execute("DELETE FROM address CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS address_seq RESTART;")
-        jdbcTemplate.execute("DELETE FROM food_bus CASCADE;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_bus_seq RESTART;")
-        jdbcTemplate.execute("DELETE FROM franchisor CASCADE;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_seq RESTART;")
-        jdbcTemplate.execute("DELETE FROM franchisor_property CASCADE;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_property_seq RESTART;")
-        jdbcTemplate.execute("DELETE FROM fsma_user CASCADE;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS fsma_user_seq RESTART;")
-        jdbcTemplate.execute("DELETE FROM location CASCADE;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
-        jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
-        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
-
 
         jdbcTemplate.execute("DELETE FROM cte_cool CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_cool_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM cte_first_land_receive CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_land_receive_seq RESTART;")
+
         jdbcTemplate.execute("DELETE FROM cte_harvest CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_harvest_seq RESTART;")
+
         jdbcTemplate.execute("DELETE FROM cte_ipack_prod CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ipack_prod_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM cte_ipack_sprouts CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ipack_sprouts_seq RESTART;")
+
         jdbcTemplate.execute("DELETE FROM cte_receive CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_receive_seq RESTART;")
+
         jdbcTemplate.execute("DELETE FROM cte_ship CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ship_seq RESTART;")
+
         jdbcTemplate.execute("DELETE FROM cte_trans CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_trans_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM food_bus CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS food_bus_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM franchisor CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM franchisor_property CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS franchisor_property_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM fsma_user CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS fsma_user_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM location CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
+
+        jdbcTemplate.execute("DELETE FROM trace_lot_code CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS trace_lot_code_seq RESTART;")
     }
 
     fun addAddresses() {
@@ -134,7 +153,7 @@ class DataLoader : ApplicationRunner {
             foodBusName = "KaleidoscopeInc",
             contactName = "Joe Smith",
             contactPhone = "800-555-1212",
-            foodBusType = FoodBusType.RfeRestaurant
+            foodBusType = FoodBusType.Restaurant
         )
         foodBusList.add(foodBusService.insert(foodBus))
 
@@ -143,7 +162,7 @@ class DataLoader : ApplicationRunner {
             foodBusName = "630 N. Main",
             contactName = "Ted Podolak",
             contactPhone = "800-555-1212",
-            foodBusType = FoodBusType.RfeRestaurant
+            foodBusType = FoodBusType.Restaurant
         )
         foodBusList.add(foodBusService.insert(foodBus))
     }

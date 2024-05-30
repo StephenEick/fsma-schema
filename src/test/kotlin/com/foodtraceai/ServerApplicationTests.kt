@@ -92,7 +92,7 @@ class ServerApplicationTests {
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
             foodBusName = "Fred's Restaurant",
-            foodBusType = FoodBusType.RfeRestaurant,
+            foodBusType = FoodBusType.Restaurant,
             franchisorId = null,
         )
 
@@ -102,7 +102,7 @@ class ServerApplicationTests {
             contactName = "NewContact",
             contactPhone = "1-800-555-1212",
             foodBusName = "Fred's Restaurant",
-            foodBusType = FoodBusType.RfeGrocer,
+            foodBusType = FoodBusType.RFE,
             franchisorId = null,
         )
 
@@ -257,7 +257,7 @@ class ServerApplicationTests {
             jsonPath("$.contactName") { value("Steve") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
             jsonPath("$.foodBusName") { value("Fred's Restaurant") }
-            jsonPath("$.foodBusType") { value("RfeRestaurant") }
+            jsonPath("$.foodBusType") { value("Restaurant") }
         }
     }
 
@@ -277,7 +277,7 @@ class ServerApplicationTests {
             jsonPath("$.contactName") { value("NewContact") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
             jsonPath("$.foodBusName") { value("Fred's Restaurant") }
-            jsonPath("$.foodBusType") { value("RfeGrocer") }
+            jsonPath("$.foodBusType") { value("RFE") }
         }
     }
 

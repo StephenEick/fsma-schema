@@ -37,15 +37,16 @@ data class CteHarvest(
 
     // (1)(i) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
+    // Will usually be the initial packer but could be the cooler
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     val subsequentRecipient: Location,
 
     // (1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem, // or commodity for Harvest CTEs
-    override val variety: String,    // variety of commodity
-    override val foodDesc: String,   // Not required by Rule 204
+    override val foodItem: FtlItem, // Called commodity for Harvest CTEs
+    override val variety: String,   // variety of commodity
+    override val foodDesc: String,  // Not required by Rule 204
 
     // The harvest quantity and unit of measure
     // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);

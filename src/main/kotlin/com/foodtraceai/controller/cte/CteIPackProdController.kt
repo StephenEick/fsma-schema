@@ -5,6 +5,7 @@ package com.foodtraceai.controller.cte
 
 import com.foodtraceai.controller.BaseController
 import com.foodtraceai.model.FsmaUser
+import com.foodtraceai.model.cte.CteHarvest
 import com.foodtraceai.model.cte.CteIPackProdDto
 import com.foodtraceai.model.cte.toCteIPackProd
 import com.foodtraceai.model.cte.toCteIPackProdDto
@@ -48,6 +49,11 @@ class CteIPackProdController : BaseController() {
         val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
 
+        var cteHarvest: CteHarvest? = null
+        if (cteIPackProdDto.cteHarvestId != null)
+            cteHarvest = cteHarvestService.findById(cteIPackProdDto.cteHarvestId)
+                ?: throw EntityNotFoundException("CteHarvest not found: ${cteIPackProdDto.cteHarvestId}")
+
         val harvestLocation = locationService.findById(cteIPackProdDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteIPackProdDto.harvestLocationId}")
 
@@ -66,7 +72,7 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            cteBusName, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
+            cteBusName, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdDto = cteIPackProdService.insert(cteIPackProd).toCteIPackProdDto()
         return ResponseEntity.created(URI.create(CTE_IPACK_PROD_BASE_URL.plus("/${cteIPackProdDto.id}")))
@@ -86,6 +92,11 @@ class CteIPackProdController : BaseController() {
         val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
             ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
 
+        var cteHarvest: CteHarvest? = null
+        if (cteIPackProdDto.cteHarvestId != null)
+            cteHarvest = cteHarvestService.findById(cteIPackProdDto.cteHarvestId)
+                ?: throw EntityNotFoundException("CteHarvest not found: ${cteIPackProdDto.cteHarvestId}")
+
         val harvestLocation = locationService.findById(cteIPackProdDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteIPackProdDto.harvestLocationId}")
 
@@ -104,7 +115,7 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            cteBusName, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
+            cteBusName, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdCto = cteIPackProdService.update(cteIPackProd).toCteIPackProdDto()
         return ResponseEntity.ok().body(cteIPackProdCto)

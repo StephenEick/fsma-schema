@@ -23,12 +23,16 @@ abstract class CteBase<T> : BaseModel<T>() {
     abstract val foodItem: FtlItem  // or commodity
     abstract val variety: String
     abstract val foodDesc: String
+    //TODO: Add product name, brand, commodity, and variety,
+    // packaging size, packing style,
+    // for fish: may include species and/or market name
+    // TODO: Do it as a json text
 
     // quantity & unitOfMeasure is the amount after CTE is finished
     abstract val quantity: Double   // from Initial Packer or Transformer
     abstract val unitOfMeasure: UnitOfMeasure   // from Initial Packer or Transformer
 
-    // TODO: need retain multiple referenceDocuments for debugging
+    // TODO: need retain a list referenceDocuments for debugging
     abstract val referenceDocumentType: ReferenceDocumentType
     abstract val referenceDocumentNum: String
 }

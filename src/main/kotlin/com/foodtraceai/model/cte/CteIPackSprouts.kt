@@ -16,7 +16,7 @@ import java.time.OffsetDateTime
 
 /**
 https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
-Look at p.22
+Look at p.24
 
 https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-1/subpart-S/subject-group-ECFRbfe98fb65ccc9f7/section-1.1330
 § 1.1330 What records must I keep when I am performing the initial packing of a raw
@@ -25,15 +25,15 @@ Food Traceability List?
  **/
 
 @Entity
-@Table(name = "cte_ipack_prod")
-data class CteIPackProd(
+@Table(name = "cte_ipack_sprouts")
+data class CteIPackSprouts(
     @Id @GeneratedValue override val id: Long = 0,
 
-    @Enumerated(EnumType.STRING)
-    override val cteType: CteType = CteType.InitPackProduce,
+    override val cteType: CteType = CteType.InitPackSprouts,
 
-    // Business name, e.g. creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
+    // Business name for the creator of this CTE
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
     override val cteBusName: FoodBus,
 
     // Not required but likely useful to save associated Cte Harvest. See p.22 in
@@ -134,14 +134,71 @@ data class CteIPackProd(
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 
+    // Part (b) for Sprouts.
+    // https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
+    // look at p.23
+
+    // (b) For each traceability lot of sprouts (except soil- or substrate-grown
+    // sprouts harvested without their roots) you initially pack, you must also
+    // maintain records containing the following information and linking this
+    // information to the traceability lot:
+
+    // (b)(1) The location description for the grower of seeds for sprouting and the
+    // date of seed harvesting, if either is available;
+    @ManyToOne @JoinColumn
+    val seedGrowerLocation: Location? = null,
+    val seedHarvestingDate: LocalDate? = null,
+
+    // (b)(2) The location description for the seed conditioner or processor,
+    // the associated seed lot code, and the date of conditioning or processing;
+    @ManyToOne @JoinColumn
+    val seedConditionerLocation: Location,  // or seed processor
+    @ManyToOne @JoinColumn
+    val seedTlc: TraceLotCode,
+    val seedConditioningDate: LocalDate,
+
+    // (b)(3) The location description for the seed packinghouse (including any repackers),
+    // the date of packing (and of repacking, if applicable), and any associated
+    // seed lot code assigned by the seed packinghouse;
+    @ManyToOne @JoinColumn
+    val seedPackingHouseLocation: Location, // TODO: convert into a list for repackers
+    val seedRepackingDate: LocalDate? = null, // TODO: convert into a list for repackers
+    @ManyToOne @JoinColumn
+    val seedPackingHouseTlc: TraceLotCode? = null,
+
+    // (b)(4) The location description for the seed supplier, any seed lot code
+    // assigned by the seed supplier (including the master lot and sub-lot codes),
+    // and any new seed lot code assigned by the sprouter;
+    @ManyToOne @JoinColumn
+    val seedSupplierLocation: Location, // TODO: convert into a list for repackers
+    @ManyToOne @JoinColumn
+    val seedSupplierTlc: TraceLotCode? = null,
+
+    // (b)(5) A description of the seeds, including the seed type or taxonomic name,
+    // growing specifications, type of packaging, and (if applicable) antimicrobial
+    // treatment;
+    val seedDesc: String,
+    val seedTaxonomicName: String,
+    val seedGrowingSpecs: String,
+    val seedTypeOfPacking: String,
+    val seedAntimicrobialTreatment: String? = null,
+
+    // (b)(6) The date of receipt of the seeds by the sprouter; and
+    val seedReceiveDate: LocalDate,
+    val seedReceiveTime: OffsetDateTime,    // Not required but useful
+
+    // (b)(7) The reference document type and reference document number.
+    val seedReferenceDocumentType: ReferenceDocumentType,
+    val seedReferenceDocumentNum: String,
+
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null
-) : CteBase<CteIPackProd>()
+) : CteBase<CteIPackSprouts>()
 
-data class CteIPackProdDto(
+data class CteIPackSproutsDto(
     val id: Long,
     val cteType: CteType,
     val cteBusNameId: Long,
@@ -171,13 +228,34 @@ data class CteIPackProdDto(
     val packDate: LocalDate,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
+
+    // Seeds - part (b)
+    val seedGrowerLocationId: Long?,
+    val seedHarvestingDate: LocalDate?,
+    val seedConditionerLocationId: Long?,
+    val seedTlcId: Long,
+    val seedConditioningDate: LocalDate,
+    val seedPackingHouseLocationId: Long,
+    val seedRepackingDate: LocalDate?,
+    val seedPackingHouseTlcId: Long?,
+    val seedSupplierLocationId: Long,
+    val seedSupplierTlcId: Long?,
+    val seedDesc: String,
+    val seedTaxonomicName: String,
+    val seedGrowingSpecs: String,
+    val seedTypeOfPacking: String,
+    val seedAntimicrobialTreatment: String?,
+    val seedReceiveDate: LocalDate,
+    val seedReceiveTime: OffsetDateTime,    // Not required but useful
+    val seedReferenceDocumentType: ReferenceDocumentType,
+    val seedReferenceDocumentNum: String,
     val dateCreated: OffsetDateTime,
     val dateModified: OffsetDateTime,
     val isDeleted: Boolean,
     val dateDeleted: OffsetDateTime?,
 )
 
-fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
+fun CteIPackSprouts.toCteIPackSproutsDto() = CteIPackSproutsDto(
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
@@ -207,13 +285,33 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
     packDate = packDate,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
+    // Seeds - part (b)
+    seedGrowerLocationId = seedGrowerLocation?.id,
+    seedHarvestingDate = seedHarvestingDate,
+    seedConditionerLocationId = seedConditionerLocation.id,
+    seedTlcId = seedTlc.id,
+    seedConditioningDate = seedConditioningDate,
+    seedPackingHouseLocationId = seedPackingHouseLocation.id,
+    seedRepackingDate = seedRepackingDate,
+    seedPackingHouseTlcId = seedPackingHouseTlc?.id,
+    seedSupplierLocationId = seedSupplierLocation.id,
+    seedSupplierTlcId = seedSupplierTlc?.id,
+    seedDesc = seedDesc,
+    seedTaxonomicName = seedTaxonomicName,
+    seedGrowingSpecs = seedGrowingSpecs,
+    seedTypeOfPacking = seedTypeOfPacking,
+    seedAntimicrobialTreatment = seedAntimicrobialTreatment,
+    seedReceiveDate = seedReceiveDate,
+    seedReceiveTime = seedReceiveTime,
+    seedReferenceDocumentType = seedReferenceDocumentType,
+    seedReferenceDocumentNum = seedReferenceDocumentNum,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
     dateDeleted = dateDeleted,
 )
 
-fun CteIPackProdDto.toCteIPackProd(
+fun CteIPackSproutsDto.toCteIPackSprouts(
     cteBusName: FoodBus,
     cteHarvest: CteHarvest?,
     harvestLocation: Location,
@@ -221,7 +319,14 @@ fun CteIPackProdDto.toCteIPackProd(
     coolLocation: Location?,
     packTlc: TraceLotCode,
     packTlcSource: Location?,
-) = CteIPackProd(
+    seedGrowerLocation: Location?,
+    seedConditionerLocation: Location,
+    seedTlc: TraceLotCode,
+    seedPackingHouseLocation: Location,
+    seedPackingHouseTlc: TraceLotCode,
+    seedSupplierLocation: Location,
+    seedSupplierTlc: TraceLotCode?,
+) = CteIPackSprouts(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
@@ -251,6 +356,26 @@ fun CteIPackProdDto.toCteIPackProd(
     packDate = packDate,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
+    // Seeds - part (b)
+    seedGrowerLocation = seedGrowerLocation,
+    seedHarvestingDate = seedHarvestingDate,
+    seedConditionerLocation = seedConditionerLocation,
+    seedTlc = seedTlc,
+    seedConditioningDate = seedConditioningDate,
+    seedPackingHouseLocation = seedPackingHouseLocation,
+    seedRepackingDate = seedRepackingDate,
+    seedPackingHouseTlc = seedPackingHouseTlc,
+    seedSupplierLocation = seedSupplierLocation,
+    seedSupplierTlc = seedSupplierTlc,
+    seedDesc = seedDesc,
+    seedTaxonomicName = seedTaxonomicName,
+    seedGrowingSpecs = seedGrowingSpecs,
+    seedTypeOfPacking = seedTypeOfPacking,
+    seedAntimicrobialTreatment = seedAntimicrobialTreatment,
+    seedReceiveDate = seedReceiveDate,
+    seedReceiveTime = seedReceiveTime,
+    seedReferenceDocumentType = seedReferenceDocumentType,
+    seedReferenceDocumentNum = seedReferenceDocumentNum,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

@@ -70,6 +70,7 @@ data class CteReceive(
 
     // (a)(6) The date you received the food;
     val receiveDate: LocalDate,
+    val receiveTime: OffsetDateTime,    // Not required but useful
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
@@ -88,6 +89,7 @@ data class CteReceive(
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null,
 
+    // TODO: see below
     //(b) For each traceability lot of a food on the Food Traceability List
     // you receive from a person to whom this subpart does not apply,
     // you must maintain records containing the following information and
@@ -133,6 +135,7 @@ data class CteReceiveDto(
     val shipFromLocationId: Long,
     val shipToLocationId: Long,
     val receiveDate: LocalDate,
+    val receiveTime: OffsetDateTime,
     val tlcSourceId: Long,
     val tlcSourceReference: String?,
     val referenceDocumentType: ReferenceDocumentType,
@@ -156,6 +159,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     shipFromLocationId = shipFromLocation.id,
     shipToLocationId = shipToLocation.id,
     receiveDate = receiveDate,
+    receiveTime = receiveTime,
     tlcSourceId = tlcSource.id,
     tlcSourceReference = tlcSourceReference,
     referenceDocumentType = referenceDocumentType,
@@ -185,6 +189,7 @@ fun CteReceiveDto.toCteReceive(
     shipFromLocation = shipFromLocation,
     shipToLocation = shipToLocation,
     receiveDate = receiveDate,
+    receiveTime = receiveTime,
     tlcSource = tlcSource,
     tlcSourceReference = tlcSourceReference,
     referenceDocumentType = referenceDocumentType,

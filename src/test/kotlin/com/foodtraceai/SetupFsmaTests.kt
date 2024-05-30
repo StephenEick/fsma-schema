@@ -87,7 +87,7 @@ class SetupFsmaTests {
                 foodBusName = "KaleidoscopeInc",
                 contactName = "Joe Smith",
                 contactPhone = "800-555-1212",
-                foodBusType = FoodBusType.RfeRestaurant
+                foodBusType = FoodBusType.Restaurant
             )
             foodBusList.add(foodBusService.insert(foodBus))
 
@@ -96,7 +96,7 @@ class SetupFsmaTests {
                 foodBusName = "630 N. Main",
                 contactName = "Ted Podolak",
                 contactPhone = "800-555-1212",
-                foodBusType = FoodBusType.RfeRestaurant
+                foodBusType = FoodBusType.Restaurant
             )
             foodBusList.add(foodBusService.insert(foodBus))
         }
