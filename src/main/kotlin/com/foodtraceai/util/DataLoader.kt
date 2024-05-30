@@ -62,6 +62,9 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("DELETE FROM cte_harvest CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_harvest_seq RESTART;")
 
+        jdbcTemplate.execute("DELETE FROM cte_ipack_exempt CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ipack_exempt_seq RESTART;")
+
         jdbcTemplate.execute("DELETE FROM cte_ipack_prod CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS cte_ipack_prod_seq RESTART;")
 

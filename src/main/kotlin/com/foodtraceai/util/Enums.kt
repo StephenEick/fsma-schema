@@ -14,8 +14,7 @@ enum class Country {
 enum class CteType {
     Harvest,
     Cool,
-
-    //TODO: are there different types of Pack or just one type?
+    InitPackExempt,
     InitPackProduce,
     InitPackSprouts,
     FirstLandReceive,
