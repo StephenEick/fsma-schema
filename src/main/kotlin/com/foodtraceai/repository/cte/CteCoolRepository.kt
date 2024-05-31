@@ -1,13 +1,11 @@
 // ----------------------------------------------------------------------------
 // Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
 // ----------------------------------------------------------------------------
-package com.foodtraceai.service
+package com.foodtraceai.repository.cte
 
 import com.foodtraceai.model.cte.CteCool
-import com.foodtraceai.repository.CteCoolRepository
-import org.springframework.stereotype.Service
+import com.foodtraceai.repository.BaseRepository
+import org.springframework.stereotype.Repository
 
-@Service
-class CteCoolService(
-    cteCoolRepository: CteCoolRepository
-) : BaseService<CteCool>(cteCoolRepository, "CteCool")
+@Repository
+interface CteCoolRepository : BaseRepository<CteCool>

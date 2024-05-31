@@ -25,7 +25,7 @@ food on the Food Traceability List that was obtained from a fishing vessel?
 
 @Entity
 @Table(name = "cte_first_land_receive")
-data class CteFirstLandReceive(
+data class CteFirstLand(
     @Id @GeneratedValue override val id: Long = 0,
 
     @Enumerated(EnumType.STRING)
@@ -85,4 +85,4 @@ data class CteFirstLandReceive(
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null
-) : CteBase<CteFirstLandReceive>()
+) : CteBase<CteFirstLand>()
