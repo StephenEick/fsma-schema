@@ -12,8 +12,9 @@ enum class Country {
 }
 
 enum class CteType {
-    Harvest,
+    // For the CTEs that we create
     Cool,
+    Harvest,
     InitPackExempt,
     InitPackProduce,
     InitPackSprouts,
@@ -21,6 +22,9 @@ enum class CteType {
     Ship,
     Receive,
     Transform,
+
+    // For the CTEs coming from suppliers
+    SupShip,    // Supplier shipped to one of our customer locations
 }
 
 enum class FoodBusType(val myCteTypes: List<CteType>) {

@@ -29,6 +29,7 @@ Food Traceability List?
 data class CteIPackSprouts(
     @Id @GeneratedValue override val id: Long = 0,
 
+    @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.InitPackSprouts,
 
     // Business name for the creator of this CTE
@@ -188,6 +189,7 @@ data class CteIPackSprouts(
     val seedReceiveTime: OffsetDateTime,    // Not required but useful
 
     // (b)(7) The reference document type and reference document number.
+    @Enumerated(EnumType.STRING)
     val seedReferenceDocumentType: ReferenceDocumentType,
     val seedReferenceDocumentNum: String,
 

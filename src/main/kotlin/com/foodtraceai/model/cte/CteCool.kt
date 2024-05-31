@@ -23,6 +23,7 @@ a raw agricultural commodity on the Food Traceability List?
  **/
 
 // (b) Cooling before initial packing.
+
 @Entity
 data class CteCool(
     @Id @GeneratedValue override val id: Long = 0,
@@ -35,45 +36,44 @@ data class CteCool(
     override val cteBusName: FoodBus,
 
     // ************** KDEs *************
-    // (1) For each raw agricultural commodity
+    // (b)(1) For each raw agricultural commodity
     // (not obtained from a fishing vessel) on the Food Traceability List
     // that you cool before it is initially packed, you must maintain records
     // containing the following information:
 
-    // (1)(i) The location description for the immediate subsequent
+    // (b)(1)(i) The location description for the immediate subsequent
     // recipient (other than a transporter) of the food;
     @ManyToOne @JoinColumn
     val subsequentRecipient: Location,
 
-    // (1)(ii) The commodity and, if applicable, variety of the food;
+    // (b)(1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
     override val foodItem: FtlItem,  // Commodity harvested
     override val variety: String,
     override val foodDesc: String,  // not required for this CTE
 
-    // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
+    // (b)(1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     override val quantity: Double,
+    @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
-    // (1)(iv) The location description for where you cooled the food;
+    // (b)(1)(iv) The location description for where you cooled the food;
     @ManyToOne @JoinColumn
     val coolLocation: Location,
-    @Enumerated(EnumType.STRING)
-    val coolUnitOfMeasure: UnitOfMeasure,
 
-    // (1)(v) The date of cooling;
+    // (b)(1)(v) The date of cooling;
     val coolDate: LocalDate,
 
-    // (1)(vi) The location description for the farm where the food was harvested;
+    // (b)(1)(vi) The location description for the farm where the food was harvested;
     @ManyToOne @JoinColumn
     val harvestLocation: Location,
 
-    // (1)(vii) The reference document type and reference document number.
+    // (b)(1)(vii) The reference document type and reference document number.
     @Enumerated(EnumType.STRING)
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 
-    // (2) For each raw agricultural commodity (not obtained from a fishing vessel)
+    // (b)(2) For each raw agricultural commodity (not obtained from a fishing vessel)
     // on the Food Traceability List that you harvest, you must provide (in electronic,
     // paper, or other written form) your business name, phone number, and the
     // information in paragraphs (a)(1)(i) through (vii) of this section to the
@@ -97,7 +97,6 @@ data class CteCoolDto(
     val quantity: Double,
     val unitOfMeasure: UnitOfMeasure,
     val coolLocation: Location,
-    val coolUnitOfMeasure: UnitOfMeasure,
     val coolDate: LocalDate,
     val harvestLocation: Location,
     val referenceDocumentType: ReferenceDocumentType,
@@ -119,7 +118,6 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     coolLocation = coolLocation,
-    coolUnitOfMeasure = coolUnitOfMeasure,
     coolDate = coolDate,
     harvestLocation = harvestLocation,
     referenceDocumentType = referenceDocumentType,
@@ -144,7 +142,6 @@ fun CteCoolDto.toCteCool(
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     coolLocation = coolLocation,
-    coolUnitOfMeasure = coolUnitOfMeasure,
     coolDate = coolDate,
     harvestLocation = harvestLocation,
     referenceDocumentType = referenceDocumentType,

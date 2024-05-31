@@ -28,6 +28,7 @@ food on the Food Traceability List that was obtained from a fishing vessel?
 data class CteFirstLandReceive(
     @Id @GeneratedValue override val id: Long = 0,
 
+    @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.FirstLandReceive,
 
     // Business name for the creator of this CTE
@@ -49,6 +50,7 @@ data class CteFirstLandReceive(
 
     //(c) The quantity and unit of measure of the food (e.g., 300 kg);
     override val quantity: Double,
+    @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
     //(d) The harvest date range and locations (as identified under the
@@ -74,6 +76,7 @@ data class CteFirstLandReceive(
     val landedTime: OffsetDateTime,    // not required
 
     //(g) The reference document type and reference document number.
+    @Enumerated(EnumType.STRING)
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 

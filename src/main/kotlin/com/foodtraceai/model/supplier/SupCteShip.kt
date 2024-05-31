@@ -1,18 +1,20 @@
 // ----------------------------------------------------------------------------
 // Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
 // ----------------------------------------------------------------------------
-package com.foodtraceai.model.cte
+package com.foodtraceai.model.supplier
 
+import com.foodtraceai.model.BaseModel
 import com.foodtraceai.model.FoodBus
 import com.foodtraceai.model.Location
 import com.foodtraceai.model.TraceLotCode
 import com.foodtraceai.util.CteType
 import com.foodtraceai.util.FtlItem
-import com.foodtraceai.util.ReferenceDocumentType
 import com.foodtraceai.util.UnitOfMeasure
 import jakarta.persistence.*
 import java.time.LocalDate
 import java.time.OffsetDateTime
+
+// This data structure is to receive a supplier shipping event
 
 /**
 https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
@@ -24,16 +26,15 @@ Food Traceability List?
  **/
 
 @Entity
-data class CteShip(
+data class SupCteShip(
     @Id @GeneratedValue override val id: Long = 0,
 
-    @Enumerated(EnumType.STRING)
-    override val cteType: CteType = CteType.Ship,
+    val cteType: CteType = CteType.SupShip,
 
-    // Business name for the creator of this CTE
+    // Business name for the company doing the shipping from which you received the food
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: FoodBus,
+    val cteBusName: FoodBus,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
@@ -43,19 +44,19 @@ data class CteShip(
     // (a)(1) The traceability lot code for the food;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val tlc: TraceLotCode,  // from Initial Packer or Transformer
+    val tlc: TraceLotCode,  // from the company that hired the shipper
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    override val quantity: Double,   // from Initial Packer or Transformer
+    val quantity: Double,   // from Initial Packer or Transformer
     @Enumerated(EnumType.STRING)
-    override val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
+    val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
 
     // (a)(3) The product description for the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
-    override val foodDesc: String,
+    val foodItem: FtlItem,
+    val variety: String,
+    val foodDesc: String,
 
     // (a)(4) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
@@ -80,11 +81,6 @@ data class CteShip(
     val tlcSource: Location,
     val tlcSourceReference: String? = null,
 
-    // (a)(8) The reference document type and reference document number.
-    @Enumerated(EnumType.STRING)
-    override val referenceDocumentType: ReferenceDocumentType,
-    override val referenceDocumentNum: String,
-
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
@@ -96,12 +92,9 @@ data class CteShip(
     // to the immediate subsequent recipient (other than a transporter)
     // of each traceability lot that you ship.
 
-    // (c) This section does not apply to the shipment of a food that occurs
-    // before the food is initially packed (if the food is a raw agricultural
-    // commodity not obtained from a fishing vessel).
-) : CteBase<CteShip>()
+) : BaseModel<SupCteShip>()
 
-data class CteShipDto(
+data class SupCteShipDto(
     val id: Long,
     val cteType: CteType,
     val cteBusNameId: Long,
@@ -117,15 +110,13 @@ data class CteShipDto(
     val shipTime: OffsetDateTime,
     val tlcSourceId: Long,
     val tlcSourceReference: String?,
-    val referenceDocumentType: ReferenceDocumentType,
-    val referenceDocumentNum: String,
     val dateCreated: OffsetDateTime,
     val dateModified: OffsetDateTime,
     val isDeleted: Boolean,
     val dateDeleted: OffsetDateTime?,
 )
 
-fun CteShip.toCteShipDto() = CteShipDto(
+fun SupCteShip.toSupCteShipDto() = SupCteShipDto(
     id = id,
     cteType = cteType,
     cteBusNameId = cteBusName.id,
@@ -141,21 +132,19 @@ fun CteShip.toCteShipDto() = CteShipDto(
     shipTime = shipTime,
     tlcSourceId = tlcSource.id,
     tlcSourceReference = tlcSourceReference,
-    referenceDocumentType = referenceDocumentType,
-    referenceDocumentNum = referenceDocumentNum,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
     dateDeleted = dateDeleted,
 )
 
-fun CteShipDto.toCteShip(
+fun SupCteShipDto.toSupCteShip(
     cteBusName: FoodBus,
     tlc: TraceLotCode,
     shipToLocation: Location,
     shipFromLocation: Location,
     tlcSource: Location,
-) = CteShip(
+) = SupCteShip(
     id = id,
     cteType = cteType,
     cteBusName = cteBusName,
@@ -171,8 +160,6 @@ fun CteShipDto.toCteShip(
     shipTime = shipTime,
     tlcSource = tlcSource,
     tlcSourceReference = tlcSourceReference,
-    referenceDocumentType = referenceDocumentType,
-    referenceDocumentNum = referenceDocumentNum,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

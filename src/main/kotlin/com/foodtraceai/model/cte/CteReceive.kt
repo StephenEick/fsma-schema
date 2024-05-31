@@ -27,16 +27,13 @@ Food Traceability List?
 data class CteReceive(
     @Id @GeneratedValue override val id: Long = 0,
 
+    @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Receive,
 
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     override val cteBusName: FoodBus,
-
-    @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
-    override val variety: String,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -52,21 +49,25 @@ data class CteReceive(
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
     override val quantity: Double,
+    @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(3) The product description for the food;
+    @Enumerated(EnumType.STRING)
+    override val foodItem: FtlItem,
+    override val variety: String,
     override val foodDesc: String,
 
     // (a)(4) The location description for the immediate previous source
     // (other than a transporter) for the food;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val shipFromLocation: Location,
+    val prevSourceLocation: Location,   // e.g. ShipFromLocation on CteShip
 
     // (a)(5) The location description for where the food was received;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val shipToLocation: Location,
+    val receiveLocation: Location,  // ship to location on CteShip
 
     // (a)(6) The date you received the food;
     val receiveDate: LocalDate,
@@ -80,6 +81,7 @@ data class CteReceive(
     val tlcSourceReference: String? = null,
 
     // (a)(8) The reference document type and reference document number.
+    @Enumerated(EnumType.STRING)
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 
@@ -132,7 +134,7 @@ data class CteReceiveDto(
     val quantity: Double,
     val unitOfMeasure: UnitOfMeasure,
     val foodDesc: String,
-    val shipFromLocationId: Long,
+    val prevSourcLocationId: Long,
     val shipToLocationId: Long,
     val receiveDate: LocalDate,
     val receiveTime: OffsetDateTime,
@@ -156,8 +158,8 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     foodDesc = foodDesc,
-    shipFromLocationId = shipFromLocation.id,
-    shipToLocationId = shipToLocation.id,
+    prevSourcLocationId = prevSourceLocation.id,
+    shipToLocationId = receiveLocation.id,
     receiveDate = receiveDate,
     receiveTime = receiveTime,
     tlcSourceId = tlcSource.id,
@@ -173,7 +175,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
 fun CteReceiveDto.toCteReceive(
     cteBusName: FoodBus,
     tlc: TraceLotCode,
-    shipFromLocation: Location,
+    prevSourceLocation: Location,
     shipToLocation: Location,
     tlcSource: Location,
 ) = CteReceive(
@@ -186,8 +188,8 @@ fun CteReceiveDto.toCteReceive(
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     foodDesc = foodDesc,
-    shipFromLocation = shipFromLocation,
-    shipToLocation = shipToLocation,
+    prevSourceLocation = prevSourceLocation,
+    receiveLocation = shipToLocation,
     receiveDate = receiveDate,
     receiveTime = receiveTime,
     tlcSource = tlcSource,

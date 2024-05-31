@@ -27,17 +27,13 @@ Food Traceability List?
 data class CteTrans(
     @Id @GeneratedValue override val id: Long = 0,
 
+    @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Transform,
 
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     override val cteBusName: FoodBus,
-
-    // Transformed (new) Food Item
-    @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem, // new food item
-    override val variety: String,   // new variety
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -60,6 +56,7 @@ data class CteTrans(
     // (a)(1)(iii) For each traceability lot used, the quantity and unit of measure
     // of the food used from that lot.
     val inputQuantity: Double,   // from Initial Packer
+    @Enumerated(EnumType.STRING)
     val inputUnitOfMeasure: UnitOfMeasure,   // from Initial Packer
 
     // (a)(2) For the food produced through transformation, the following
@@ -82,6 +79,9 @@ data class CteTrans(
     val transDate: LocalDate,
 
     // (a)(2)(iv) The product description for the new food;
+    @Enumerated(EnumType.STRING)
+    override val foodItem: FtlItem, // new food item
+    override val variety: String,   // new variety
     override val foodDesc: String,  // new food description
 
     // For the transformed food
@@ -89,10 +89,12 @@ data class CteTrans(
     // food (e.g., 6 cases, 25 reusable plastic containers,
     // 100 tanks, 200 pounds); and
     override val quantity: Double,
+    @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(2)(vi) The reference document type and reference document
     // number for the transformation event.
+    @Enumerated(EnumType.STRING)
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 

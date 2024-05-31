@@ -30,43 +30,48 @@ data class CteHarvest(
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Harvest,
 
+    // Harvest business name, e.g. creator of this CTE
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn
+    override val cteBusName: FoodBus,
+
     // ************** KDEs *************
-    // (1) For each raw agricultural commodity (not obtained from a fishing vessel)
+    // (a)(1) For each raw agricultural commodity (not obtained from a fishing vessel)
     // on the Food Traceability List that you harvest, you must maintain records
     // containing the following information:
 
-    // (1)(i) The location description for the immediate subsequent recipient
+    // (a)(1)(i) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
     // Will usually be the initial packer but could be the cooler
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     val subsequentRecipient: Location,
 
-    // (1)(ii) The commodity and, if applicable, variety of the food;
+    // (a)(1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
     override val foodItem: FtlItem, // Called commodity for Harvest CTEs
     override val variety: String,   // variety of commodity
     override val foodDesc: String,  // Not required by Rule 204
 
     // The harvest quantity and unit of measure
-    // (1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
+    // (a)(1)(iii) The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
     override val quantity: Double,
     @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
-    // (1)(iv) The location description for the farm where the food was harvested;
+    // (a)(1)(iv) The location description for the farm where the food was harvested;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     val harvestLocation: Location,
 
-    // (1)(v) For produce, the name of the field or other growing area from which the
+    // (a)(1)(v) For produce, the name of the field or other growing area from which the
     // food was harvested (which must correspond to the name used by the grower),
     // or other information identifying the harvest location at least as precisely
     // as the field or other growing area name;
     val fieldName: String,
     val fieldDesc: String,
 
-    // (1)(vi) For aquacultured food, the name of the container
+    // (a)(1)(vi) For aquacultured food, the name of the container
     // (e.g., pond, pool, tank, cage) from which the food was harvested
     // (which must correspond to the container name
     // used by the aquaculture farmer) or other information identifying the harvest
@@ -74,25 +79,20 @@ data class CteHarvest(
     val containerName: String? = null,
     val containerDesc: String? = null,
 
-    // (1)(vii) The date of harvesting;
+    // (a)(1)(vii) The date of harvesting;
     val harvestDate: LocalDate,
 
-    // (1)(viii) The reference document type and reference document number.
+    // (a)(1)(viii) The reference document type and reference document number.
     @Enumerated(EnumType.STRING)
     override val referenceDocumentType: ReferenceDocumentType,
     override val referenceDocumentNum: String,
 
-    // (2) For each raw agricultural commodity (not obtained from a fishing vessel)
+    // (a)(2) For each raw agricultural commodity (not obtained from a fishing vessel)
     // on the Food Traceability List that you harvest, you must provide (in electronic,
     // paper, or other written form) your business name, phone number, and the
     // information in paragraphs (a)(1)(i) through (vii) of this section to the
     // initial packer of the raw agricultural commodity you harvest, either directly
     // or through the supply chain.
-
-    // Harvest business name, e.g. creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL])
-    @JoinColumn
-    override val cteBusName: FoodBus,
 
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
