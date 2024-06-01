@@ -46,8 +46,8 @@ class CteIPackProdController : BaseController() {
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
-        val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteIPackProdDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.foodBusId}")
 
         var cteHarvest: CteHarvest? = null
         if (cteIPackProdDto.cteHarvestId != null)
@@ -89,8 +89,8 @@ class CteIPackProdController : BaseController() {
         if (cteIPackProdDto.id <= 0L || cteIPackProdDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteIPackProd Ids specified: $id != ${cteIPackProdDto.id}")
 
-        val cteBusName = foodBusService.findById(cteIPackProdDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteIPackProdDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.foodBusId}")
 
         var cteHarvest: CteHarvest? = null
         if (cteIPackProdDto.cteHarvestId != null)

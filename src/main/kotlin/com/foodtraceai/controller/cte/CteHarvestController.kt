@@ -50,8 +50,8 @@ class CteHarvestController : BaseController() {
         val harvestLocation = locationService.findById(cteHarvestDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteHarvestDto.harvestLocationId}")
 
-        val cteBusName = foodBusService.findById(cteHarvestDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteHarvestDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteHarvestDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName not found: ${cteHarvestDto.foodBusId}")
 
         val cteHarvest = cteHarvestDto.toCteHarvest(subsequentRecipient, harvestLocation, cteBusName)
         val cteHarvestResponse = cteHarvestService.insert(cteHarvest).toCteHarvestDto()
@@ -75,8 +75,8 @@ class CteHarvestController : BaseController() {
         val harvestLocation = locationService.findById(cteHarvestDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteHarvestDto.harvestLocationId}")
 
-        val cteBusName = foodBusService.findById(cteHarvestDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteHarvestDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteHarvestDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteHarvestDto.foodBusId}")
 
         val cteHarvest = cteHarvestDto.toCteHarvest(subsequentRecipient, harvestLocation, cteBusName)
         val cteHarvestCto = cteHarvestService.update(cteHarvest).toCteHarvestDto()

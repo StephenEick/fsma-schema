@@ -33,7 +33,7 @@ data class CteTrans(
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: FoodBus,
+    override val foodBus: FoodBus,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -120,7 +120,7 @@ data class CteTrans(
 data class CteTransDto(
     val id: Long,
     val cteType: CteType,
-    val cteBusNameId: Long,
+    val foodBusId: Long,
     val foodItem: FtlItem,
     val variety: String,
     val inputTlcId: Long,  // from Initial Packer or previous Transformer
@@ -145,7 +145,7 @@ data class CteTransDto(
 fun CteTrans.toCteTransDto() = CteTransDto(
     id = id,
     cteType = cteType,
-    cteBusNameId = cteBusName.id,
+    foodBusId = foodBus.id,
     foodItem = foodItem,
     variety = variety,
     inputTlcId = inputTlc.id,  // from Initial Packer or previous Transformer
@@ -168,14 +168,14 @@ fun CteTrans.toCteTransDto() = CteTransDto(
 )
 
 fun CteTransDto.toCteTrans(
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
     inputTlc: TraceLotCode,
     newTlc: TraceLotCode,
     newTlcLocation: Location,
 ) = CteTrans(
     id = id,
     cteType = cteType,
-    cteBusName = cteBusName,
+    foodBus = foodBus,
     foodItem = foodItem,
     variety = variety,
     inputTlc = inputTlc,  // from Initial Packer or previous Transformer

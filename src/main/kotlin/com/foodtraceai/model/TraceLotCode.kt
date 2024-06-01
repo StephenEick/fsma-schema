@@ -14,7 +14,11 @@ data class TraceLotCode(
     @Id @GeneratedValue
     override val id: Long = 0,
     val tlc: String,
-    val desc: String,
+    val desc: String? = null,
+    val gtin: String? = null,
+    val lot: String? = null,
+    val case: String? = null,
+
 
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
@@ -26,7 +30,10 @@ data class TraceLotCode(
 data class TraceLotCodeDto(
     val id: Long = 0,
     val tlc: String,
-    val desc: String,
+    val desc: String?,
+    val gtin: String?,
+    val lot: String?,
+    val case: String?,
     val dateCreated: OffsetDateTime = OffsetDateTime.now(),
     val dateModified: OffsetDateTime = OffsetDateTime.now(),
     val isDeleted: Boolean = false,
@@ -39,6 +46,9 @@ fun TraceLotCode.toTraceLotCodeDto() = TraceLotCodeDto(
     id = id,
     tlc = tlc,
     desc = desc,
+    gtin = gtin,
+    lot = lot,
+    case = case,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -49,6 +59,9 @@ fun TraceLotCodeDto.toTraceLotCode() = TraceLotCode(
     id = id,
     tlc = tlc,
     desc = desc,
+    gtin = gtin,
+    lot = lot,
+    case = case,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

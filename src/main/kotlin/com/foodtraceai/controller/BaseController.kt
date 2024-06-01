@@ -28,13 +28,22 @@ class BaseController {
     protected lateinit var addressService: AddressService
 
     @Autowired
+    protected lateinit var cteFirstLandService: CteFirstLandService
+
+    @Autowired
     protected lateinit var cteCoolService: CteCoolService
 
     @Autowired
     protected lateinit var cteHarvestService: CteHarvestService
 
     @Autowired
+    protected lateinit var cteIPackExemptService: CteIPackExemptService
+
+    @Autowired
     protected lateinit var cteIPackProdService: CteIPackProdService
+
+    @Autowired
+    protected lateinit var cteIPackSproutsService: CteIPackSproutsService
 
     @Autowired
     protected lateinit var cteReceiveService: CteReceiveService
@@ -43,7 +52,7 @@ class BaseController {
     protected lateinit var cteShipService: CteShipService
 
     @Autowired
-    protected lateinit var cteTransformService: CteTransformService
+    protected lateinit var cteTransService: CteTransService
 
     @Autowired
     protected lateinit var foodBusService: FoodBusService

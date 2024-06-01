@@ -33,7 +33,7 @@ data class CteReceive(
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: FoodBus,
+    override val foodBus: FoodBus,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -77,7 +77,7 @@ data class CteReceive(
     // or the traceability lot code source reference; and
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val tlcSource: Location,
+    val tlcSource: Location? = null,
     val tlcSourceReference: String? = null,
 
     // (a)(8) The reference document type and reference document number.
@@ -127,7 +127,7 @@ data class CteReceive(
 data class CteReceiveDto(
     val id: Long,
     val cteType: CteType,
-    val cteBusNameId: Long,
+    val foodBusId: Long,
     val foodItem: FtlItem,
     val variety: String,
     val tlcId: Long,
@@ -138,7 +138,7 @@ data class CteReceiveDto(
     val shipToLocationId: Long,
     val receiveDate: LocalDate,
     val receiveTime: OffsetDateTime,
-    val tlcSourceId: Long,
+    val tlcSourceId: Long?,
     val tlcSourceReference: String?,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
@@ -151,7 +151,7 @@ data class CteReceiveDto(
 fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     id = id,
     cteType = cteType,
-    cteBusNameId = cteBusName.id,
+    foodBusId = foodBus.id,
     foodItem = foodItem,
     variety = variety,
     tlcId = tlc.id,
@@ -162,7 +162,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     shipToLocationId = receiveLocation.id,
     receiveDate = receiveDate,
     receiveTime = receiveTime,
-    tlcSourceId = tlcSource.id,
+    tlcSourceId = tlcSource?.id,
     tlcSourceReference = tlcSourceReference,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
@@ -173,15 +173,15 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
 )
 
 fun CteReceiveDto.toCteReceive(
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
     tlc: TraceLotCode,
     prevSourceLocation: Location,
     shipToLocation: Location,
-    tlcSource: Location,
+    tlcSource: Location?,
 ) = CteReceive(
     id = id,
     cteType = cteType,
-    cteBusName = cteBusName,
+    foodBus = foodBus,
     foodItem = foodItem,
     variety = variety,
     tlc = tlc,

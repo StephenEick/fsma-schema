@@ -5,6 +5,7 @@ package com.foodtraceai.controller.cte
 
 import com.foodtraceai.controller.BaseController
 import com.foodtraceai.model.FsmaUser
+import com.foodtraceai.model.Location
 import com.foodtraceai.model.cte.CteReceiveDto
 import com.foodtraceai.model.cte.toCteReceive
 import com.foodtraceai.model.cte.toCteReceiveDto
@@ -44,8 +45,8 @@ class CteReceiveController : BaseController() {
         @Valid @RequestBody cteReceiveDto: CteReceiveDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
-        val cteBusName = foodBusService.findById(cteReceiveDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteReceiveDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.foodBusId}")
 
         val traceLotCode = traceLotCodeService.findById(cteReceiveDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteReceiveDto.tlcId}")
@@ -56,11 +57,14 @@ class CteReceiveController : BaseController() {
         val shipToLocation = locationService.findById(cteReceiveDto.shipToLocationId)
             ?: throw EntityNotFoundException("ShipToLocation not found: ${cteReceiveDto.shipToLocationId}")
 
-        val tlcSource = locationService.findById(cteReceiveDto.tlcSourceId)
-            ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
+        var tlcSource: Location? = null
+        if (cteReceiveDto.tlcSourceId != null)
+            tlcSource = locationService.findById(cteReceiveDto.tlcSourceId)
+                ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
 
-        val cteReceive =
-            cteReceiveDto.toCteReceive(cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource)
+        val cteReceive = cteReceiveDto.toCteReceive(
+            cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource
+        )
         val cteReceiveResponse = cteReceiveService.insert(cteReceive).toCteReceiveDto()
         return ResponseEntity.created(URI.create(CTE_RECEIVE_BASE_URL.plus("/${cteReceiveResponse.id}")))
             .body(cteReceiveResponse)
@@ -76,8 +80,8 @@ class CteReceiveController : BaseController() {
         if (cteReceiveDto.id <= 0L || cteReceiveDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteReceive Ids specified: $id != ${cteReceiveDto.id}")
 
-        val cteBusName = foodBusService.findById(cteReceiveDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteReceiveDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.foodBusId}")
 
         val traceLotCode = traceLotCodeService.findById(cteReceiveDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteReceiveDto.tlcId}")
@@ -88,11 +92,14 @@ class CteReceiveController : BaseController() {
         val shipToLocation = locationService.findById(cteReceiveDto.shipToLocationId)
             ?: throw EntityNotFoundException("ShipToLocation not found: ${cteReceiveDto.shipToLocationId}")
 
-        val tlcSource = locationService.findById(cteReceiveDto.tlcSourceId)
-            ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
+        var tlcSource: Location? = null
+        if (cteReceiveDto.tlcSourceId != null)
+            tlcSource = locationService.findById(cteReceiveDto.tlcSourceId)
+                ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
 
-        val cteReceive =
-            cteReceiveDto.toCteReceive(cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource)
+        val cteReceive = cteReceiveDto.toCteReceive(
+            cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource
+        )
         val cteReceiveCto = cteReceiveService.update(cteReceive).toCteReceiveDto()
         return ResponseEntity.ok().body(cteReceiveCto)
     }

@@ -33,7 +33,7 @@ data class CteShip(
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: FoodBus,
+    override val foodBus: FoodBus,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
@@ -104,7 +104,7 @@ data class CteShip(
 data class CteShipDto(
     val id: Long,
     val cteType: CteType,
-    val cteBusNameId: Long,
+    val foodBusId: Long,
     val foodItem: FtlItem,
     val variety: String,
     val tlcId: Long,
@@ -128,7 +128,7 @@ data class CteShipDto(
 fun CteShip.toCteShipDto() = CteShipDto(
     id = id,
     cteType = cteType,
-    cteBusNameId = cteBusName.id,
+    foodBusId = foodBus.id,
     foodItem = foodItem,
     variety = variety,
     tlcId = tlc.id,
@@ -150,7 +150,7 @@ fun CteShip.toCteShipDto() = CteShipDto(
 )
 
 fun CteShipDto.toCteShip(
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
     tlc: TraceLotCode,
     shipToLocation: Location,
     shipFromLocation: Location,
@@ -158,7 +158,7 @@ fun CteShipDto.toCteShip(
 ) = CteShip(
     id = id,
     cteType = cteType,
-    cteBusName = cteBusName,
+    foodBus = foodBus,
     foodItem = foodItem,
     variety = variety,
     tlc = tlc,

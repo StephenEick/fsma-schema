@@ -125,11 +125,10 @@ class ServerApplicationTests {
         traceLotCodeDto = TraceLotCodeDto(
             tlc = "trace lot code 1",
             desc = "desc trace lot code 1",
+            gtin = null,
+            lot = null,
+            case = null,
         )
-
-//        val pair = authenticate(rootAuthLogin)
-//        accessToken = pair[0]
-//        refreshToken = pair[1]
     }
 
 

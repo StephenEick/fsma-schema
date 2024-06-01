@@ -29,9 +29,10 @@ Food Traceability List?
 data class SupCteShip(
     @Id @GeneratedValue override val id: Long = 0,
 
+    // Supplier sent you a shipment
     val cteType: CteType = CteType.SupShip,
 
-    // Business name for the company doing the shipping from which you received the food
+    // Business name for supplier from which you received the food
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
     val cteBusName: FoodBus,
@@ -44,13 +45,13 @@ data class SupCteShip(
     // (a)(1) The traceability lot code for the food;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val tlc: TraceLotCode,  // from the company that hired the shipper
+    val tlc: TraceLotCode,  // from the supplier
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    val quantity: Double,   // from Initial Packer or Transformer
+    val quantity: Double,   // from the supplier
     @Enumerated(EnumType.STRING)
-    val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
+    val unitOfMeasure: UnitOfMeasure,   // from the supplier
 
     // (a)(3) The product description for the food;
     @Enumerated(EnumType.STRING)
@@ -62,23 +63,22 @@ data class SupCteShip(
     // (other than a transporter) of the food;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val shipToLocation: Location,
+    val shipToLocation: Location,   // Where you are receiving the food
 
     // (a)(5) The location description for the location from which you shipped
     // the food;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val shipFromLocation: Location,
+    val shipFromLocation: Location, // Supplier location
 
     // (a)(6) The date you shipped the food;
     val shipDate: LocalDate,
-    val shipTime: OffsetDateTime,   // Not required but possibly useful
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val tlcSource: Location,
+    val tlcSource: Location? = null,
     val tlcSourceReference: String? = null,
 
     @Column(updatable = false)
@@ -107,8 +107,7 @@ data class SupCteShipDto(
     val shipToLocationId: Long,
     val shipFromLocationId: Long,
     val shipDate: LocalDate,
-    val shipTime: OffsetDateTime,
-    val tlcSourceId: Long,
+    val tlcSourceId: Long?,
     val tlcSourceReference: String?,
     val dateCreated: OffsetDateTime,
     val dateModified: OffsetDateTime,
@@ -129,8 +128,7 @@ fun SupCteShip.toSupCteShipDto() = SupCteShipDto(
     shipToLocationId = shipToLocation.id,
     shipFromLocationId = shipFromLocation.id,
     shipDate = shipDate,
-    shipTime = shipTime,
-    tlcSourceId = tlcSource.id,
+    tlcSourceId = tlcSource?.id,
     tlcSourceReference = tlcSourceReference,
     dateCreated = dateCreated,
     dateModified = dateModified,
@@ -157,7 +155,6 @@ fun SupCteShipDto.toSupCteShip(
     shipToLocation = shipToLocation,
     shipFromLocation = shipFromLocation,
     shipDate = shipDate,
-    shipTime = shipTime,
     tlcSource = tlcSource,
     tlcSourceReference = tlcSourceReference,
     dateCreated = dateCreated,

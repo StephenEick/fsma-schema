@@ -34,7 +34,7 @@ data class CteFirstLand(
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: FoodBus,
+    override val foodBus: FoodBus,
 
     @Enumerated(EnumType.STRING)
     override val foodItem: FtlItem,
@@ -68,7 +68,7 @@ data class CteFirstLand(
     // the traceability lot code source reference;
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val tlcSource: Location,
+    val tlcSource: Location? = null,
     val tlcSourceReference: String? = null,
 
     //(f) The date the food was landed; and
@@ -86,3 +86,81 @@ data class CteFirstLand(
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null
 ) : CteBase<CteFirstLand>()
+
+data class CteFirstLandDto(
+    val id: Long,
+    val cteType: CteType,
+    val foodBusId: Long,
+    val foodItem: FtlItem,
+    val tlc: TraceLotCode,
+    val variety: String,
+    val foodDesc: String,
+    val quantity: Double,
+    val unitOfMeasure: UnitOfMeasure,
+    val harvestDateBegin: LocalDate,
+    val harvestDateEnd: LocalDate,
+    val harvestLocation: String,
+    val tlcSourceId: Long?,
+    val tlcSourceReference: String?,
+    val landedDate: LocalDate,
+    val landedTime: OffsetDateTime,    // not required
+    val referenceDocumentType: ReferenceDocumentType,
+    val referenceDocumentNum: String,
+    val dateCreated: OffsetDateTime,
+    val dateModified: OffsetDateTime,
+    val isDeleted: Boolean,
+    val dateDeleted: OffsetDateTime?,
+)
+
+fun CteFirstLand.toCteFirstLandDto() = CteFirstLandDto(
+    id = id,
+    cteType = cteType,
+    foodBusId = foodBus.id,
+    foodItem = foodItem,
+    tlc = tlc,
+    variety = variety,
+    foodDesc = foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
+    harvestDateBegin = harvestDateBegin,
+    harvestDateEnd = harvestDateEnd,
+    harvestLocation = harvestLocation,
+    tlcSourceId = tlcSource?.id,
+    tlcSourceReference = tlcSourceReference,
+    landedDate = landedDate,
+    landedTime = landedTime,    // not required
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted
+)
+
+fun CteFirstLandDto.toCteFirstLand(
+    foodBus: FoodBus,
+    tlcSource: Location?,
+) = CteFirstLand(
+    id = id,
+    cteType = cteType,
+    foodBus = foodBus,
+    foodItem = foodItem,
+    tlc = tlc,
+    variety = variety,
+    foodDesc = foodDesc,
+    quantity = quantity,
+    unitOfMeasure = unitOfMeasure,
+    harvestDateBegin = harvestDateBegin,
+    harvestDateEnd = harvestDateEnd,
+    harvestLocation = harvestLocation,
+    tlcSource = tlcSource,
+    tlcSourceReference = tlcSourceReference,
+    landedDate = landedDate,
+    landedTime = landedTime,    // not required
+    referenceDocumentType = referenceDocumentType,
+    referenceDocumentNum = referenceDocumentNum,
+    dateCreated = dateCreated,
+    dateModified = dateModified,
+    isDeleted = isDeleted,
+    dateDeleted = dateDeleted
+)

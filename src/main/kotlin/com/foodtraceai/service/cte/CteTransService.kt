@@ -9,6 +9,6 @@ import com.foodtraceai.service.BaseService
 import org.springframework.stereotype.Service
 
 @Service
-class CteTransformService(
+class CteTransService(
     cteTransRepository: CteTransRepository
-) : BaseService<CteTrans>(cteTransRepository, "CteTransform")
+) : BaseService<CteTrans>(cteTransRepository, "CteTrans")

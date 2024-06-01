@@ -33,7 +33,7 @@ data class CteHarvest(
     // Harvest business name, e.g. creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: FoodBus,
+    override val foodBus: FoodBus,
 
     // ************** KDEs *************
     // (a)(1) For each raw agricultural commodity (not obtained from a fishing vessel)
@@ -104,6 +104,7 @@ data class CteHarvest(
 data class CteHarvestDto(
     val id: Long,
     val cteType: CteType,
+    val foodBusId: Long,
     val subsequentRecipientId: Long,
     val foodItem: FtlItem,
     val commodityVariety: String,
@@ -118,7 +119,6 @@ data class CteHarvestDto(
     val harvestDate: LocalDate,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
-    val cteBusNameId: Long,
     val dateCreated: OffsetDateTime,
     val dateModified: OffsetDateTime,
     val isDeleted: Boolean,
@@ -128,6 +128,7 @@ data class CteHarvestDto(
 fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
     id = id,
     cteType = cteType,
+    foodBusId = foodBus.id,
     subsequentRecipientId = subsequentRecipient.id,
     foodItem = foodItem,
     commodityVariety = variety,
@@ -142,7 +143,6 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
     harvestDate = harvestDate,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    cteBusNameId = cteBusName.id,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -152,10 +152,11 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
 fun CteHarvestDto.toCteHarvest(
     subsequentRecipient: Location,
     harvestLocation: Location,
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
 ) = CteHarvest(
     id = id,
     cteType = cteType,
+    foodBus = foodBus,
     subsequentRecipient = subsequentRecipient,
     foodItem = foodItem,
     variety = commodityVariety,
@@ -170,7 +171,6 @@ fun CteHarvestDto.toCteHarvest(
     harvestDate = harvestDate,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    cteBusName = cteBusName,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

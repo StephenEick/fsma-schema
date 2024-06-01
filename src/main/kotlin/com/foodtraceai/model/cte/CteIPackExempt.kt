@@ -34,8 +34,7 @@ data class CteIPackExempt(
 
     // Business name, e.g. creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
-    override val cteBusName: FoodBus,
-
+    override val foodBus: FoodBus,
 
     // ************** KDEs *************
     // (c) For each traceability lot of a raw agricultural commodity
@@ -109,7 +108,7 @@ data class CteIPackExempt(
 data class CteIPackExemptDto(
     val id: Long,
     val cteType: CteType,
-    val cteBusNameId: Long,
+    val foodBusId: Long,
     val foodItem: FtlItem,
     val variety: String,
     val foodDesc: String,
@@ -136,7 +135,7 @@ data class CteIPackExemptDto(
 fun CteIPackExempt.toCteIPackExemptDto() = CteIPackExemptDto(
     id = id,
     cteType = cteType,
-    cteBusNameId = cteBusName.id,
+    foodBusId = foodBus.id,
     foodItem = foodItem,
     variety = variety,
     foodDesc = foodDesc,
@@ -161,14 +160,14 @@ fun CteIPackExempt.toCteIPackExemptDto() = CteIPackExemptDto(
 )
 
 fun CteIPackExemptDto.toCteIPackExempt(
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
     sourceLocation: Location,
     packTlc: TraceLotCode,
     packTlcSource: Location?,
 ) = CteIPackExempt(
     id = id,
     cteType = cteType,
-    cteBusName = cteBusName,
+    foodBus = foodBus,
     foodItem = foodItem,
     variety = variety,
     foodDesc = foodDesc,

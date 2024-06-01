@@ -44,8 +44,8 @@ class CteShipController : BaseController() {
         @Valid @RequestBody cteShipDto: CteShipDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteShipDto> {
-        val cteBusName = foodBusService.findById(cteShipDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteShipDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteShipDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName not found: ${cteShipDto.foodBusId}")
 
         val traceLotCode = traceLotCodeService.findById(cteShipDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteShipDto.tlcId}")
@@ -75,8 +75,8 @@ class CteShipController : BaseController() {
         if (cteShipDto.id <= 0L || cteShipDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteShip Ids specified: $id != ${cteShipDto.id}")
 
-        val cteBusName = foodBusService.findById(cteShipDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteShipDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteShipDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName not found: ${cteShipDto.foodBusId}")
 
         val traceLotCode = traceLotCodeService.findById(cteShipDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteShipDto.tlcId}")

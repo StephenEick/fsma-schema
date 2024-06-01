@@ -17,7 +17,7 @@ abstract class CteBase<T> : BaseModel<T>() {
     abstract val cteType: CteType
 
     // Business name for the creator of this CTE
-    abstract val cteBusName: FoodBus
+    abstract val foodBus: FoodBus
 
     // Common to all CTEs.  For raw agricultural commodities use commodity name
     abstract val foodItem: FtlItem  // or commodity

@@ -33,7 +33,7 @@ data class CteCool(
 
     // Cooler business name
     @ManyToOne @JoinColumn
-    override val cteBusName: FoodBus,
+    override val foodBus: FoodBus,
 
     // ************** KDEs *************
     // (b)(1) For each raw agricultural commodity
@@ -101,7 +101,7 @@ data class CteCoolDto(
     val harvestLocation: Location,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
-    val cteBusNameId: Long,
+    val foodBusId: Long,
     val dateCreated: OffsetDateTime,
     val dateModified: OffsetDateTime,
     val isDeleted: Boolean,
@@ -122,7 +122,7 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
     harvestLocation = harvestLocation,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    cteBusNameId = cteBusName.id,
+    foodBusId = foodBus.id,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -131,7 +131,7 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
 
 fun CteCoolDto.toCteCool(
     subsequentRecipient: Location,
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
 ) = CteCool(
     id = id,
     cteType = cteType,
@@ -146,7 +146,7 @@ fun CteCoolDto.toCteCool(
     harvestLocation = harvestLocation,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    cteBusName = cteBusName,
+    foodBus = foodBus,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

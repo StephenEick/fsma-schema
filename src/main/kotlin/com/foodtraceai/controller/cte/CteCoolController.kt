@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
+// ----------------------------------------------------------------------------
 package com.foodtraceai.controller.cte
 
 import com.foodtraceai.controller.BaseController
@@ -47,8 +50,8 @@ class CteCoolController : BaseController() {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
 
-        val cteBusName = foodBusService.findById(cteCoolDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteCoolDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.foodBusId}")
 
         val cteCool = cteCoolDto.toCteCool(subsequentRecipient, cteBusName)
         val cteCoolResponse = cteCoolService.insert(cteCool).toCteCoolDto()
@@ -69,8 +72,8 @@ class CteCoolController : BaseController() {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
 
-        val cteBusName = foodBusService.findById(cteCoolDto.cteBusNameId)
-            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.cteBusNameId}")
+        val cteBusName = foodBusService.findById(cteCoolDto.foodBusId)
+            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.foodBusId}")
 
         val cteCool = cteCoolDto.toCteCool(subsequentRecipient, cteBusName)
         val cteCoolCto = cteCoolService.update(cteCool).toCteCoolDto()

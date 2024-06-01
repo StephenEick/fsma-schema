@@ -35,7 +35,7 @@ data class CteIPackSprouts(
     // Business name for the creator of this CTE
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    override val cteBusName: FoodBus,
+    override val foodBus: FoodBus,
 
     // Not required but likely useful to save associated Cte Harvest. See p.22 in
     // https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
@@ -203,7 +203,7 @@ data class CteIPackSprouts(
 data class CteIPackSproutsDto(
     val id: Long,
     val cteType: CteType,
-    val cteBusNameId: Long,
+    val foodBusId: Long,
     val cteHarvestId: Long?,
     val foodItem: FtlItem,
     val variety: String,
@@ -234,7 +234,7 @@ data class CteIPackSproutsDto(
     // Seeds - part (b)
     val seedGrowerLocationId: Long?,
     val seedHarvestingDate: LocalDate?,
-    val seedConditionerLocationId: Long?,
+    val seedConditionerLocationId: Long,
     val seedTlcId: Long,
     val seedConditioningDate: LocalDate,
     val seedPackingHouseLocationId: Long,
@@ -260,7 +260,7 @@ data class CteIPackSproutsDto(
 fun CteIPackSprouts.toCteIPackSproutsDto() = CteIPackSproutsDto(
     id = id,
     cteType = cteType,
-    cteBusNameId = cteBusName.id,
+    foodBusId = foodBus.id,
     cteHarvestId = cteHarvest?.id,
     foodItem = foodItem,
     variety = variety,
@@ -314,7 +314,7 @@ fun CteIPackSprouts.toCteIPackSproutsDto() = CteIPackSproutsDto(
 )
 
 fun CteIPackSproutsDto.toCteIPackSprouts(
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
     cteHarvest: CteHarvest?,
     harvestLocation: Location,
     harvestFoodBus: FoodBus,
@@ -325,13 +325,13 @@ fun CteIPackSproutsDto.toCteIPackSprouts(
     seedConditionerLocation: Location,
     seedTlc: TraceLotCode,
     seedPackingHouseLocation: Location,
-    seedPackingHouseTlc: TraceLotCode,
+    seedPackingHouseTlc: TraceLotCode?,
     seedSupplierLocation: Location,
     seedSupplierTlc: TraceLotCode?,
 ) = CteIPackSprouts(
     id = id,
     cteType = cteType,
-    cteBusName = cteBusName,
+    foodBus = foodBus,
     cteHarvest = cteHarvest,
     foodItem = foodItem,
     variety = variety,
