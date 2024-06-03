@@ -45,8 +45,8 @@ class CteReceiveController : BaseController() {
         @Valid @RequestBody cteReceiveDto: CteReceiveDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteReceiveDto> {
-        val cteBusName = foodBusService.findById(cteReceiveDto.foodBusId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.foodBusId}")
+        val foodBus = foodBusService.findById(cteReceiveDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${cteReceiveDto.foodBusId}")
 
         val traceLotCode = traceLotCodeService.findById(cteReceiveDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteReceiveDto.tlcId}")
@@ -63,7 +63,7 @@ class CteReceiveController : BaseController() {
                 ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
 
         val cteReceive = cteReceiveDto.toCteReceive(
-            cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource
+            foodBus, traceLotCode, shipFromLocation, shipToLocation, tlcSource
         )
         val cteReceiveResponse = cteReceiveService.insert(cteReceive).toCteReceiveDto()
         return ResponseEntity.created(URI.create(CTE_RECEIVE_BASE_URL.plus("/${cteReceiveResponse.id}")))
@@ -80,8 +80,8 @@ class CteReceiveController : BaseController() {
         if (cteReceiveDto.id <= 0L || cteReceiveDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteReceive Ids specified: $id != ${cteReceiveDto.id}")
 
-        val cteBusName = foodBusService.findById(cteReceiveDto.foodBusId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteReceiveDto.foodBusId}")
+        val foodBus = foodBusService.findById(cteReceiveDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${cteReceiveDto.foodBusId}")
 
         val traceLotCode = traceLotCodeService.findById(cteReceiveDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteReceiveDto.tlcId}")
@@ -98,7 +98,7 @@ class CteReceiveController : BaseController() {
                 ?: throw EntityNotFoundException("TlcSource not found: ${cteReceiveDto.tlcSourceId}")
 
         val cteReceive = cteReceiveDto.toCteReceive(
-            cteBusName, traceLotCode, shipFromLocation, shipToLocation, tlcSource
+            foodBus, traceLotCode, shipFromLocation, shipToLocation, tlcSource
         )
         val cteReceiveCto = cteReceiveService.update(cteReceive).toCteReceiveDto()
         return ResponseEntity.ok().body(cteReceiveCto)

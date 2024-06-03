@@ -35,7 +35,7 @@ data class SupCteShip(
     // Business name for supplier from which you received the food
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val cteBusName: FoodBus,
+    val foodBus: FoodBus,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
@@ -97,7 +97,7 @@ data class SupCteShip(
 data class SupCteShipDto(
     val id: Long,
     val cteType: CteType,
-    val cteBusNameId: Long,
+    val foodBusId: Long,
     val foodItem: FtlItem,
     val variety: String,
     val tlcId: Long,
@@ -118,7 +118,7 @@ data class SupCteShipDto(
 fun SupCteShip.toSupCteShipDto() = SupCteShipDto(
     id = id,
     cteType = cteType,
-    cteBusNameId = cteBusName.id,
+    foodBusId = foodBus.id,
     foodItem = foodItem,
     variety = variety,
     tlcId = tlc.id,
@@ -137,7 +137,7 @@ fun SupCteShip.toSupCteShipDto() = SupCteShipDto(
 )
 
 fun SupCteShipDto.toSupCteShip(
-    cteBusName: FoodBus,
+    foodBus: FoodBus,
     tlc: TraceLotCode,
     shipToLocation: Location,
     shipFromLocation: Location,
@@ -145,7 +145,7 @@ fun SupCteShipDto.toSupCteShip(
 ) = SupCteShip(
     id = id,
     cteType = cteType,
-    cteBusName = cteBusName,
+    foodBus = foodBus,
     foodItem = foodItem,
     variety = variety,
     tlc = tlc,

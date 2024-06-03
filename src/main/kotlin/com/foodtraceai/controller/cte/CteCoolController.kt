@@ -50,10 +50,10 @@ class CteCoolController : BaseController() {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
 
-        val cteBusName = foodBusService.findById(cteCoolDto.foodBusId)
-            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.foodBusId}")
+        val foodBus = foodBusService.findById(cteCoolDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus Business not found: ${cteCoolDto.foodBusId}")
 
-        val cteCool = cteCoolDto.toCteCool(subsequentRecipient, cteBusName)
+        val cteCool = cteCoolDto.toCteCool(subsequentRecipient, foodBus)
         val cteCoolResponse = cteCoolService.insert(cteCool).toCteCoolDto()
         return ResponseEntity.created(URI.create(CTE_COOL_BASE_URL.plus("/${cteCoolResponse.id}")))
             .body(cteCoolResponse)
@@ -72,10 +72,10 @@ class CteCoolController : BaseController() {
         val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
 
-        val cteBusName = foodBusService.findById(cteCoolDto.foodBusId)
-            ?: throw EntityNotFoundException("CteBusName Business not found: ${cteCoolDto.foodBusId}")
+        val foodBus = foodBusService.findById(cteCoolDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus Business not found: ${cteCoolDto.foodBusId}")
 
-        val cteCool = cteCoolDto.toCteCool(subsequentRecipient, cteBusName)
+        val cteCool = cteCoolDto.toCteCool(subsequentRecipient, foodBus)
         val cteCoolCto = cteCoolService.update(cteCool).toCteCoolDto()
         return ResponseEntity.ok().body(cteCoolCto)
     }

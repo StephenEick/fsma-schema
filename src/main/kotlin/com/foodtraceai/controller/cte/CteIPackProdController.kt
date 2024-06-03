@@ -46,8 +46,8 @@ class CteIPackProdController : BaseController() {
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
-        val cteBusName = foodBusService.findById(cteIPackProdDto.foodBusId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.foodBusId}")
+        val foodBus = foodBusService.findById(cteIPackProdDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackProdDto.foodBusId}")
 
         var cteHarvest: CteHarvest? = null
         if (cteIPackProdDto.cteHarvestId != null)
@@ -72,7 +72,7 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            cteBusName, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
+            foodBus, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdDto = cteIPackProdService.insert(cteIPackProd).toCteIPackProdDto()
         return ResponseEntity.created(URI.create(CTE_IPACK_PROD_BASE_URL.plus("/${cteIPackProdDto.id}")))
@@ -89,8 +89,8 @@ class CteIPackProdController : BaseController() {
         if (cteIPackProdDto.id <= 0L || cteIPackProdDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteIPackProd Ids specified: $id != ${cteIPackProdDto.id}")
 
-        val cteBusName = foodBusService.findById(cteIPackProdDto.foodBusId)
-            ?: throw EntityNotFoundException("CteBusName not found: ${cteIPackProdDto.foodBusId}")
+        val foodBus = foodBusService.findById(cteIPackProdDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackProdDto.foodBusId}")
 
         var cteHarvest: CteHarvest? = null
         if (cteIPackProdDto.cteHarvestId != null)
@@ -115,7 +115,7 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            cteBusName, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
+            foodBus, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdCto = cteIPackProdService.update(cteIPackProd).toCteIPackProdDto()
         return ResponseEntity.ok().body(cteIPackProdCto)
