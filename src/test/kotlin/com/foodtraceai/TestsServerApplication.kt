@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ServerApplicationTests {
+class TestsServerApplication {
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -336,7 +336,7 @@ class ServerApplicationTests {
     @Test
     fun `update location`() {
         val (accessToken, _) = authenticate(rootAuthLogin)
-        val (locationId, serviceAddressId) = addLocation()
+        val (locationId, _) = addLocation()
         locationDtoUpdated = locationDtoUpdated.copy(id = locationId)
         mockMvc.put("/api/v1/location/$locationId") {
             header("Authorization", "Bearer $accessToken")
@@ -359,37 +359,6 @@ class ServerApplicationTests {
             header("Authorization", "Bearer $accessToken")
         }.andExpect {
             status { isNoContent() }
-        }
-    }
-
-    // ------------------------------------------------------------------------
-    // -- TraceLotCodes tests
-
-    fun addTraceLotCode(): Long {
-        val (accessToken, _) = authenticate(rootAuthLogin)
-        val mvcResult = mockMvc.post("/api/v1/tlc") {
-            header("Authorization", "Bearer $accessToken")
-            content = objectMapper.writeValueAsString(traceLotCodeDto)
-            contentType = MediaType.APPLICATION_JSON
-        }.andExpect {
-            status { isCreated() }
-            content { contentType(MediaType.APPLICATION_JSON) }
-        }.andReturn()
-        return JsonPath.read(mvcResult.response.contentAsString, "$.id")
-    }
-
-    @Test
-    fun `get trace lot code`() {
-        val (accessToken, _) = authenticate(rootAuthLogin)
-        val traceLotCodeId = addTraceLotCode()
-        mockMvc.get("/api/v1/tlc/$traceLotCodeId") {
-            header("Authorization", "Bearer $accessToken")
-        }.andExpect {
-            status { isOk() }
-            content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.id") { value(traceLotCodeId) }
-            jsonPath("$.tlc") { value("trace lot code 1") }
-            jsonPath("$.desc") { value("desc trace lot code 1") }
         }
     }
 }

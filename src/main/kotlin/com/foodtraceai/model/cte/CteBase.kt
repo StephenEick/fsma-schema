@@ -21,7 +21,7 @@ abstract class CteBase<T> : BaseModel<T>() {
     // Business name for the creator of this CTE
     abstract val foodBus: FoodBus
 
-    // Location for this CTE
+    // Location where this CTE is created
     abstract val location: Location
 
     // Common to all CTEs.  For raw agricultural commodities use commodity name

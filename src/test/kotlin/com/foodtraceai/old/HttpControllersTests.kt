@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------------
 // Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
 // ----------------------------------------------------------------------------
-package com.foodtraceai
+package com.foodtraceai.old
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

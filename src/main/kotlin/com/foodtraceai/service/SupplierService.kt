@@ -17,12 +17,6 @@ import java.time.OffsetDateTime
 class SupplierService(
     private val cteReceiveService: CteReceiveService,
 ) {
-//    fun receiveSupShipCte(
-//
-//    ): SupCteShip {
-//
-//    }
-
     // RFE or Restaurant has received a shipment
     fun receiveSupShipment(
         supShipCte: SupShipCte,

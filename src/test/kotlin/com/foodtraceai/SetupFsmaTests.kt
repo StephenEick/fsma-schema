@@ -23,9 +23,6 @@ class SetupFsmaTests {
         @Autowired
         private lateinit var authService: AuthService
 
-//    @Autowired
-//    private lateinit var tenantIdentifierResolver: TenantIdentifierResolver
-
         @Autowired
          lateinit var addressService: AddressService
         val addressList: MutableList<Address> = mutableListOf()
@@ -37,6 +34,9 @@ class SetupFsmaTests {
         @Autowired
          lateinit var fsmaUserService: FsmaUserService
          val fsmaUserList: MutableList<FsmaUser> = mutableListOf()
+
+        //  @Autowired
+        // private lateinit var tenantIdentifierResolver: TenantIdentifierResolver
 
         private fun addAddresses() {
             var addressDto = AddressDto(

@@ -27,7 +27,7 @@ class TestsAuthController {
     private lateinit var authService: AuthService
 
     @Autowired
-    private lateinit var fsaUserService: FsmaUserService
+    private lateinit var fsmaUserService: FsmaUserService
 
     @Autowired
     private lateinit var mockMvc: MockMvc
