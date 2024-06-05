@@ -194,7 +194,7 @@ class DataLoader : ApplicationRunner {
             contactName = foodBusList[0].contactName,
             contactPhone = foodBusList[0].contactPhone,
             contactEmail = foodBusList[0].contactEmail,
-            serviceAddress = foodBusList[0].mainAddress
+            address = foodBusList[0].mainAddress
         )
         val response = locationService.insert(location)
         val retrieve = locationService.findById(response.id)
@@ -205,7 +205,7 @@ class DataLoader : ApplicationRunner {
             contactName = foodBusList[1].contactName,
             contactPhone = foodBusList[1].contactPhone,
             contactEmail = foodBusList[1].contactEmail,
-            serviceAddress = foodBusList[1].mainAddress
+            address = foodBusList[1].mainAddress
         )
         locationList.add(locationService.insert(location))
 
@@ -214,7 +214,7 @@ class DataLoader : ApplicationRunner {
             contactName = foodBusList[2].contactName,
             contactPhone = foodBusList[2].contactPhone,
             contactEmail = foodBusList[2].contactEmail,
-            serviceAddress = foodBusList[2].mainAddress
+            address = foodBusList[2].mainAddress
         )
         locationList.add(locationService.insert(location))
     }

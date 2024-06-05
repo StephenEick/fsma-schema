@@ -18,7 +18,7 @@ data class Location(
     val contactEmail: String? = null,
 
     @ManyToOne @JoinColumn
-    val serviceAddress: Address,
+    val address: Address,
 
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
@@ -33,7 +33,7 @@ data class LocationDto(
     val contactName: String?,
     val contactPhone: String?,
     val contactEmail: String?,
-    val serviceAddressId: Long,
+    val addressId: Long,
     val dateCreated: OffsetDateTime= OffsetDateTime.now(),
     val dateModified: OffsetDateTime= OffsetDateTime.now(),
     val isDeleted: Boolean = false,
@@ -46,7 +46,7 @@ fun Location.toLocationDto() = LocationDto(
     contactName = contactName,
     contactPhone = contactPhone,
     contactEmail = contactEmail,
-    serviceAddressId = serviceAddress.id,
+    addressId = address.id,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -55,12 +55,12 @@ fun Location.toLocationDto() = LocationDto(
 
 fun LocationDto.toLocation(
     foodBus: FoodBus,
-    serviceAddress: Address,
+    address: Address,
 ) = Location(
     id = id,
     foodBus = foodBus,
     contactName = contactName,
     contactPhone = contactPhone,
     contactEmail = contactEmail,
-    serviceAddress = serviceAddress,
+    address = address,
 )

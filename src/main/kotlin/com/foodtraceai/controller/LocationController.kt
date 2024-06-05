@@ -44,10 +44,10 @@ class LocationController : BaseController() {
         @Valid @RequestBody locationDto: LocationDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<LocationDto> {
-        val serviceAddress = addressService.findById(locationDto.serviceAddressId)
-            ?: throw EntityNotFoundException("Service Address not found: ${locationDto.serviceAddressId}")
+        val serviceAddress = addressService.findById(locationDto.addressId)
+            ?: throw EntityNotFoundException("Service Address not found: ${locationDto.addressId}")
         val business = foodBusService.findById(locationDto.foodBusId)
-            ?: throw EntityNotFoundException("ServiceAddress not found: ${locationDto.serviceAddressId}")
+            ?: throw EntityNotFoundException("ServiceAddress not found: ${locationDto.addressId}")
         val location = locationDto.toLocation(business, serviceAddress)
         val locationResponse = locationService.insert(location).toLocationDto()
         return ResponseEntity.created(URI.create(LOCATION_BASE_URL.plus("/${locationResponse.id}")))
@@ -67,8 +67,8 @@ class LocationController : BaseController() {
         val business = foodBusService.findById(locationDto.foodBusId)
             ?: throw EntityNotFoundException("Business not found: ${locationDto.foodBusId}")
 
-        val serviceAddress = addressService.findById(locationDto.serviceAddressId)
-            ?: throw EntityNotFoundException("ServiceAddress not found: ${locationDto.serviceAddressId}")
+        val serviceAddress = addressService.findById(locationDto.addressId)
+            ?: throw EntityNotFoundException("ServiceAddress not found: ${locationDto.addressId}")
 
         val location = locationDto.toLocation(business, serviceAddress)
         val locationResponse = locationService.update(location).toLocationDto()

@@ -112,7 +112,7 @@ class ServerApplicationTests {
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
             contactEmail = null,
-            serviceAddressId = 1,
+            addressId = 1,
         )
 
         locationDtoUpdated = LocationDto(
@@ -121,7 +121,7 @@ class ServerApplicationTests {
             contactName = "NewContact",
             contactPhone = "0-000-000-0000",
             contactEmail = null,
-            serviceAddressId = 1,
+            addressId = 1,
         )
 
         traceLotCodeDto = TraceLotCodeDto(
@@ -305,7 +305,7 @@ class ServerApplicationTests {
             content = objectMapper.writeValueAsString(
                 locationDto.copy(
                     foodBusId = foodBusId,
-                    serviceAddressId = serviceAddressId
+                    addressId = serviceAddressId
                 )
             )
             contentType = MediaType.APPLICATION_JSON
@@ -329,7 +329,7 @@ class ServerApplicationTests {
             jsonPath("$.id") { value(locationId) }
             jsonPath("$.contactName") { value("Steve") }
             jsonPath("$.contactPhone") { value("1-800-555-1212") }
-            jsonPath("$.serviceAddressId") { value(serviceAddressId) }
+            jsonPath("$.addressId") { value(serviceAddressId) }
         }
     }
 
