@@ -19,7 +19,6 @@ data class TraceLotCode(
     val lot: String? = null,
     val case: String? = null,
 
-
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),

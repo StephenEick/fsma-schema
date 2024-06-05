@@ -7,8 +7,9 @@ import com.foodtraceai.model.BaseModel
 import com.foodtraceai.model.FoodBus
 import com.foodtraceai.model.Location
 import com.foodtraceai.model.TraceLotCode
-import com.foodtraceai.util.CteType
+import com.foodtraceai.model.cte.CteReceive
 import com.foodtraceai.util.FtlItem
+import com.foodtraceai.util.SupCteStatus
 import com.foodtraceai.util.UnitOfMeasure
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -26,16 +27,17 @@ Food Traceability List?
  **/
 
 @Entity
-data class SupCteShip(
+data class SupShipCte(
     @Id @GeneratedValue override val id: Long = 0,
 
-    // Supplier sent you a shipment
-    val cteType: CteType = CteType.SupShip,
+    // The status of the shipment
+    @Enumerated(EnumType.STRING)
+    val supCteStatus: SupCteStatus = SupCteStatus.Pending,
 
-    // Business name for supplier from which you received the food
+    // Gets populated when the shipment is received
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val foodBus: FoodBus,
+    val cteReceive: CteReceive? = null,
 
     // ************** KDEs *************
     // (a) For each traceability lot of a food on the Food Traceability List
@@ -43,7 +45,7 @@ data class SupCteShip(
     // and linking this information to the traceability lot:
 
     // (a)(1) The traceability lot code for the food;
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
     val tlc: TraceLotCode,  // from the supplier
 
@@ -61,22 +63,22 @@ data class SupCteShip(
 
     // (a)(4) The location description for the immediate subsequent recipient
     // (other than a transporter) of the food;
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
     val shipToLocation: Location,   // Where you are receiving the food
 
     // (a)(5) The location description for the location from which you shipped
     // the food;
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
-    val shipFromLocation: Location, // Supplier location
+    val shipFromLocation: Location, // supplier location
 
     // (a)(6) The date you shipped the food;
     val shipDate: LocalDate,
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
     val tlcSource: Location? = null,
     val tlcSourceReference: String? = null,
@@ -92,12 +94,17 @@ data class SupCteShip(
     // to the immediate subsequent recipient (other than a transporter)
     // of each traceability lot that you ship.
 
-) : BaseModel<SupCteShip>()
+) : BaseModel<SupShipCte>() {
+    val shipToFoodBus: FoodBus
+        get() = shipFromLocation.foodBus
+    val shipFromFoodBus: FoodBus
+        get() = shipToLocation.foodBus
+}
 
-data class SupCteShipDto(
+data class SupShipCteDto(
     val id: Long,
-    val cteType: CteType,
-    val foodBusId: Long,
+    val supCteStatus: SupCteStatus,
+    val cteReceive: CteReceive?,
     val foodItem: FtlItem,
     val variety: String,
     val tlcId: Long,
@@ -115,10 +122,10 @@ data class SupCteShipDto(
     val dateDeleted: OffsetDateTime?,
 )
 
-fun SupCteShip.toSupCteShipDto() = SupCteShipDto(
+fun SupShipCte.toSupShipCteDto() = SupShipCteDto(
     id = id,
-    cteType = cteType,
-    foodBusId = foodBus.id,
+    supCteStatus = supCteStatus,
+    cteReceive = cteReceive,
     foodItem = foodItem,
     variety = variety,
     tlcId = tlc.id,
@@ -136,16 +143,15 @@ fun SupCteShip.toSupCteShipDto() = SupCteShipDto(
     dateDeleted = dateDeleted,
 )
 
-fun SupCteShipDto.toSupCteShip(
-    foodBus: FoodBus,
+fun SupShipCteDto.toSupCteShip(
     tlc: TraceLotCode,
     shipToLocation: Location,
     shipFromLocation: Location,
-    tlcSource: Location,
-) = SupCteShip(
+    tlcSource: Location?
+) = SupShipCte(
     id = id,
-    cteType = cteType,
-    foodBus = foodBus,
+    supCteStatus = supCteStatus,
+    cteReceive = cteReceive,
     foodItem = foodItem,
     variety = variety,
     tlc = tlc,

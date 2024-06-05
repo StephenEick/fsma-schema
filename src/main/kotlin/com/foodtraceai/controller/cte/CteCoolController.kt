@@ -36,7 +36,7 @@ class CteCoolController : BaseController() {
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteCoolDto> {
         val cteCool = cteCoolService.findById(id)
-            ?: throw EntityNotFoundException("ServiceAddress not found = $id")
+            ?: throw EntityNotFoundException("CteCool not found = $id")
 //        assertResellerClientMatchesToken(fsaUser, address.resellerId)
         return ResponseEntity.ok(cteCool.toCteCoolDto())
     }

@@ -22,18 +22,15 @@ enum class CteType {
     Ship,
     Receive,
     Transform,
-
-    // For the CTEs coming from suppliers
-    SupShip,    // Supplier shipped to one of our customer locations
 }
 
-enum class FoodBusType(val myCteTypes: List<CteType>) {
+enum class FoodBusType(val cteTypes: List<CteType>) {
     Farm(listOf(CteType.Harvest)),
     Cooler(listOf(CteType.Cool)),
     Packer(listOf(CteType.InitPackProduce, CteType.Ship)),
+    Processor(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
     Distributor(listOf(CteType.Receive, CteType.Ship)),
     RFE(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),  // grocery, convenience, club stores, etc.
-    Processor(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
     Restaurant(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
     Other(emptyList()), // For administrative accounts
 }
@@ -73,11 +70,17 @@ enum class Role {
     Mobile,
     FoodBusinessUser,
     FoodBusinessAdmin,
-    FranchisorAdmin, // GPS Tracking
-    RootAdmin, // FoodTrace204
+    FranchisorAdmin,
+    RootAdmin,
 }
 
 fun maxRole(roles: List<Role>) = roles.maxBy { it.ordinal }
+
+enum class SupCteStatus {
+    Pending,
+    Received,
+    Cancelled,
+}
 
 // The quantity and unit of measure of the food (e.g., 75 bins, 200 pounds);
 enum class UnitOfMeasure {

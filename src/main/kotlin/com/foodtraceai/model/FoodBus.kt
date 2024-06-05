@@ -27,6 +27,7 @@ data class FoodBus(
     @ManyToOne @JoinColumn
     val franchisor: Franchisor? = null,
 
+    // Is this account enabled in the system?
     val isEnabled: Boolean = true,
 
     @Column(updatable = false)

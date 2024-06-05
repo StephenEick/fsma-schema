@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.security.core.context.SecurityContextHolder
 import java.time.OffsetDateTime
 
 //@MappedSuperclass
@@ -57,7 +58,7 @@ open class BaseModel<T> {
     open fun preSoftDelete() {
         dateModified = OffsetDateTime.now()
         dateDeleted = dateModified
-//        authUsername = SecurityContextHolder.getContext()?.authentication?.name ?: ""
+        authUsername = SecurityContextHolder.getContext()?.authentication?.name ?: ""
     }
 }
 

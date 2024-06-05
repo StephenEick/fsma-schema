@@ -111,6 +111,7 @@ class ServerApplicationTests {
             foodBusId = 1,
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
+            contactEmail = null,
             serviceAddressId = 1,
         )
 
@@ -119,6 +120,7 @@ class ServerApplicationTests {
             foodBusId = 1,
             contactName = "NewContact",
             contactPhone = "0-000-000-0000",
+            contactEmail = null,
             serviceAddressId = 1,
         )
 
