@@ -44,6 +44,9 @@ class CteHarvestController : BaseController() {
         @Valid @RequestBody cteHarvestDto: CteHarvestDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteHarvestDto> {
+        val location = locationService.findById(cteHarvestDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteHarvestDto.locationId}")
+
         val subsequentRecipient = locationService.findById(cteHarvestDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient not found: ${cteHarvestDto.subsequentRecipientId}")
 
@@ -53,7 +56,7 @@ class CteHarvestController : BaseController() {
         val foodBus = foodBusService.findById(cteHarvestDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteHarvestDto.foodBusId}")
 
-        val cteHarvest = cteHarvestDto.toCteHarvest(subsequentRecipient, harvestLocation, foodBus)
+        val cteHarvest = cteHarvestDto.toCteHarvest(location, subsequentRecipient, harvestLocation, foodBus)
         val cteHarvestResponse = cteHarvestService.insert(cteHarvest).toCteHarvestDto()
         return ResponseEntity.created(URI.create(CTE_HARVEST_BASE_URL.plus("/${cteHarvestResponse.id}")))
             .body(cteHarvestResponse)
@@ -69,6 +72,9 @@ class CteHarvestController : BaseController() {
         if (cteHarvestDto.id <= 0L || cteHarvestDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteHarvest Ids specified: $id != ${cteHarvestDto.id}")
 
+        val location = locationService.findById(cteHarvestDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteHarvestDto.locationId}")
+
         val subsequentRecipient = locationService.findById(cteHarvestDto.subsequentRecipientId)
             ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteHarvestDto.subsequentRecipientId}")
 
@@ -78,7 +84,7 @@ class CteHarvestController : BaseController() {
         val foodBus = foodBusService.findById(cteHarvestDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus Business not found: ${cteHarvestDto.foodBusId}")
 
-        val cteHarvest = cteHarvestDto.toCteHarvest(subsequentRecipient, harvestLocation, foodBus)
+        val cteHarvest = cteHarvestDto.toCteHarvest(location, subsequentRecipient, harvestLocation, foodBus)
         val cteHarvestCto = cteHarvestService.update(cteHarvest).toCteHarvestDto()
         return ResponseEntity.ok().body(cteHarvestCto)
     }

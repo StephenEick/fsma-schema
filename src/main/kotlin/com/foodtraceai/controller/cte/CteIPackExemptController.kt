@@ -47,6 +47,9 @@ class CteIPackExemptController : BaseController() {
         val foodBus = foodBusService.findById(cteIPackExemptDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackExemptDto.foodBusId}")
 
+        val location = locationService.findById(cteIPackExemptDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteIPackExemptDto.locationId}")
+
         val sourceLocation = locationService.findById(cteIPackExemptDto.sourceLocationId)
             ?: throw EntityNotFoundException("SourceLocation not found: ${cteIPackExemptDto.sourceLocationId}")
 
@@ -58,7 +61,7 @@ class CteIPackExemptController : BaseController() {
             packTlcSource = locationService.findById(cteIPackExemptDto.packTlcSourceId)
                 ?: throw EntityNotFoundException("PackTlcSource not found: ${cteIPackExemptDto.packTlcSourceId}")
 
-        val iPackExempt = cteIPackExemptDto.toCteIPackExempt(foodBus, sourceLocation, packTlc, packTlcSource)
+        val iPackExempt = cteIPackExemptDto.toCteIPackExempt(foodBus, location, sourceLocation, packTlc, packTlcSource)
         val iPackExemptResponse = cteIPackExemptService.insert(iPackExempt).toCteIPackExemptDto()
         return ResponseEntity.created(URI.create(CTE_IPACK_EXEMPT_BASE_URL.plus("/${iPackExemptResponse.id}")))
             .body(iPackExemptResponse)
@@ -74,6 +77,9 @@ class CteIPackExemptController : BaseController() {
         val foodBus = foodBusService.findById(cteIPackExemptDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackExemptDto.foodBusId}")
 
+        val location = locationService.findById(cteIPackExemptDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteIPackExemptDto.locationId}")
+
         val sourceLocation = locationService.findById(cteIPackExemptDto.sourceLocationId)
             ?: throw EntityNotFoundException("SourceLocation not found: ${cteIPackExemptDto.sourceLocationId}")
 
@@ -85,7 +91,8 @@ class CteIPackExemptController : BaseController() {
             packTlcSource = locationService.findById(cteIPackExemptDto.packTlcSourceId)
                 ?: throw EntityNotFoundException("PackTlcSource not found: ${cteIPackExemptDto.packTlcSourceId}")
 
-        val cteIPackExempt = cteIPackExemptDto.toCteIPackExempt(foodBus, sourceLocation, packTlc, packTlcSource)
+        val cteIPackExempt =
+            cteIPackExemptDto.toCteIPackExempt(foodBus, location, sourceLocation, packTlc, packTlcSource)
         val iPackExemptCto = cteIPackExemptService.update(cteIPackExempt).toCteIPackExemptDto()
         return ResponseEntity.ok().body(iPackExemptCto)
     }

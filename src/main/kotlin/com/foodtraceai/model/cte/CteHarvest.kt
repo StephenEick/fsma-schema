@@ -31,9 +31,13 @@ data class CteHarvest(
     override val cteType: CteType = CteType.Harvest,
 
     // Harvest business name, e.g. creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne  //(cascade = [CascadeType.ALL])
     @JoinColumn
     override val foodBus: FoodBus,
+
+    // Location for this CTE
+    @ManyToOne @JoinColumn
+    override val location: Location,
 
     // ************** KDEs *************
     // (a)(1) For each raw agricultural commodity (not obtained from a fishing vessel)
@@ -105,6 +109,7 @@ data class CteHarvestDto(
     val id: Long,
     val cteType: CteType,
     val foodBusId: Long,
+    val locationId: Long,
     val subsequentRecipientId: Long,
     val foodItem: FtlItem,
     val commodityVariety: String,
@@ -129,6 +134,7 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
     id = id,
     cteType = cteType,
     foodBusId = foodBus.id,
+    locationId = location.id,
     subsequentRecipientId = subsequentRecipient.id,
     foodItem = foodItem,
     commodityVariety = variety,
@@ -150,6 +156,7 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
 )
 
 fun CteHarvestDto.toCteHarvest(
+    location: Location,
     subsequentRecipient: Location,
     harvestLocation: Location,
     foodBus: FoodBus,
@@ -157,6 +164,7 @@ fun CteHarvestDto.toCteHarvest(
     id = id,
     cteType = cteType,
     foodBus = foodBus,
+    location = location,
     subsequentRecipient = subsequentRecipient,
     foodItem = foodItem,
     variety = commodityVariety,

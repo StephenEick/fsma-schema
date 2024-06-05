@@ -47,6 +47,9 @@ class CteShipController : BaseController() {
         val foodBus = foodBusService.findById(cteShipDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteShipDto.foodBusId}")
 
+        val location = locationService.findById(cteShipDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteShipDto.locationId}")
+
         val traceLotCode = traceLotCodeService.findById(cteShipDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteShipDto.tlcId}")
 
@@ -59,7 +62,10 @@ class CteShipController : BaseController() {
         val tlcSource = locationService.findById(cteShipDto.tlcSourceId)
             ?: throw EntityNotFoundException("TlcSource not found: ${cteShipDto.tlcSourceId}")
 
-        val cteShip = cteShipDto.toCteShip(foodBus, traceLotCode, shipToLocation, shipFromLocation, tlcSource)
+        val cteShip = cteShipDto.toCteShip(
+            foodBus, location, traceLotCode, shipToLocation,
+            shipFromLocation, tlcSource
+        )
         val cteShipResponse = cteShipService.insert(cteShip).toCteShipDto()
         return ResponseEntity.created(URI.create(CTE_SHIP_BASE_URL.plus("/${cteShipResponse.id}")))
             .body(cteShipResponse)
@@ -78,6 +84,9 @@ class CteShipController : BaseController() {
         val foodBus = foodBusService.findById(cteShipDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteShipDto.foodBusId}")
 
+        val location = locationService.findById(cteShipDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteShipDto.locationId}")
+
         val traceLotCode = traceLotCodeService.findById(cteShipDto.tlcId)
             ?: throw EntityNotFoundException("TraceLotCode not found: ${cteShipDto.tlcId}")
 
@@ -90,7 +99,10 @@ class CteShipController : BaseController() {
         val tlcSource = locationService.findById(cteShipDto.tlcSourceId)
             ?: throw EntityNotFoundException("TlcSource not found: ${cteShipDto.tlcSourceId}")
 
-        val cteShip = cteShipDto.toCteShip(foodBus, traceLotCode, shipToLocation, shipFromLocation, tlcSource)
+        val cteShip = cteShipDto.toCteShip(
+            foodBus, location, traceLotCode, shipToLocation,
+            shipFromLocation, tlcSource
+        )
         val cteShipCto = cteShipService.update(cteShip).toCteShipDto()
         return ResponseEntity.ok().body(cteShipCto)
     }

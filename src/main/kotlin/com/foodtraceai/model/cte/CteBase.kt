@@ -5,6 +5,7 @@ package com.foodtraceai.model.cte
 
 import com.foodtraceai.model.BaseModel
 import com.foodtraceai.model.FoodBus
+import com.foodtraceai.model.Location
 import com.foodtraceai.util.CteType
 import com.foodtraceai.util.FtlItem
 import com.foodtraceai.util.ReferenceDocumentType
@@ -16,8 +17,12 @@ import com.foodtraceai.util.UnitOfMeasure
 abstract class CteBase<T> : BaseModel<T>() {
     abstract val cteType: CteType
 
+    // TODO: remove and pick this up from location?
     // Business name for the creator of this CTE
     abstract val foodBus: FoodBus
+
+    // Location for this CTE
+    abstract val location: Location
 
     // Common to all CTEs.  For raw agricultural commodities use commodity name
     abstract val foodItem: FtlItem  // or commodity

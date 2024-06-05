@@ -36,6 +36,10 @@ data class CteIPackProd(
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
     override val foodBus: FoodBus,
 
+    // Location for this CTE
+    @ManyToOne @JoinColumn
+    override val location: Location,
+
     // Not required but likely useful to save associated Cte Harvest. See p.22 in
     // https://producetraceability.org/wp-content/uploads/2024/02/PTI-FSMA-204-Implementation-Guidance-FINAL-2.12.24.pdf
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
@@ -145,6 +149,7 @@ data class CteIPackProdDto(
     val id: Long,
     val cteType: CteType,
     val foodBusId: Long,
+    val locationId: Long,
     val cteHarvestId: Long?,
     val foodItem: FtlItem,
     val variety: String,
@@ -181,6 +186,7 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
     id = id,
     cteType = cteType,
     foodBusId = foodBus.id,
+    locationId = location.id,
     cteHarvestId = cteHarvest?.id,
     foodItem = foodItem,
     variety = variety,
@@ -215,6 +221,7 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
 
 fun CteIPackProdDto.toCteIPackProd(
     foodBus: FoodBus,
+    location: Location,
     cteHarvest: CteHarvest?,
     harvestLocation: Location,
     harvestFoodBus: FoodBus,
@@ -225,6 +232,7 @@ fun CteIPackProdDto.toCteIPackProd(
     id = id,
     cteType = cteType,
     foodBus = foodBus,
+    location = location,
     cteHarvest = cteHarvest,
     foodItem = foodItem,
     variety = variety,

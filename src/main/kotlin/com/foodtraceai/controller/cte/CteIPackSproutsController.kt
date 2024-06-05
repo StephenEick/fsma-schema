@@ -49,6 +49,9 @@ class CteIPackSproutsController : BaseController() {
         val foodBus = foodBusService.findById(cteIPackSproutsDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackSproutsDto.foodBusId}")
 
+        val location = locationService.findById(cteIPackSproutsDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteIPackSproutsDto.locationId}")
+
         var cteHarvest: CteHarvest? = null
         if (cteIPackSproutsDto.cteHarvestId != null)
             cteHarvest = cteHarvestService.findById(cteIPackSproutsDto.cteHarvestId)
@@ -103,6 +106,7 @@ class CteIPackSproutsController : BaseController() {
 
         val cteIPackSprouts = cteIPackSproutsDto.toCteIPackSprouts(
             foodBus,
+            location,
             cteHarvest,
             harvestLocation,
             harvestFoodBus,
@@ -132,6 +136,9 @@ class CteIPackSproutsController : BaseController() {
         val foodBus = foodBusService.findById(cteIPackSproutsDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackSproutsDto.foodBusId}")
 
+        val location = locationService.findById(cteIPackSproutsDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteIPackSproutsDto.locationId}")
+
         var cteHarvest: CteHarvest? = null
         if (cteIPackSproutsDto.cteHarvestId != null)
             cteHarvest = cteHarvestService.findById(cteIPackSproutsDto.cteHarvestId)
@@ -185,6 +192,7 @@ class CteIPackSproutsController : BaseController() {
 
         val cteIPackSprouts = cteIPackSproutsDto.toCteIPackSprouts(
             foodBus,
+            location,
             cteHarvest,
             harvestLocation,
             harvestFoodBus,

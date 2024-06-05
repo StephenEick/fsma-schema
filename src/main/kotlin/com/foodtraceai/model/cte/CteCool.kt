@@ -35,6 +35,10 @@ data class CteCool(
     @ManyToOne @JoinColumn
     override val foodBus: FoodBus,
 
+    // Location for this CTE
+    @ManyToOne @JoinColumn
+    override val location: Location,
+
     // ************** KDEs *************
     // (b)(1) For each raw agricultural commodity
     // (not obtained from a fishing vessel) on the Food Traceability List
@@ -90,6 +94,7 @@ data class CteCool(
 data class CteCoolDto(
     val id: Long,
     val cteType: CteType = CteType.Cool,
+    val locationId: Long,
     val subsequentRecipientId: Long,
     val foodItem: FtlItem,
     val variety: String,
@@ -111,6 +116,7 @@ data class CteCoolDto(
 fun CteCool.toCteCoolDto() = CteCoolDto(
     id = id,
     cteType = cteType,
+    locationId = location.id,
     subsequentRecipientId = subsequentRecipient.id,
     foodItem = foodItem,
     variety = variety,
@@ -130,11 +136,13 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
 )
 
 fun CteCoolDto.toCteCool(
+    location: Location,
     subsequentRecipient: Location,
     foodBus: FoodBus,
 ) = CteCool(
     id = id,
     cteType = cteType,
+    location = location,
     subsequentRecipient = subsequentRecipient,
     foodItem = foodItem,
     variety = variety,

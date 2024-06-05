@@ -48,12 +48,15 @@ class CteFirstLandController : BaseController() {
         val foodBus = foodBusService.findById(cteFirstLandDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteFirstLandDto.foodBusId}")
 
+        val location = locationService.findById(cteFirstLandDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteFirstLandDto.locationId}")
+
         var tlcSource: Location? = null
         if (cteFirstLandDto.tlcSourceId != null)
             tlcSource = locationService.findById(cteFirstLandDto.tlcSourceId)
                 ?: throw EntityNotFoundException("TlcSource Location not found: ${cteFirstLandDto.tlcSourceId}")
 
-        val cteFirstLand = cteFirstLandDto.toCteFirstLand(foodBus, tlcSource)
+        val cteFirstLand = cteFirstLandDto.toCteFirstLand(foodBus, location, tlcSource)
         val cteFirstLandResponse = cteFirstLandService.insert(cteFirstLand).toCteFirstLandDto()
         return ResponseEntity.created(URI.create(CTE_FIRST_LAND_BASE_URL.plus("/${cteFirstLandResponse.id}")))
             .body(cteFirstLandResponse)
@@ -72,12 +75,15 @@ class CteFirstLandController : BaseController() {
         val foodBus = foodBusService.findById(cteFirstLandDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteFirstLandDto.foodBusId}")
 
+        val location = locationService.findById(cteFirstLandDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteFirstLandDto.locationId}")
+
         var tlcSource: Location? = null
         if (cteFirstLandDto.tlcSourceId != null)
             tlcSource = locationService.findById(cteFirstLandDto.tlcSourceId)
                 ?: throw EntityNotFoundException("TlcSource Location not found: ${cteFirstLandDto.tlcSourceId}")
 
-        val cteFirstLand = cteFirstLandDto.toCteFirstLand(foodBus, tlcSource)
+        val cteFirstLand = cteFirstLandDto.toCteFirstLand(foodBus, location, tlcSource)
         val cteFirstLandCto = cteFirstLandService.update(cteFirstLand).toCteFirstLandDto()
         return ResponseEntity.ok().body(cteFirstLandCto)
     }

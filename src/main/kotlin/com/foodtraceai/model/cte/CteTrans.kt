@@ -35,6 +35,10 @@ data class CteTrans(
     @JoinColumn
     override val foodBus: FoodBus,
 
+    // Location for this CTE
+    @ManyToOne @JoinColumn
+    override val location: Location,
+
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
     // for each new traceability lot of food you produce through transformation
@@ -121,6 +125,7 @@ data class CteTransDto(
     val id: Long,
     val cteType: CteType,
     val foodBusId: Long,
+    val locationId: Long,
     val foodItem: FtlItem,
     val variety: String,
     val inputTlcId: Long,  // from Initial Packer or previous Transformer
@@ -146,6 +151,7 @@ fun CteTrans.toCteTransDto() = CteTransDto(
     id = id,
     cteType = cteType,
     foodBusId = foodBus.id,
+    locationId = location.id,
     foodItem = foodItem,
     variety = variety,
     inputTlcId = inputTlc.id,  // from Initial Packer or previous Transformer
@@ -169,6 +175,7 @@ fun CteTrans.toCteTransDto() = CteTransDto(
 
 fun CteTransDto.toCteTrans(
     foodBus: FoodBus,
+    location: Location,
     inputTlc: TraceLotCode,
     newTlc: TraceLotCode,
     newTlcLocation: Location,
@@ -176,6 +183,7 @@ fun CteTransDto.toCteTrans(
     id = id,
     cteType = cteType,
     foodBus = foodBus,
+    location = location,
     foodItem = foodItem,
     variety = variety,
     inputTlc = inputTlc,  // from Initial Packer or previous Transformer

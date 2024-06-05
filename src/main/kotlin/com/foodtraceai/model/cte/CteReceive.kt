@@ -31,9 +31,13 @@ data class CteReceive(
     override val cteType: CteType = CteType.Receive,
 
     // Business name for the creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne  //(cascade = [CascadeType.ALL])
     @JoinColumn
     override val foodBus: FoodBus,
+
+    // Location for this CTE
+    @ManyToOne @JoinColumn
+    override val location: Location,
 
     // ************** KDEs *************
     // (a) Except as specified in paragraphs (b) and (c) of this section,
@@ -128,6 +132,7 @@ data class CteReceiveDto(
     val id: Long,
     val cteType: CteType,
     val foodBusId: Long,
+    val locationId: Long,
     val foodItem: FtlItem,
     val variety: String,
     val tlcId: Long,
@@ -152,6 +157,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     id = id,
     cteType = cteType,
     foodBusId = foodBus.id,
+    locationId = location.id,
     foodItem = foodItem,
     variety = variety,
     tlcId = tlc.id,
@@ -174,6 +180,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
 
 fun CteReceiveDto.toCteReceive(
     foodBus: FoodBus,
+    location: Location,
     tlc: TraceLotCode,
     prevSourceLocation: Location,
     shipToLocation: Location,
@@ -182,6 +189,7 @@ fun CteReceiveDto.toCteReceive(
     id = id,
     cteType = cteType,
     foodBus = foodBus,
+    location = location,
     foodItem = foodItem,
     variety = variety,
     tlc = tlc,

@@ -36,6 +36,10 @@ data class CteFirstLand(
     @JoinColumn
     override val foodBus: FoodBus,
 
+    // Location for this CTE
+    @ManyToOne @JoinColumn
+    override val location: Location,
+
     @Enumerated(EnumType.STRING)
     override val foodItem: FtlItem,
 
@@ -91,6 +95,7 @@ data class CteFirstLandDto(
     val id: Long,
     val cteType: CteType,
     val foodBusId: Long,
+    val locationId: Long,
     val foodItem: FtlItem,
     val tlc: TraceLotCode,
     val variety: String,
@@ -116,6 +121,7 @@ fun CteFirstLand.toCteFirstLandDto() = CteFirstLandDto(
     id = id,
     cteType = cteType,
     foodBusId = foodBus.id,
+    locationId = location.id,
     foodItem = foodItem,
     tlc = tlc,
     variety = variety,
@@ -139,11 +145,13 @@ fun CteFirstLand.toCteFirstLandDto() = CteFirstLandDto(
 
 fun CteFirstLandDto.toCteFirstLand(
     foodBus: FoodBus,
+    location: Location,
     tlcSource: Location?,
 ) = CteFirstLand(
     id = id,
     cteType = cteType,
     foodBus = foodBus,
+    location = location,
     foodItem = foodItem,
     tlc = tlc,
     variety = variety,

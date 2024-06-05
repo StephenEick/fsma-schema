@@ -49,6 +49,9 @@ class CteIPackProdController : BaseController() {
         val foodBus = foodBusService.findById(cteIPackProdDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackProdDto.foodBusId}")
 
+        val location = locationService.findById(cteIPackProdDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteIPackProdDto.locationId}")
+
         var cteHarvest: CteHarvest? = null
         if (cteIPackProdDto.cteHarvestId != null)
             cteHarvest = cteHarvestService.findById(cteIPackProdDto.cteHarvestId)
@@ -72,7 +75,8 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            foodBus, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
+            foodBus, location, cteHarvest, harvestLocation, harvestBusiness,
+            coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdDto = cteIPackProdService.insert(cteIPackProd).toCteIPackProdDto()
         return ResponseEntity.created(URI.create(CTE_IPACK_PROD_BASE_URL.plus("/${cteIPackProdDto.id}")))
@@ -92,6 +96,9 @@ class CteIPackProdController : BaseController() {
         val foodBus = foodBusService.findById(cteIPackProdDto.foodBusId)
             ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackProdDto.foodBusId}")
 
+        val location = locationService.findById(cteIPackProdDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${cteIPackProdDto.locationId}")
+
         var cteHarvest: CteHarvest? = null
         if (cteIPackProdDto.cteHarvestId != null)
             cteHarvest = cteHarvestService.findById(cteIPackProdDto.cteHarvestId)
@@ -115,7 +122,8 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            foodBus, cteHarvest, harvestLocation, harvestBusiness, coolLocation, packTlc, packTlcSource
+            foodBus, location, cteHarvest, harvestLocation, harvestBusiness,
+            coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdCto = cteIPackProdService.update(cteIPackProd).toCteIPackProdDto()
         return ResponseEntity.ok().body(cteIPackProdCto)
