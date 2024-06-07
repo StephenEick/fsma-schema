@@ -16,8 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
-private const val FSMA_USER_BASE_URL = "/api/v1/fsausers"
-private const val FSMA_USER_ALT_BASE_URL = "/api/v1/fsa_users"
+private const val FSMA_USER_BASE_URL = "/api/v1/fsauser"
+private const val FSMA_USER_ALT_BASE_URL = "/api/v1/fsa_user"
 
 @RestController
 @RequestMapping(value = [FSMA_USER_BASE_URL, FSMA_USER_ALT_BASE_URL])
@@ -42,9 +42,13 @@ class FsmaUserController : BaseController() {
         @Valid @RequestBody fsmaUserDto: FsmaUserDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FsmaUserDto> {
-        val foodBusiness = foodBusService.findById(fsmaUserDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserDto.foodBusinessId}")
-        val fsmaUser = fsmaUserDto.toFsmaUser(foodBusiness)
+        val foodBus = foodBusService.findById(fsmaUserDto.foodBusinessId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${fsmaUserDto.foodBusinessId}")
+
+        val location = locationService.findById(fsmaUserDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${fsmaUserDto.locationId}")
+
+        val fsmaUser = fsmaUserDto.toFsmaUser(foodBus, location)
         val fsmaUserResponse = fsmaUserService.insert(fsmaUser).toFsmaUserDto()
         return ResponseEntity.created(URI.create(FSMA_USER_BASE_URL.plus("/${fsmaUserResponse.id}")))
             .body(fsmaUserResponse)
@@ -60,10 +64,13 @@ class FsmaUserController : BaseController() {
         if (fsmaUserDto.id <= 0L || fsmaUserDto.id != id)
             throw UnauthorizedRequestException("Conflicting FsmaUserIds specified: $id != ${fsmaUserDto.id}")
 
-        val foodBusiness = foodBusService.findById(fsmaUserDto.foodBusinessId)
+        val foodBus = foodBusService.findById(fsmaUserDto.foodBusinessId)
             ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserDto.foodBusinessId}")
 
-        val fsma = fsmaUserDto.toFsmaUser(foodBusiness)
+        val location = locationService.findById(fsmaUserDto.locationId)
+            ?: throw EntityNotFoundException("Location not found: ${fsmaUserDto.locationId}")
+
+        val fsma = fsmaUserDto.toFsmaUser(foodBus, location)
         val fsmaUserResponse = fsmaUserService.update(fsma).toFsmaUserDto()
         return ResponseEntity.ok().body(fsmaUserResponse)
     }

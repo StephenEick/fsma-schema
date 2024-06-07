@@ -8,6 +8,8 @@ import com.foodtraceai.util.Role
 import com.foodtraceai.util.RoleToJsonConverter
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -16,7 +18,7 @@ import java.time.OffsetDateTime
 @Entity
 @Table(
     indexes = [
-        Index(columnList = "email"), Index(columnList = "food_business_id")
+        Index(columnList = "email"), Index(columnList = "food_bus_id")
     ]
 )
 data class FsmaUser(
@@ -24,8 +26,14 @@ data class FsmaUser(
     override val id: Long = 0,
 
     @ManyToOne
-    @JoinColumn(name = "food_business_id")
+    @JoinColumn(name = "food_bus_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val foodBus: FoodBus,
+
+    // Home Location for this user
+    @ManyToOne @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    val location: Location,
 
     // email is the "username"
     @Column(unique = true)
@@ -85,6 +93,7 @@ data class FsmaUser(
 data class FsmaUserDto(
     val id: Long = 0,
     val foodBusinessId: Long,
+    val locationId: Long,
     @field:Email(message = "A valid email is required")
     val email: String,
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -108,6 +117,7 @@ data class FsmaUserDto(
 fun FsmaUser.toFsmaUserDto() = FsmaUserDto(
     id = id,
     foodBusinessId = foodBus.id,
+    locationId = location.id,
     email = email,
     password = password,
     isAccountNonExpired = isAccountNonExpired,
@@ -125,9 +135,10 @@ fun FsmaUser.toFsmaUserDto() = FsmaUserDto(
     dateDeleted = dateDeleted,
 )
 
-fun FsmaUserDto.toFsmaUser(foodBus: FoodBus) = FsmaUser(
+fun FsmaUserDto.toFsmaUser(foodBus: FoodBus, location: Location) = FsmaUser(
     id = id,
     foodBus = foodBus,
+    location = location,
     email = email,
     password = password,
     isAccountNonExpired = isAccountNonExpired,

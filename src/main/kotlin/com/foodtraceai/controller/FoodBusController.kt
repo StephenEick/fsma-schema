@@ -5,8 +5,8 @@ package com.foodtraceai.controller
 
 import com.foodtraceai.model.FoodBusDto
 import com.foodtraceai.model.FsmaUser
-import com.foodtraceai.model.toBusiness
-import com.foodtraceai.model.toFoodBusinessDto
+import com.foodtraceai.model.toFoodBus
+import com.foodtraceai.model.toFoodBusDto
 import com.foodtraceai.util.EntityNotFoundException
 import com.foodtraceai.util.UnauthorizedRequestException
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -34,7 +34,7 @@ class FoodBusController : BaseController() {
         val business = foodBusService.findById(id)
             ?: throw EntityNotFoundException("FoodBusiness not found = $id")
 //        assertResellerClientMatchesToken(fsaUser, business.resellerId)
-        return ResponseEntity.ok(business.toFoodBusinessDto())
+        return ResponseEntity.ok(business.toFoodBusDto())
     }
 
     // -- Create a new business
@@ -50,10 +50,10 @@ class FoodBusController : BaseController() {
         else franchisorService.findById(foodBusDto.franchisorId)
             ?: throw EntityNotFoundException("Franchisor not found: ${foodBusDto.franchisorId}")
 
-        val business = foodBusDto.toBusiness(mainAddress, franchisor)
-        val businessResponse = foodBusService.insert(business).toFoodBusinessDto()
-        return ResponseEntity.created(URI.create(BUSINESS_BASE_URL.plus("/${businessResponse.id}")))
-            .body(businessResponse)
+        val foodBus = foodBusDto.toFoodBus(mainAddress, franchisor)
+        val foodBusResponse = foodBusService.insert(foodBus).toFoodBusDto()
+        return ResponseEntity.created(URI.create(BUSINESS_BASE_URL.plus("/${foodBusResponse.id}")))
+            .body(foodBusResponse)
     }
 
     // -- Update an existing business
@@ -71,9 +71,9 @@ class FoodBusController : BaseController() {
         else franchisorService.findById(foodBusDto.franchisorId)
             ?: throw EntityNotFoundException("Franchisor not found: ${foodBusDto.franchisorId}")
 
-        val business = foodBusDto.toBusiness(mainAddress, franchisor)
-        val businessResponseDto = foodBusService.update(business).toFoodBusinessDto()
-        return ResponseEntity.ok().body(businessResponseDto)
+        val foodBus = foodBusDto.toFoodBus(mainAddress, franchisor)
+        val foodBusResponse = foodBusService.update(foodBus)
+        return ResponseEntity.ok().body(foodBusResponse.toFoodBusDto())
     }
 
     // -- Delete an existing business

@@ -12,6 +12,8 @@ import com.foodtraceai.util.FtlItem
 import com.foodtraceai.util.SupCteStatus
 import com.foodtraceai.util.UnitOfMeasure
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import java.time.LocalDate
 import java.time.OffsetDateTime
 
@@ -37,6 +39,7 @@ data class SupShipCte(
     // Gets populated when the shipment is received
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val cteReceive: CteReceive? = null,
 
     // ************** KDEs *************
@@ -47,6 +50,7 @@ data class SupShipCte(
     // (a)(1) The traceability lot code for the food;
     @ManyToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val tlc: TraceLotCode,  // from the supplier
 
     // (a)(2) The quantity and unit of measure of the food
@@ -65,12 +69,14 @@ data class SupShipCte(
     // (other than a transporter) of the food;
     @ManyToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val shipToLocation: Location,   // Where you are receiving the food
 
     // (a)(5) The location description for the location from which you shipped
     // the food;
     @ManyToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val shipFromLocation: Location, // supplier location
 
     // (a)(6) The date you shipped the food;

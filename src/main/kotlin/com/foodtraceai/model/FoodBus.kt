@@ -5,6 +5,8 @@ package com.foodtraceai.model
 
 import com.foodtraceai.util.FoodBusType
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import java.time.OffsetDateTime
 
 @Entity
@@ -17,14 +19,17 @@ data class FoodBus(
     val contactEmail: String? = null,
 
     @ManyToOne @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val mainAddress: Address,
     val foodBusName: String,
 
     @Enumerated(EnumType.STRING)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val foodBusType: FoodBusType,
 
     // Is this a franchisee?
     @ManyToOne @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val franchisor: Franchisor? = null,
 
     // Is this account enabled in the system?
@@ -55,7 +60,7 @@ data class FoodBusDto(
     val dateDeleted: OffsetDateTime? = null,
 )
 
-fun FoodBus.toFoodBusinessDto() = FoodBusDto(
+fun FoodBus.toFoodBusDto() = FoodBusDto(
     id = id,
     contactName = contactName,
     contactPhone = contactPhone,
@@ -71,7 +76,7 @@ fun FoodBus.toFoodBusinessDto() = FoodBusDto(
     dateDeleted = dateDeleted,
 )
 
-fun FoodBusDto.toBusiness(
+fun FoodBusDto.toFoodBus(
     mainAddress: Address,
     franchisor: Franchisor?,
 ) = FoodBus(

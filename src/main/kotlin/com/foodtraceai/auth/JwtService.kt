@@ -29,7 +29,8 @@ private const val PROP_signing_key = "kscope.jwt.signing-key"
 
 // Used for token claims
 internal const val FSMA_USER_ID = "fsma_user_id"
-internal const val FOOD_BUSINESS_ID = "food_business_id"
+internal const val FOOD_BUS_ID = "food_bus_id"
+internal const val LOCATION_ID = "location_id"
 
 @Service
 class JwtService {
@@ -68,17 +69,20 @@ class JwtService {
 
     fun extractUsername(token: String): String = extractClaim(token) { claims: Claims -> claims.subject }
     private fun extractFsmaUserId(token: String) = extractWhichId(FSMA_USER_ID, token)
-    private fun extractFoodBusinessId(token: String) = extractWhichId(FOOD_BUSINESS_ID, token)
+    private fun extractFoodBusinessId(token: String) = extractWhichId(FOOD_BUS_ID, token)
+    private fun extractLocationId(token: String) = extractWhichId(LOCATION_ID, token)
 
-    fun getFoodBusinessIdAndFsmaUserId(token: String) = Pair(
+    fun getFoodBusIdAndLocationIdAndFsmaUserId(token: String) = Triple(
         extractFoodBusinessId(token),
+        extractLocationId(token),
         extractFsmaUserId(token)
     )
 
-    fun createExtraClaims(foodBusinessId: Long, fsaUserId: Long): MutableMap<String, Long> {
+    fun createExtraClaims(foodBusId: Long, locationId: Long, fsmaUserId: Long): MutableMap<String, Long> {
         val extraClaims = mutableMapOf<String, Long>()
-        extraClaims[FOOD_BUSINESS_ID] = foodBusinessId
-        extraClaims[FSMA_USER_ID] = fsaUserId
+        extraClaims[FOOD_BUS_ID] = foodBusId
+        extraClaims[LOCATION_ID] = locationId
+        extraClaims[FSMA_USER_ID] = fsmaUserId
         return extraClaims
     }
 

@@ -222,45 +222,45 @@ class DataLoader : ApplicationRunner {
     fun addFsmaUsers() {
         val rootDto = FsmaUserDto(
             foodBusinessId = 1,
+            locationId = 1,
             email = "root@foodtraceai.com",
             password = "123",
             roles = listOf(Role.RootAdmin),
             firstname = "Root",
             lastname = "Root",
         )
-        var response = authService.createNewFsmaUser(rootDto)
-        fsmaUserList.add(
-            fsmaUserService.findById(response.fsmaUserId)
-                ?: throw Exception("Failed to create FsmaUser: ${rootDto.email}")
-        )
+        var resDto = authService.createNewFsmaUser(rootDto)
+        var fmsaUser = fsmaUserService.findById(resDto.fsmaUserId)
+            ?: throw Exception("Failed to create FsmaUser: ${rootDto.email}")
+        fsmaUserList.add(fmsaUser)
 
         var fsmaUserDto = FsmaUserDto(
             foodBusinessId = foodBusList[1].id,
-            email = "User0@restaurant0.com",
+            locationId = 2,
+            email = "User0@foodtraceai.com",
             password = "123",
             roles = listOf(Role.RootAdmin),
             firstname = "Root",
             lastname = "User0",
         )
-        response = authService.createNewFsmaUser(fsmaUserDto)
-        fsmaUserList.add(
-            fsmaUserService.findById(response.fsmaUserId)
+        resDto = authService.createNewFsmaUser(fsmaUserDto)
+        fmsaUser = fsmaUserService.findById(resDto.fsmaUserId)
                 ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
-        )
+        fsmaUserList.add(fmsaUser)
 
         fsmaUserDto = FsmaUserDto(
             foodBusinessId = foodBusList[2].id,
-            email = "User1@Restaurant0.com",
+            locationId = 3,
+            email = "User1@foodtraceai.com",
             password = "123",
             roles = listOf(Role.FranchisorAdmin, Role.FoodBusinessUser),
             firstname = "Steve",
             lastname = "User1",
         )
-        response = authService.createNewFsmaUser(fsmaUserDto)
-        fsmaUserList.add(
-            fsmaUserService.findById(response.fsmaUserId)
-                ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
-        )
+        resDto = authService.createNewFsmaUser(fsmaUserDto)
+        fmsaUser = fsmaUserService.findById(resDto.fsmaUserId)
+            ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
+        fsmaUserList.add(fmsaUser)
     }
 
     fun addTlcs() {

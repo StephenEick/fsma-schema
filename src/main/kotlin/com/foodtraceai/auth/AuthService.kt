@@ -7,6 +7,7 @@ import com.foodtraceai.model.FsmaUserDto
 import com.foodtraceai.model.toFsmaUser
 import com.foodtraceai.repository.FoodBusRepository
 import com.foodtraceai.repository.FsmaUserRepository
+import com.foodtraceai.repository.LocationRepository
 import com.foodtraceai.service.FsmaUserService
 import com.foodtraceai.util.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,6 +31,9 @@ class AuthService {
     private lateinit var fsmaUserService: FsmaUserService
 
     @Autowired
+    private lateinit var locationRepository: LocationRepository
+
+    @Autowired
     private lateinit var jwtService: JwtService
 
     @Autowired
@@ -51,14 +55,18 @@ class AuthService {
             throw EntityExistsException("User already exists: ${newFsmaUserDto.email}")
 
         val foodBusiness = foodBusRepository.findByIdOrNull(newFsmaUserDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBusiness not found: ${newFsmaUserDto.foodBusinessId}")
+            ?: throw EntityNotFoundException("FoodBus not found: ${newFsmaUserDto.foodBusinessId}")
 
-        val newFsmaUser = newFsmaUserDto.toFsmaUser(foodBusiness)
+        val location = locationRepository.findByIdOrNull(newFsmaUserDto.foodBusinessId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${newFsmaUserDto.foodBusinessId}")
+
+        val newFsmaUser = newFsmaUserDto.toFsmaUser(foodBusiness, location)
             .copy(password = passwordEncoder.encode(newFsmaUserDto.password), email = newFsmaUserDto.email.lowercase())
         val newFsmaUserId = fsmaUserService.save(newFsmaUser).id
 
         // Embed the resellerId, clientId, userId in the token
-        val extraClaims = jwtService.createExtraClaims(foodBusiness.id, newFsmaUserId)
+        val extraClaims =
+            jwtService.createExtraClaims(foodBusId = foodBusiness.id, locationId = location.id, newFsmaUserId)
 
         return AuthResponse(
             accessToken = jwtService.generateToken(newFsmaUser, extraClaims),
@@ -66,6 +74,7 @@ class AuthService {
             expiresIn = expiresIn,
             refreshToken = jwtService.generateToken(newFsmaUser),
             foodBusinessId = foodBusiness.id,
+            locationId = location.id,
             fsmaUserId = newFsmaUserId,
         )
     }
@@ -85,7 +94,9 @@ class AuthService {
             ?: throw AuthorizationException("FsmaUser $email not authorized")
 
         // Embed the resellerId, clientId, userId in the token
-        val extraClaims = jwtService.createExtraClaims(fsmaUser.foodBus.id, fsmaUser.id)
+        val extraClaims = jwtService.createExtraClaims(
+            foodBusId = fsmaUser.foodBus.id, locationId = fsmaUser.location.id, fsmaUserId = fsmaUser.id
+        )
 
         return AuthResponse(
             accessToken = jwtService.generateToken(fsmaUser, extraClaims),
@@ -93,6 +104,7 @@ class AuthService {
             expiresIn = expiresIn,
             refreshToken = jwtService.generateToken(fsmaUser, expiresIn = 30.days),
             foodBusinessId = fsmaUser.foodBus.id,
+            locationId = fsmaUser.location.id,
             fsmaUserId = fsmaUser.id,
         )
     }
@@ -111,7 +123,7 @@ class AuthService {
             throw AuthorizationException("Invalid user or password")
 
         // Embed the resellerId, clientId, userId in the token
-        val extraClaims = jwtService.createExtraClaims(fsmaUser.foodBus.id, fsmaUser.id)
+        val extraClaims = jwtService.createExtraClaims(fsmaUser.foodBus.id, fsmaUser.location.id, fsmaUser.id)
 
         return AuthResponse(
             accessToken = jwtService.generateToken(fsmaUser, extraClaims),
@@ -119,6 +131,7 @@ class AuthService {
             expiresIn = expiresIn,
             refreshToken = jwtService.generateToken(fsmaUser, expiresIn = 30.days),
             foodBusinessId = fsmaUser.foodBus.id,
+            locationId = fsmaUser.location.id,
             fsmaUserId = fsmaUser.id,
         )
     }

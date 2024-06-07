@@ -11,5 +11,6 @@ data class AuthResponse(
     val expiresIn: Duration,
     val refreshToken: String,
     val foodBusinessId: Long,
+    val locationId: Long,
     val fsmaUserId: Long,
 )

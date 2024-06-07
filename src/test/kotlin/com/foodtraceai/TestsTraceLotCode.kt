@@ -31,7 +31,7 @@ class TestsTraceLotCode {
     // Test setup
     private lateinit var traceLotCodeDto: TraceLotCodeDto
     private var traceLotCodeId: Long = 0
-    private val rootAuthLogin = AuthLogin(email = "User0@restaurant0.com", password = "123", refreshToken = null)
+    private val rootAuthLogin = AuthLogin(email = "root@foodtraceai.com", password = "123", refreshToken = null)
     private lateinit var accessToken: String
 
     fun authenticate(authLogin: AuthLogin): Pair<String, String> {

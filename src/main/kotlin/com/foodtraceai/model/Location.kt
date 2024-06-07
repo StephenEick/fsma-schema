@@ -4,6 +4,8 @@
 package com.foodtraceai.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import java.time.OffsetDateTime
 
 @Entity
@@ -11,6 +13,7 @@ data class Location(
     @Id @GeneratedValue override val id: Long = 0,
 
     @ManyToOne @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val foodBus: FoodBus,
 
     val contactName: String? = null,
@@ -18,6 +21,7 @@ data class Location(
     val contactEmail: String? = null,
 
     @ManyToOne @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     val address: Address,
 
     @Column(updatable = false)
