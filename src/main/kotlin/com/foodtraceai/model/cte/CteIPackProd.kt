@@ -32,10 +32,6 @@ data class CteIPackProd(
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.InitPackProduce,
 
-    // Business name, e.g. creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn
-    override val foodBus: FoodBus,
-
     // Location for this CTE
     @ManyToOne @JoinColumn
     override val location: Location,
@@ -148,7 +144,6 @@ data class CteIPackProd(
 data class CteIPackProdDto(
     val id: Long,
     val cteType: CteType,
-    val foodBusId: Long,
     val locationId: Long,
     val cteHarvestId: Long?,
     val foodItem: FtlItem,
@@ -185,7 +180,6 @@ data class CteIPackProdDto(
 fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
     id = id,
     cteType = cteType,
-    foodBusId = foodBus.id,
     locationId = location.id,
     cteHarvestId = cteHarvest?.id,
     foodItem = foodItem,
@@ -220,7 +214,6 @@ fun CteIPackProd.toCteIPackProdDto() = CteIPackProdDto(
 )
 
 fun CteIPackProdDto.toCteIPackProd(
-    foodBus: FoodBus,
     location: Location,
     cteHarvest: CteHarvest?,
     harvestLocation: Location,
@@ -231,7 +224,6 @@ fun CteIPackProdDto.toCteIPackProd(
 ) = CteIPackProd(
     id = id,
     cteType = cteType,
-    foodBus = foodBus,
     location = location,
     cteHarvest = cteHarvest,
     foodItem = foodItem,

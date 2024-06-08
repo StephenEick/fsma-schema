@@ -12,6 +12,7 @@ import com.foodtraceai.model.cte.CteIPackSproutsDto
 import com.foodtraceai.model.cte.toCteIPackSprouts
 import com.foodtraceai.model.cte.toCteIPackSproutsDto
 import com.foodtraceai.util.EntityNotFoundException
+import com.foodtraceai.util.UnauthorizedRequestException
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
@@ -46,9 +47,6 @@ class CteIPackSproutsController : BaseController() {
         @Valid @RequestBody cteIPackSproutsDto: CteIPackSproutsDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackSproutsDto> {
-        val foodBus = foodBusService.findById(cteIPackSproutsDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackSproutsDto.foodBusId}")
-
         val location = locationService.findById(cteIPackSproutsDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteIPackSproutsDto.locationId}")
 
@@ -81,7 +79,6 @@ class CteIPackSproutsController : BaseController() {
             seedGrowerLocation = locationService.findById(cteIPackSproutsDto.seedGrowerLocationId)
                 ?: throw EntityNotFoundException("SeedGrowerLocation not found: ${cteIPackSproutsDto.seedGrowerLocationId}")
 
-
         val seedConditionerLocation = locationService.findById(cteIPackSproutsDto.seedConditionerLocationId)
             ?: throw EntityNotFoundException("SeedConditionerLocation not found: ${cteIPackSproutsDto.seedConditionerLocationId}")
 
@@ -105,21 +102,9 @@ class CteIPackSproutsController : BaseController() {
                 ?: throw EntityNotFoundException("SeedSupplierTlc not found: ${cteIPackSproutsDto.seedSupplierTlcId}")
 
         val cteIPackSprouts = cteIPackSproutsDto.toCteIPackSprouts(
-            foodBus,
-            location,
-            cteHarvest,
-            harvestLocation,
-            harvestFoodBus,
-            coolLocation,
-            packTlc,
-            packTlcSource,
-            seedGrowerLocation,
-            seedConditionerLocation,
-            seedTlc,
-            seedPackingHouseLocation,
-            seedPackingHouseTlc,
-            seedSupplierLocation,
-            seedSupplierTlc,
+            location, cteHarvest, harvestLocation, harvestFoodBus, coolLocation, packTlc, packTlcSource,
+            seedGrowerLocation, seedConditionerLocation, seedTlc, seedPackingHouseLocation, seedPackingHouseTlc,
+            seedSupplierLocation, seedSupplierTlc,
         )
         val cteIPackSproutsResponse = cteIPackSproutsService.insert(cteIPackSprouts).toCteIPackSproutsDto()
         return ResponseEntity.created(URI.create(CTE_IPACK_SPROUTS_BASE_URL.plus("/${cteIPackSproutsResponse.id}")))
@@ -133,8 +118,8 @@ class CteIPackSproutsController : BaseController() {
         @Valid @RequestBody cteIPackSproutsDto: CteIPackSproutsDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackSproutsDto> {
-        val foodBus = foodBusService.findById(cteIPackSproutsDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackSproutsDto.foodBusId}")
+        if (cteIPackSproutsDto.id <= 0L || cteIPackSproutsDto.id != id)
+            throw UnauthorizedRequestException("Conflicting cteIPackSproutsDto Ids specified: $id != ${cteIPackSproutsDto.id}")
 
         val location = locationService.findById(cteIPackSproutsDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteIPackSproutsDto.locationId}")
@@ -191,21 +176,9 @@ class CteIPackSproutsController : BaseController() {
                 ?: throw EntityNotFoundException("SeedSupplierTlc not found: ${cteIPackSproutsDto.seedSupplierTlcId}")
 
         val cteIPackSprouts = cteIPackSproutsDto.toCteIPackSprouts(
-            foodBus,
-            location,
-            cteHarvest,
-            harvestLocation,
-            harvestFoodBus,
-            coolLocation,
-            packTlc,
-            packTlcSource,
-            seedGrowerLocation,
-            seedConditionerLocation,
-            seedTlc,
-            seedPackingHouseLocation,
-            seedPackingHouseTlc,
-            seedSupplierLocation,
-            seedSupplierTlc,
+            location, cteHarvest, harvestLocation, harvestFoodBus, coolLocation, packTlc, packTlcSource,
+            seedGrowerLocation, seedConditionerLocation, seedTlc, seedPackingHouseLocation, seedPackingHouseTlc,
+            seedSupplierLocation, seedSupplierTlc,
         )
         val cteIPackSproutsResponse = cteIPackSproutsService.update(cteIPackSprouts).toCteIPackSproutsDto()
         return ResponseEntity.ok().body(cteIPackSproutsResponse)

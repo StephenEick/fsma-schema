@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
-import com.foodtraceai.model.FoodBus
 import com.foodtraceai.model.Location
 import com.foodtraceai.model.TraceLotCode
 import com.foodtraceai.util.CteType
@@ -31,11 +30,6 @@ data class CteIPackExempt(
 
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.InitPackExempt,
-
-    // Business name, e.g. creator of this CTE
-    @ManyToOne  //(cascade = [CascadeType.ALL])
-    @JoinColumn
-    override val foodBus: FoodBus,
 
     // Location for this CTE
     @ManyToOne @JoinColumn
@@ -113,7 +107,6 @@ data class CteIPackExempt(
 data class CteIPackExemptDto(
     val id: Long,
     val cteType: CteType,
-    val foodBusId: Long,
     val locationId: Long,
     val foodItem: FtlItem,
     val variety: String,
@@ -141,7 +134,6 @@ data class CteIPackExemptDto(
 fun CteIPackExempt.toCteIPackExemptDto() = CteIPackExemptDto(
     id = id,
     cteType = cteType,
-    foodBusId = foodBus.id,
     locationId = location.id,
     foodItem = foodItem,
     variety = variety,
@@ -167,7 +159,6 @@ fun CteIPackExempt.toCteIPackExemptDto() = CteIPackExemptDto(
 )
 
 fun CteIPackExemptDto.toCteIPackExempt(
-    foodBus: FoodBus,
     location: Location,
     sourceLocation: Location,
     packTlc: TraceLotCode,
@@ -175,7 +166,6 @@ fun CteIPackExemptDto.toCteIPackExempt(
 ) = CteIPackExempt(
     id = id,
     cteType = cteType,
-    foodBus = foodBus,
     location = location,
     foodItem = foodItem,
     variety = variety,

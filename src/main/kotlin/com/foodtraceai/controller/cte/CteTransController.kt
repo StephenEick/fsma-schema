@@ -45,9 +45,6 @@ class CteTransController : BaseController() {
         @Valid @RequestBody cteTransDto: CteTransDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteTransDto> {
-        val foodBus = foodBusService.findById(cteTransDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteTransDto.foodBusId}")
-
         val location = locationService.findById(cteTransDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteTransDto.locationId}")
 
@@ -60,9 +57,7 @@ class CteTransController : BaseController() {
         val transformFromLocation = locationService.findById(cteTransDto.newTlcLocationId)
             ?: throw EntityNotFoundException("TransformFromLocation not found: ${cteTransDto.newTlcLocationId}")
 
-        val cteTransform = cteTransDto.toCteTrans(
-            foodBus, location, traceLotCode, transformLotCode, transformFromLocation
-        )
+        val cteTransform = cteTransDto.toCteTrans(location, traceLotCode, transformLotCode, transformFromLocation)
         val cteTransformResponse = cteTransService.insert(cteTransform).toCteTransDto()
         return ResponseEntity.created(URI.create(CTE_TRANSFORM_BASE_URL.plus("/${cteTransformResponse.id}")))
             .body(cteTransformResponse)
@@ -76,10 +71,7 @@ class CteTransController : BaseController() {
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteTransDto> {
         if (cteTransDto.id <= 0L || cteTransDto.id != id)
-            throw UnauthorizedRequestException("Conflicting CteTransform Ids specified: $id != ${cteTransDto.id}")
-
-        val foodBus = foodBusService.findById(cteTransDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteTransDto.foodBusId}")
+            throw UnauthorizedRequestException("Conflicting cteTransDto Ids specified: $id != ${cteTransDto.id}")
 
         val location = locationService.findById(cteTransDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteTransDto.locationId}")
@@ -93,10 +85,7 @@ class CteTransController : BaseController() {
         val transformFromLocation = locationService.findById(cteTransDto.newTlcLocationId)
             ?: throw EntityNotFoundException("TransformFromLocation not found: ${cteTransDto.newTlcLocationId}")
 
-        val cteTransform = cteTransDto.toCteTrans(
-            foodBus, location, traceLotCode, transformLotCode, transformFromLocation
-        )
-
+        val cteTransform = cteTransDto.toCteTrans(location, traceLotCode, transformLotCode, transformFromLocation)
         val cteTransformCto = cteTransService.update(cteTransform).toCteTransDto()
         return ResponseEntity.ok().body(cteTransformCto)
     }

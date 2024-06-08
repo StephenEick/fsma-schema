@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
-import com.foodtraceai.model.FoodBus
 import com.foodtraceai.model.Location
 import com.foodtraceai.model.TraceLotCode
 import com.foodtraceai.util.CteType
@@ -30,11 +29,6 @@ data class CteFirstLand(
 
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.FirstLandReceive,
-
-    // Business name for the creator of this CTE
-    @ManyToOne(cascade = [CascadeType.ALL])
-    @JoinColumn
-    override val foodBus: FoodBus,
 
     // Location for this CTE
     @ManyToOne @JoinColumn
@@ -94,7 +88,6 @@ data class CteFirstLand(
 data class CteFirstLandDto(
     val id: Long,
     val cteType: CteType,
-    val foodBusId: Long,
     val locationId: Long,
     val foodItem: FtlItem,
     val tlc: TraceLotCode,
@@ -120,7 +113,6 @@ data class CteFirstLandDto(
 fun CteFirstLand.toCteFirstLandDto() = CteFirstLandDto(
     id = id,
     cteType = cteType,
-    foodBusId = foodBus.id,
     locationId = location.id,
     foodItem = foodItem,
     tlc = tlc,
@@ -144,13 +136,11 @@ fun CteFirstLand.toCteFirstLandDto() = CteFirstLandDto(
 )
 
 fun CteFirstLandDto.toCteFirstLand(
-    foodBus: FoodBus,
     location: Location,
     tlcSource: Location?,
 ) = CteFirstLand(
     id = id,
     cteType = cteType,
-    foodBus = foodBus,
     location = location,
     foodItem = foodItem,
     tlc = tlc,

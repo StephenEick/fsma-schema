@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------
 package com.foodtraceai.service
 
-import com.foodtraceai.model.FoodBus
 import com.foodtraceai.model.Location
 import com.foodtraceai.model.cte.CteReceive
 import com.foodtraceai.model.supplier.SupShipCte
@@ -20,14 +19,12 @@ class SupplierService(
     // RFE or Restaurant has received a shipment
     fun receiveSupShipment(
         supShipCte: SupShipCte,
-        foodBus: FoodBus,
         location: Location,
         receiveDate: LocalDate,
         referenceDocumentType: ReferenceDocumentType,
         referenceDocumentNum: String,
     ): CteReceive {
         val cteReceive = CteReceive(
-            foodBus = foodBus,
             location = location,
             tlc = supShipCte.tlc,
             quantity = supShipCte.quantity,
@@ -44,6 +41,7 @@ class SupplierService(
             referenceDocumentType = referenceDocumentType,
             referenceDocumentNum = referenceDocumentNum,
         )
+
         return cteReceiveService.save(cteReceive)
     }
 }

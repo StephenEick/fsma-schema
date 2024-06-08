@@ -45,9 +45,6 @@ class CteFirstLandController : BaseController() {
         @Valid @RequestBody cteFirstLandDto: CteFirstLandDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteFirstLandDto> {
-        val foodBus = foodBusService.findById(cteFirstLandDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteFirstLandDto.foodBusId}")
-
         val location = locationService.findById(cteFirstLandDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteFirstLandDto.locationId}")
 
@@ -56,7 +53,7 @@ class CteFirstLandController : BaseController() {
             tlcSource = locationService.findById(cteFirstLandDto.tlcSourceId)
                 ?: throw EntityNotFoundException("TlcSource Location not found: ${cteFirstLandDto.tlcSourceId}")
 
-        val cteFirstLand = cteFirstLandDto.toCteFirstLand(foodBus, location, tlcSource)
+        val cteFirstLand = cteFirstLandDto.toCteFirstLand(location, tlcSource)
         val cteFirstLandResponse = cteFirstLandService.insert(cteFirstLand).toCteFirstLandDto()
         return ResponseEntity.created(URI.create(CTE_FIRST_LAND_BASE_URL.plus("/${cteFirstLandResponse.id}")))
             .body(cteFirstLandResponse)
@@ -72,9 +69,6 @@ class CteFirstLandController : BaseController() {
         if (cteFirstLandDto.id <= 0L || cteFirstLandDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteFirstLandDto Ids specified: $id != ${cteFirstLandDto.id}")
 
-        val foodBus = foodBusService.findById(cteFirstLandDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteFirstLandDto.foodBusId}")
-
         val location = locationService.findById(cteFirstLandDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteFirstLandDto.locationId}")
 
@@ -83,7 +77,7 @@ class CteFirstLandController : BaseController() {
             tlcSource = locationService.findById(cteFirstLandDto.tlcSourceId)
                 ?: throw EntityNotFoundException("TlcSource Location not found: ${cteFirstLandDto.tlcSourceId}")
 
-        val cteFirstLand = cteFirstLandDto.toCteFirstLand(foodBus, location, tlcSource)
+        val cteFirstLand = cteFirstLandDto.toCteFirstLand(location, tlcSource)
         val cteFirstLandCto = cteFirstLandService.update(cteFirstLand).toCteFirstLandDto()
         return ResponseEntity.ok().body(cteFirstLandCto)
     }

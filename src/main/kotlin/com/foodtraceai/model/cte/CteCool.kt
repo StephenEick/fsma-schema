@@ -3,7 +3,6 @@
 // ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
-import com.foodtraceai.model.FoodBus
 import com.foodtraceai.model.Location
 import com.foodtraceai.util.CteType
 import com.foodtraceai.util.FtlItem
@@ -30,10 +29,6 @@ data class CteCool(
 
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Cool,
-
-    // Cooler business name
-    @ManyToOne @JoinColumn
-    override val foodBus: FoodBus,
 
     // Location for this CTE
     @ManyToOne @JoinColumn
@@ -106,7 +101,6 @@ data class CteCoolDto(
     val harvestLocation: Location,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
-    val foodBusId: Long,
     val dateCreated: OffsetDateTime,
     val dateModified: OffsetDateTime,
     val isDeleted: Boolean,
@@ -128,7 +122,6 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
     harvestLocation = harvestLocation,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    foodBusId = foodBus.id,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -138,7 +131,6 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
 fun CteCoolDto.toCteCool(
     location: Location,
     subsequentRecipient: Location,
-    foodBus: FoodBus,
 ) = CteCool(
     id = id,
     cteType = cteType,
@@ -154,7 +146,6 @@ fun CteCoolDto.toCteCool(
     harvestLocation = harvestLocation,
     referenceDocumentType = referenceDocumentType,
     referenceDocumentNum = referenceDocumentNum,
-    foodBus = foodBus,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

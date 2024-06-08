@@ -46,9 +46,6 @@ class CteIPackProdController : BaseController() {
         @Valid @RequestBody cteIPackProdDto: CteIPackProdDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<CteIPackProdDto> {
-        val foodBus = foodBusService.findById(cteIPackProdDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackProdDto.foodBusId}")
-
         val location = locationService.findById(cteIPackProdDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteIPackProdDto.locationId}")
 
@@ -75,7 +72,7 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            foodBus, location, cteHarvest, harvestLocation, harvestBusiness,
+            location, cteHarvest, harvestLocation, harvestBusiness,
             coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdDto = cteIPackProdService.insert(cteIPackProd).toCteIPackProdDto()
@@ -93,9 +90,6 @@ class CteIPackProdController : BaseController() {
         if (cteIPackProdDto.id <= 0L || cteIPackProdDto.id != id)
             throw UnauthorizedRequestException("Conflicting CteIPackProd Ids specified: $id != ${cteIPackProdDto.id}")
 
-        val foodBus = foodBusService.findById(cteIPackProdDto.foodBusId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${cteIPackProdDto.foodBusId}")
-
         val location = locationService.findById(cteIPackProdDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteIPackProdDto.locationId}")
 
@@ -122,7 +116,7 @@ class CteIPackProdController : BaseController() {
         }
 
         val cteIPackProd = cteIPackProdDto.toCteIPackProd(
-            foodBus, location, cteHarvest, harvestLocation, harvestBusiness,
+            location, cteHarvest, harvestLocation, harvestBusiness,
             coolLocation, packTlc, packTlcSource
         )
         val cteIPackProdCto = cteIPackProdService.update(cteIPackProd).toCteIPackProdDto()
