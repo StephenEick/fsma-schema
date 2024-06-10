@@ -3,9 +3,7 @@
 // ----------------------------------------------------------------------------
 package com.foodtraceai.model.cte
 
-import com.foodtraceai.model.BaseModel
-import com.foodtraceai.model.FoodBus
-import com.foodtraceai.model.Location
+import com.foodtraceai.model.BaseLocationModel
 import com.foodtraceai.util.CteType
 import com.foodtraceai.util.FtlItem
 import com.foodtraceai.util.ReferenceDocumentType
@@ -14,17 +12,20 @@ import com.foodtraceai.util.UnitOfMeasure
 /**
  *** Base superclass of Critical Tracking Events
  **/
-abstract class CteBase<T> : BaseModel<T>() {
+abstract class CteBase<T> : BaseLocationModel<T>() {
     abstract val cteType: CteType
 
-    // Business name for the creator of this CTE
-    val foodBus: FoodBus
-        get() = location.foodBus
-    val foodBusId: Long
-        get() = foodBus.id
-
-    // Location where this CTE is created
-    abstract val location: Location
+//    // Business name for the creator of this CTE
+//    val foodBus: FoodBus
+//        get() = location.foodBus
+//    val foodBusId: Long
+//        get() = foodBus.id
+//
+//    // Location where this CTE is created
+//    override val location: Location
+//
+//    val reseller:Reseller
+//        get() = foodBus.reseller
 
     // Common to all CTEs.  For raw agricultural commodities use commodity name
     abstract val foodItem: FtlItem  // or commodity
