@@ -72,6 +72,7 @@ class TestsLocation {
             contactPhone = "1-800-555-1212",
             contactEmail = "steve@gmail.abc",
             addressId = 1,
+            isBillable = true,
         )
 
         locationDtoUpdated = LocationDto(
@@ -81,6 +82,7 @@ class TestsLocation {
             contactPhone = "0-000-000-0000",
             contactEmail = "newcontact@gmail.abc",
             addressId = 1,
+            isBillable = false,
         )
     }
 
@@ -112,6 +114,7 @@ class TestsLocation {
             jsonPath("$.contactPhone") { value(locationDto.contactPhone) }
             jsonPath("$.contactEmail") { value(locationDto.contactEmail) }
             jsonPath("$.addressId") { value(locationDto.addressId) }
+            jsonPath("$.isBillable") { value(true) }
         }.andReturn()
         val locationId: Long = JsonPath.read(mvcResult.response.contentAsString, "$.id")
     }
@@ -130,6 +133,7 @@ class TestsLocation {
             jsonPath("$.contactPhone") { value(locationDto.contactPhone) }
             jsonPath("$.contactEmail") { value(locationDto.contactEmail) }
             jsonPath("$.addressId") { value(locationDto.addressId) }
+            jsonPath("$.isBillable") { value(true) }
         }
     }
 
@@ -151,6 +155,7 @@ class TestsLocation {
             jsonPath("$.contactPhone") { value(locationDtoUpdated.contactPhone) }
             jsonPath("$.contactEmail") { value(locationDtoUpdated.contactEmail) }
             jsonPath("$.addressId") { value(locationDtoUpdated.addressId) }
+            jsonPath("$.isBillable") { value(false) }
         }
     }
 

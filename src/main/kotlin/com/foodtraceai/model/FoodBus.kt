@@ -39,9 +39,6 @@ data class FoodBus(
     // Is this account enabled in the system?
     val isEnabled: Boolean = true,
 
-    // Is this food business one of our clients that we need to bill?
-    val isClient: Boolean = true,
-
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
@@ -81,7 +78,6 @@ fun FoodBus.toFoodBusDto() = FoodBusDto(
     foodBusType = foodBusType,
     franchisorId = franchisor?.id,
     isEnabled = isEnabled,
-    isClient = isClient,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -103,5 +99,4 @@ fun FoodBusDto.toFoodBus(
     foodBusType = foodBusType,
     franchisor = franchisor,
     isEnabled = isEnabled,
-    isClient = isClient,
 )
