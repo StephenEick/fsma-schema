@@ -12,6 +12,7 @@ import com.foodtraceai.model.toFoodBus
 import com.foodtraceai.service.AddressService
 import com.foodtraceai.service.FoodBusService
 import com.foodtraceai.service.FranchisorService
+import com.foodtraceai.service.ResellerService
 import com.foodtraceai.util.EntityNotFoundException
 import com.foodtraceai.util.FoodBusType
 import com.jayway.jsonpath.JsonPath
@@ -45,6 +46,9 @@ class TestsFoodBus {
     @Autowired
     private lateinit var foodBusService: FoodBusService
 
+    @Autowired
+    private lateinit var resellerService: ResellerService
+
     private lateinit var foodBusDto: FoodBusDto
     private lateinit var foodBusDtoUpdated: FoodBusDto
 
@@ -69,6 +73,7 @@ class TestsFoodBus {
     fun localSetup() {
         foodBusDto = FoodBusDto(
             id = 0,
+            resellerId = 1,
             mainAddressId = 1,
             contactName = "Steve",
             contactPhone = "1-800-555-1212",
@@ -79,6 +84,7 @@ class TestsFoodBus {
 
         foodBusDtoUpdated = FoodBusDto(
             id = 0,
+            resellerId = 1,
             mainAddressId = 1,
             contactName = "NewContact",
             contactPhone = "1-800-555-1212",
@@ -92,6 +98,9 @@ class TestsFoodBus {
     // ------------------------------------------------------------------------
 
     private fun addFoodBus(dto: FoodBusDto): FoodBus {
+        val reseller = resellerService.findById(dto.resellerId)
+            ?: throw EntityNotFoundException("ResellerDto not found = ${dto.resellerId}")
+
         val mainAddress = addressService.findById(dto.mainAddressId)
             ?: throw EntityNotFoundException("FoodBus mainAddresssId not found = ${foodBusDto.mainAddressId}")
 
@@ -99,7 +108,7 @@ class TestsFoodBus {
         if (foodBusDto.franchisorId != null)
             franchisor = franchisorService.findById(foodBusDto.franchisorId!!)
 
-        return foodBusService.insert(foodBusDto.toFoodBus(mainAddress, franchisor))
+        return foodBusService.insert(foodBusDto.toFoodBus(reseller, mainAddress, franchisor))
     }
 
     @Test

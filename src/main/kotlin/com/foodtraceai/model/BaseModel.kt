@@ -37,7 +37,6 @@ abstract class BaseAuditModel {
 
 @MappedSuperclass
 abstract class BaseIdModel : BaseAuditModel() {
-
     @Id
     @GeneratedValue
     var id: Long = 0
@@ -62,13 +61,33 @@ open class BaseModel<T> {
     }
 }
 
-///**
-// *** Base superclass of Reseller Entity objects
-// **/
-//abstract class BaseResellerModel<T> : BaseModel<T>() {
-//    abstract val reseller: Reseller
-//}
-//
+/**
+ *** Base superclass of Reseller Entity objects
+ **/
+abstract class BaseResellerModel<T> : BaseModel<T>() {
+    abstract val reseller: Reseller
+}
+
+abstract class BaseFoodBusModel<T> : BaseModel<T>() {
+    abstract val foodBus: FoodBus
+    val reseller: Reseller
+        get() = foodBus.reseller
+    val resellerId: Long
+        get() = reseller.id
+}
+
+abstract class BaseLocationModel<T> : BaseModel<T>() {
+    abstract val location: Location
+    val foodBus: FoodBus
+        get() = location.foodBus
+    val foodBusId: Long
+        get() = foodBus.id
+    val reseller: Reseller
+        get() = foodBus.reseller
+    val resellerId: Long
+        get() = reseller.id
+}
+
 ///**
 // *** Base superclass of Client Entity objects
 // **/

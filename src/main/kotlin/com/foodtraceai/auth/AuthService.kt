@@ -54,11 +54,11 @@ class AuthService {
         if (fsmaUserService.findByEmailIgnoreCase(newFsmaUserDto.email) != null)
             throw EntityExistsException("User already exists: ${newFsmaUserDto.email}")
 
-        val foodBusiness = foodBusRepository.findByIdOrNull(newFsmaUserDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${newFsmaUserDto.foodBusinessId}")
+        val foodBusiness = foodBusRepository.findByIdOrNull(newFsmaUserDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${newFsmaUserDto.foodBusId}")
 
-        val location = locationRepository.findByIdOrNull(newFsmaUserDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${newFsmaUserDto.foodBusinessId}")
+        val location = locationRepository.findByIdOrNull(newFsmaUserDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${newFsmaUserDto.foodBusId}")
 
         val newFsmaUser = newFsmaUserDto.toFsmaUser(foodBusiness, location)
             .copy(password = passwordEncoder.encode(newFsmaUserDto.password), email = newFsmaUserDto.email.lowercase())

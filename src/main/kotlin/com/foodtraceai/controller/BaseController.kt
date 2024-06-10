@@ -71,6 +71,9 @@ class BaseController {
     protected lateinit var locationService: LocationService
 
     @Autowired
+    protected lateinit var resellerService: ResellerService
+
+    @Autowired
     protected lateinit var supShipCteService: SupShipCteService
 
     @Autowired
@@ -204,7 +207,7 @@ class BaseController {
     }
 
     private fun isFoodBusinessCheck(authPrincipal: FsmaUser, modelFoodBusinessId: Long) =
-        authPrincipal.isFoodBusinessAdmin() && modelFoodBusinessId == authPrincipal.foodBus.id
+        authPrincipal.isFoodBusAdmin() && modelFoodBusinessId == authPrincipal.foodBus.id
 //
 //    private fun isResellerCheck(authPrincipal: FsmaUser, modelResellerId: Long): Boolean {
 //        return authPrincipal.isResellerAdmin() && modelResellerId == authPrincipal.reseller.id

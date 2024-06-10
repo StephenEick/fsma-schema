@@ -17,11 +17,11 @@ import com.foodtraceai.util.UnitOfMeasure
 abstract class CteBase<T> : BaseModel<T>() {
     abstract val cteType: CteType
 
-    //    // TODO: remove and pick this up from location?
-//    // Business name for the creator of this CTE
-//    abstract val foodBus: FoodBus
+    // Business name for the creator of this CTE
     val foodBus: FoodBus
         get() = location.foodBus
+    val foodBusId: Long
+        get() = foodBus.id
 
     // Location where this CTE is created
     abstract val location: Location

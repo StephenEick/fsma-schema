@@ -43,6 +43,10 @@ class DataLoader : ApplicationRunner {
     private val locationList: MutableList<Location> = mutableListOf()
 
     @Autowired
+    private lateinit var resellerService: ResellerService
+    private val resellerList: MutableList<Reseller> = mutableListOf()
+
+    @Autowired
     private lateinit var supShipCteService: SupShipCteService
     private val supShipCteList: MutableList<SupShipCte> = mutableListOf()
 
@@ -56,6 +60,7 @@ class DataLoader : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
         deleteAllData()
         addAddresses()
+        addResellers()
         addFoodBusinesses()
         addLocations()
         addFsmaUsers()
@@ -110,6 +115,9 @@ class DataLoader : ApplicationRunner {
         jdbcTemplate.execute("DELETE FROM location CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS location_seq RESTART;")
 
+        jdbcTemplate.execute("DELETE FROM reseller CASCADE;")
+        jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS reseller_seq RESTART;")
+
         jdbcTemplate.execute("DELETE FROM sup_ship_cte CASCADE;")
         jdbcTemplate.execute("ALTER SEQUENCE IF EXISTS sup_ship_cte_seq RESTART;")
 
@@ -118,21 +126,8 @@ class DataLoader : ApplicationRunner {
     }
 
     fun addAddresses() {
+        val resellerId = 1L
         var addressDto = AddressDto(
-            street = "1622 Central Ave",
-            city = "Memphis",
-            state = UsaCanadaState.TN,
-            postalCode = "38104-5064",
-            country = Country.USA,
-            lat = 35.1268133,
-            lng = -90.0087413
-        )
-
-        var address = addressDto.toAddress()
-        addressList.add(addressService.insert(address))
-
-
-        addressDto = AddressDto(
             street = "1413 Durness Ct.",
             city = "Naperville",
             state = UsaCanadaState.IL,
@@ -142,7 +137,21 @@ class DataLoader : ApplicationRunner {
             lng = -90.0087413
         )
 
-        address = addressDto.toAddress()
+        var address = addressDto.toAddress(resellerId)
+        addressList.add(addressService.insert(address))
+
+
+        addressDto = AddressDto(
+            street = "1622 Central Ave",
+            city = "Memphis",
+            state = UsaCanadaState.TN,
+            postalCode = "38104-5064",
+            country = Country.USA,
+            lat = 35.1268133,
+            lng = -90.0087413
+        )
+
+        address = addressDto.toAddress(resellerId)
         addressList.add(addressService.insert(address))
 
         addressDto = AddressDto(
@@ -155,21 +164,43 @@ class DataLoader : ApplicationRunner {
             lng = -90.0087413
         )
 
-        address = addressDto.toAddress()
+        address = addressDto.toAddress(resellerId)
         addressList.add(addressService.insert(address))
+    }
+
+    fun addResellers() {
+        var resellerDto = ResellerDto(
+            addressDto = addressList[0].toAddressDto(),
+            accountRep = "Steve",
+            businessName = "FoodTraceAI",
+            firstName = "Stephen",
+            lastName = "Eick",
+            mainContactName = "mainContactName",
+            mainContactPhone = "mainContactPhone",
+            mainContactEmail = "mainContactEmail",
+            billingContactName = "billingContactName",
+            billingContactPhone = "billingContactPhone",
+            billingContactEmail = "billingContactEmail",
+            billingAddressDto = addressList[0].toAddressDto(),
+        )
+        val resellerId = 1L // for testing
+        var reseller = resellerDto.toReseller(resellerId)
+        resellerList.add(resellerService.insert(reseller))
     }
 
     fun addFoodBusinesses() {
         var foodBus = FoodBus(
+            reseller = resellerList[0],
             mainAddress = addressList[0],
-            foodBusName = "SafeFood204",
+            foodBusName = "FoodTraceAI",
             contactName = "Stephen Eick",
             contactPhone = "630-561-7897",
-            foodBusType = FoodBusType.Other
+            foodBusType = FoodBusType.Restaurant
         )
         foodBusList.add(foodBusService.insert(foodBus))
 
         foodBus = FoodBus(
+            reseller = resellerList[0],
             mainAddress = addressList[0],
             foodBusName = "KaleidoscopeInc",
             contactName = "Joe Smith",
@@ -179,6 +210,7 @@ class DataLoader : ApplicationRunner {
         foodBusList.add(foodBusService.insert(foodBus))
 
         foodBus = FoodBus(
+            reseller = resellerList[0],
             mainAddress = addressList[0],
             foodBusName = "630 N. Main",
             contactName = "Ted Podolak",
@@ -221,7 +253,7 @@ class DataLoader : ApplicationRunner {
 
     fun addFsmaUsers() {
         val rootDto = FsmaUserDto(
-            foodBusinessId = 1,
+            foodBusId = 1,
             locationId = 1,
             email = "root@foodtraceai.com",
             password = "123",
@@ -235,7 +267,7 @@ class DataLoader : ApplicationRunner {
         fsmaUserList.add(fmsaUser)
 
         var fsmaUserDto = FsmaUserDto(
-            foodBusinessId = foodBusList[1].id,
+            foodBusId = foodBusList[1].id,
             locationId = 2,
             email = "User0@foodtraceai.com",
             password = "123",
@@ -245,11 +277,11 @@ class DataLoader : ApplicationRunner {
         )
         resDto = authService.createNewFsmaUser(fsmaUserDto)
         fmsaUser = fsmaUserService.findById(resDto.fsmaUserId)
-                ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
+            ?: throw Exception("Failed to create FsmaUser: ${fsmaUserDto.email}")
         fsmaUserList.add(fmsaUser)
 
         fsmaUserDto = FsmaUserDto(
-            foodBusinessId = foodBusList[2].id,
+            foodBusId = foodBusList[2].id,
             locationId = 3,
             email = "User1@foodtraceai.com",
             password = "123",

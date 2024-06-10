@@ -28,7 +28,7 @@ data class FsmaUser(
     @ManyToOne
     @JoinColumn(name = "food_bus_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    val foodBus: FoodBus,
+    override val foodBus: FoodBus,
 
     // Home Location for this user
     @ManyToOne @JoinColumn
@@ -61,8 +61,8 @@ data class FsmaUser(
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
     override var isDeleted: Boolean = false,
     override var dateDeleted: OffsetDateTime? = null,
-) : BaseModel<FsmaUser>(), UserDetails {
-
+//) : BaseModel<FsmaUser>(), UserDetails {
+) : BaseFoodBusModel<FsmaUser>(), UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
         roles.map { SimpleGrantedAuthority(it.name) }.toMutableList()
 
@@ -83,16 +83,16 @@ data class FsmaUser(
 
     fun isFranchisorAdmin() = roles.contains(Role.FranchisorAdmin)
 
-    fun isFoodBusinessAdmin() = roles.contains(Role.FoodBusinessAdmin)
+    fun isFoodBusAdmin() = roles.contains(Role.FoodBusinessAdmin)
 
-    fun isFoodBusinessUser() = isFoodBusinessAdmin() || roles.contains(Role.FoodBusinessUser)
+    fun isFoodBusUser() = isFoodBusAdmin() || roles.contains(Role.FoodBusinessUser)
 
-    fun isMobile() = isFoodBusinessUser() || roles.contains(Role.Mobile)
+    fun isMobile() = isFoodBusUser() || roles.contains(Role.Mobile)
 }
 
 data class FsmaUserDto(
     val id: Long = 0,
-    val foodBusinessId: Long,
+    val foodBusId: Long,
     val locationId: Long,
     @field:Email(message = "A valid email is required")
     val email: String,
@@ -116,7 +116,7 @@ data class FsmaUserDto(
 
 fun FsmaUser.toFsmaUserDto() = FsmaUserDto(
     id = id,
-    foodBusinessId = foodBus.id,
+    foodBusId = foodBus.id,
     locationId = location.id,
     email = email,
     password = password,

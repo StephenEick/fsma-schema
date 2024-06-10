@@ -62,7 +62,7 @@ class TestsAuthController {
     fun `get root admin`() {
         val rootDto = FsmaUserDto(
             id = 1,
-            foodBusinessId = 1,//foodBusinessList[0].id,
+            foodBusId = 1,//foodBusinessList[0].id,
             locationId = 1,
             email = "root@foodtraceai.com",
             password = "123",

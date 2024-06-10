@@ -69,7 +69,7 @@ class AuthController : BaseController() {
             return false
         }
 
-        return switchToFsmaUser.isFoodBusinessAdmin() && fsmaUser.isRootAdmin()
+        return switchToFsmaUser.isFoodBusAdmin() && fsmaUser.isRootAdmin()
     }
 
     //TODO: Remove
@@ -110,7 +110,7 @@ class AuthController : BaseController() {
         if (maxRole(fsmaUser.roles) < maxRole(newUserDto.roles))
             throw UnauthorizedRequestException("FsmaUser cannot create role with higher permissions id=${newUserDto.id}")
 
-        assertFoodBusinessMatchesToken(fsmaUser, newUserDto.foodBusinessId)
+        assertFoodBusinessMatchesToken(fsmaUser, newUserDto.foodBusId)
         return ResponseEntity.ok(authService.createNewFsmaUser(newUserDto))
     }
 

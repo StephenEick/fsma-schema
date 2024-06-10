@@ -14,6 +14,10 @@ data class FoodBus(
     @Id @GeneratedValue
     override val id: Long = 0,
 
+    @ManyToOne @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    override val reseller: Reseller,
+
     val contactName: String? = null,
     val contactPhone: String? = null,
     val contactEmail: String? = null,
@@ -27,7 +31,7 @@ data class FoodBus(
     @OnDelete(action = OnDeleteAction.CASCADE)
     val foodBusType: FoodBusType,
 
-    // Is this a franchisee?
+    // Is this a franchisee?  If so, it has a franchisor
     @ManyToOne @JoinColumn
     @OnDelete(action = OnDeleteAction.CASCADE)
     val franchisor: Franchisor? = null,
@@ -35,17 +39,22 @@ data class FoodBus(
     // Is this account enabled in the system?
     val isEnabled: Boolean = true,
 
+    // Is this food business one of our clients that we need to bill?
+    val isClient: Boolean = true,
+
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
     override var dateModified: OffsetDateTime = OffsetDateTime.now(),
     override var isDeleted: Boolean = false,
-    override var dateDeleted: OffsetDateTime? = null
-) : BaseModel<FoodBus>() {
-    val isFranchisee: Boolean = franchisor != null
+    override var dateDeleted: OffsetDateTime? = null,
+) : BaseResellerModel<FoodBus>() {
+    val isFranchisee: Boolean
+        get() = franchisor != null
 }
 
 data class FoodBusDto(
     val id: Long = 0,
+    val resellerId: Long,
     val contactName: String? = null,
     val contactPhone: String? = null,
     val contactEmail: String? = null,
@@ -54,6 +63,7 @@ data class FoodBusDto(
     val foodBusType: FoodBusType,
     val franchisorId: Long? = null,
     val isEnabled: Boolean = true,
+    val isClient: Boolean = true,
     val dateCreated: OffsetDateTime = OffsetDateTime.now(),
     val dateModified: OffsetDateTime = OffsetDateTime.now(),
     val isDeleted: Boolean = false,
@@ -62,6 +72,7 @@ data class FoodBusDto(
 
 fun FoodBus.toFoodBusDto() = FoodBusDto(
     id = id,
+    resellerId = reseller.id,
     contactName = contactName,
     contactPhone = contactPhone,
     contactEmail = contactEmail,
@@ -70,6 +81,7 @@ fun FoodBus.toFoodBusDto() = FoodBusDto(
     foodBusType = foodBusType,
     franchisorId = franchisor?.id,
     isEnabled = isEnabled,
+    isClient = isClient,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -77,10 +89,12 @@ fun FoodBus.toFoodBusDto() = FoodBusDto(
 )
 
 fun FoodBusDto.toFoodBus(
+    reseller: Reseller,
     mainAddress: Address,
-    franchisor: Franchisor?,
+    franchisor: Franchisor? = null,
 ) = FoodBus(
     id = id,
+    reseller = reseller,
     contactName = contactName,
     contactPhone = contactPhone,
     contactEmail = contactEmail,
@@ -89,4 +103,5 @@ fun FoodBusDto.toFoodBus(
     foodBusType = foodBusType,
     franchisor = franchisor,
     isEnabled = isEnabled,
+    isClient = isClient,
 )

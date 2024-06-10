@@ -32,7 +32,6 @@ enum class FoodBusType(val cteTypes: List<CteType>) {
     Distributor(listOf(CteType.Receive, CteType.Ship)),
     RFE(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),  // grocery, convenience, club stores, etc.
     Restaurant(listOf(CteType.Receive, CteType.Transform, CteType.Ship)),
-    Other(emptyList()), // For administrative accounts
 }
 
 enum class FtlItem {

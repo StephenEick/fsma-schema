@@ -42,8 +42,8 @@ class FsmaUserController : BaseController() {
         @Valid @RequestBody fsmaUserDto: FsmaUserDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FsmaUserDto> {
-        val foodBus = foodBusService.findById(fsmaUserDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBus not found: ${fsmaUserDto.foodBusinessId}")
+        val foodBus = foodBusService.findById(fsmaUserDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBus not found: ${fsmaUserDto.foodBusId}")
 
         val location = locationService.findById(fsmaUserDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${fsmaUserDto.locationId}")
@@ -64,8 +64,8 @@ class FsmaUserController : BaseController() {
         if (fsmaUserDto.id <= 0L || fsmaUserDto.id != id)
             throw UnauthorizedRequestException("Conflicting FsmaUserIds specified: $id != ${fsmaUserDto.id}")
 
-        val foodBus = foodBusService.findById(fsmaUserDto.foodBusinessId)
-            ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserDto.foodBusinessId}")
+        val foodBus = foodBusService.findById(fsmaUserDto.foodBusId)
+            ?: throw EntityNotFoundException("FoodBusiness not found: ${fsmaUserDto.foodBusId}")
 
         val location = locationService.findById(fsmaUserDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${fsmaUserDto.locationId}")

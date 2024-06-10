@@ -38,7 +38,7 @@ class TestsAddress {
 
     private lateinit var addressDto: AddressDto
     private lateinit var addressDtoUpdated: AddressDto
-
+    private val resellerId = 1L
     private val rootAuthLogin = AuthLogin(email = "root@foodtraceai.com", password = "123", refreshToken = null)
 
     private fun authenticate(authLogin: AuthLogin): Pair<String, String> {
@@ -62,6 +62,7 @@ class TestsAddress {
         // -- Address
         addressDto = AddressDto(
             id = 0,
+            resellerId = 1,
             street = "1413 Durness Court",
             street2 = "Apt-101",
             city = "Naperville",
@@ -73,6 +74,7 @@ class TestsAddress {
         )
         addressDtoUpdated = AddressDto(
             id = 0,
+            resellerId = 1,
             street = "1413 Durness Court",
             street2 = "Changed",
             city = "Naperville",
@@ -118,7 +120,7 @@ class TestsAddress {
 
     @Test
     fun `get address`() {
-        val addressId = addressService.insert(addressDto.toAddress()).id
+        val addressId = addressService.insert(addressDto.toAddress(resellerId)).id
         val (accessToken, _) = authenticate(rootAuthLogin)
         mockMvc.get("/api/v1/address/$addressId") {
             header("Authorization", "Bearer $accessToken")
@@ -139,7 +141,7 @@ class TestsAddress {
 
     @Test
     fun `update address`() {
-        val addressId = addressService.insert(addressDto.toAddress()).id
+        val addressId = addressService.insert(addressDto.toAddress(resellerId)).id
         val (accessToken, _) = authenticate(rootAuthLogin)
         addressDtoUpdated = addressDtoUpdated.copy(id = addressId)
         mockMvc.put("/api/v1/address/$addressId") {
@@ -163,7 +165,7 @@ class TestsAddress {
 
     @Test
     fun `delete address`() {
-        val addressId = addressService.insert(addressDto.toAddress()).id
+        val addressId = addressService.insert(addressDto.toAddress(resellerId)).id
         val (accessToken, _) = authenticate(rootAuthLogin)
         mockMvc.delete("/api/v1/address/$addressId") {
             header("Authorization", "Bearer $accessToken")

@@ -16,25 +16,25 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
-private const val BUSINESS_BASE_URL = "/api/v1/foodbus"
-private const val BUSINESS_ALT_BASE_URL = "/api/v1/food-bus"
+private const val FOOD_BUS_BASE_URL = "/api/v1/foodbus"
+private const val FOOD_BUS_ALT_BASE_URL = "/api/v1/food-bus"
 
 @RestController
-@RequestMapping(value = [BUSINESS_BASE_URL, BUSINESS_ALT_BASE_URL])
+@RequestMapping(value = [FOOD_BUS_BASE_URL, FOOD_BUS_ALT_BASE_URL])
 @SecurityRequirement(name = "bearerAuth")
 class FoodBusController : BaseController() {
 
     // -- Return a specific foodBusiness
-    // -    http://localhost:8080/api/v1/business/1
+    // -    http://localhost:8080/api/v1/fooodbus/1
     @GetMapping("/{id}")
     fun findById(
         @PathVariable(value = "id") id: Long,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FoodBusDto> {
-        val business = foodBusService.findById(id)
+        val foodBus = foodBusService.findById(id)
             ?: throw EntityNotFoundException("FoodBusiness not found = $id")
 //        assertResellerClientMatchesToken(fsaUser, business.resellerId)
-        return ResponseEntity.ok(business.toFoodBusDto())
+        return ResponseEntity.ok(foodBus.toFoodBusDto())
     }
 
     // -- Create a new business
@@ -43,6 +43,9 @@ class FoodBusController : BaseController() {
         @Valid @RequestBody foodBusDto: FoodBusDto,
         @AuthenticationPrincipal authPrincipal: FsmaUser
     ): ResponseEntity<FoodBusDto> {
+        val reseller = resellerService.findById(foodBusDto.resellerId)
+            ?: throw EntityNotFoundException("Reseller not found: ${foodBusDto.resellerId}")
+
         val mainAddress = addressService.findById(foodBusDto.mainAddressId)
             ?: throw EntityNotFoundException("Address not found: ${foodBusDto.mainAddressId}")
 
@@ -50,9 +53,9 @@ class FoodBusController : BaseController() {
         else franchisorService.findById(foodBusDto.franchisorId)
             ?: throw EntityNotFoundException("Franchisor not found: ${foodBusDto.franchisorId}")
 
-        val foodBus = foodBusDto.toFoodBus(mainAddress, franchisor)
+        val foodBus = foodBusDto.toFoodBus(reseller, mainAddress, franchisor)
         val foodBusResponse = foodBusService.insert(foodBus).toFoodBusDto()
-        return ResponseEntity.created(URI.create(BUSINESS_BASE_URL.plus("/${foodBusResponse.id}")))
+        return ResponseEntity.created(URI.create(FOOD_BUS_BASE_URL.plus("/${foodBusResponse.id}")))
             .body(foodBusResponse)
     }
 
@@ -65,13 +68,17 @@ class FoodBusController : BaseController() {
     ): ResponseEntity<FoodBusDto> {
         if (foodBusDto.id <= 0L || foodBusDto.id != id)
             throw UnauthorizedRequestException("Conflicting BusinessIds specified: $id != ${foodBusDto.id}")
+
+        val reseller = resellerService.findById(foodBusDto.resellerId)
+            ?: throw EntityNotFoundException("Reseller not found: ${foodBusDto.resellerId}")
+
         val mainAddress = addressService.findById(foodBusDto.mainAddressId)
             ?: throw EntityNotFoundException("Address not found: ${foodBusDto.mainAddressId}")
         val franchisor = if (foodBusDto.franchisorId == null) null
         else franchisorService.findById(foodBusDto.franchisorId)
             ?: throw EntityNotFoundException("Franchisor not found: ${foodBusDto.franchisorId}")
 
-        val foodBus = foodBusDto.toFoodBus(mainAddress, franchisor)
+        val foodBus = foodBusDto.toFoodBus(reseller, mainAddress, franchisor)
         val foodBusResponse = foodBusService.update(foodBus)
         return ResponseEntity.ok().body(foodBusResponse.toFoodBusDto())
     }

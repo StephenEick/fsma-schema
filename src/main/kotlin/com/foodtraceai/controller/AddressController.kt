@@ -40,9 +40,9 @@ class AddressController : BaseController() {
     @PostMapping
     fun create(
         @Valid @RequestBody addressDto: AddressDto,
-        @AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal fsmaUser: FsmaUser
     ): ResponseEntity<AddressDto> {
-        val address = addressDto.toAddress()
+        val address = addressDto.toAddress(fsmaUser.resellerId)
         val addressResponse = addressService.insert(address).toAddressDto()
         return ResponseEntity
             .created(URI.create(ADDRESS_BASE_URL.plus("/${addressResponse.id}")))
@@ -54,11 +54,11 @@ class AddressController : BaseController() {
     fun update(
         @PathVariable id: Long,
         @Valid @RequestBody addressDto: AddressDto,
-        @AuthenticationPrincipal authPrincipal: FsmaUser
+        @AuthenticationPrincipal fsmaUser: FsmaUser
     ): ResponseEntity<AddressDto> {
         if (addressDto.id <= 0L || addressDto.id != id)
             throw UnauthorizedRequestException("Conflicting AddressIds specified: $id != ${addressDto.id}")
-        val address = addressDto.toAddress()
+        val address = addressDto.toAddress(fsmaUser.resellerId)
         val addressResponse = addressService.update(address).toAddressDto()
         return ResponseEntity.ok().body(addressResponse)
     }
