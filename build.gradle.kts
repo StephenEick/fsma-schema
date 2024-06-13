@@ -23,6 +23,8 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.apache.poi)         // to create xlsx file
+    implementation(libs.apache.poi.ooxml)   // to create xlsx file
     implementation(libs.commons.csv)
     implementation(libs.jackson)
     implementation(libs.jsonwebtoken)
@@ -40,6 +42,7 @@ dependencies {
     developmentOnly(libs.spring.boot.devtools)
     implementation(libs.springdoc.common)
     implementation(libs.springdoc.webmvc)
+
     runtimeOnly(libs.h2database)
     testImplementation(libs.spring.boot.starter.test) {
         exclude(module = "mockito-core")

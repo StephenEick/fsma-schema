@@ -3,10 +3,9 @@
 // ----------------------------------------------------------------------------
 package com.foodtraceai.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
+import com.foodtraceai.util.TlcDateType
+import jakarta.persistence.*
+import java.time.LocalDate
 import java.time.OffsetDateTime
 
 @Entity
@@ -14,10 +13,13 @@ data class TraceLotCode(
     @Id @GeneratedValue
     override val id: Long = 0,
     val tlc: String,
-    val desc: String? = null,
-    val gtin: String? = null,
-    val lot: String? = null,
-    val case: String? = null,
+    val gtin: String? = null,   // not required
+    val batch: String? = null,  // not required
+    val tlcDate: LocalDate? = null,    // not required
+    @Enumerated(EnumType.STRING)
+    val tlcDateType: TlcDateType? = null,   // not required
+    // Serial Shipping Container Code
+    val sscc: String? = null,   // not required
 
     @Column(updatable = false)
     override var dateCreated: OffsetDateTime = OffsetDateTime.now(),
@@ -29,10 +31,11 @@ data class TraceLotCode(
 data class TraceLotCodeDto(
     val id: Long = 0,
     val tlc: String,
-    val desc: String?,
     val gtin: String?,
-    val lot: String?,
-    val case: String?,
+    val batch: String?,
+    val tlcDate: LocalDate?,
+    val tlcDateType: TlcDateType?,
+    val sscc: String?,
     val dateCreated: OffsetDateTime = OffsetDateTime.now(),
     val dateModified: OffsetDateTime = OffsetDateTime.now(),
     val isDeleted: Boolean = false,
@@ -44,10 +47,11 @@ data class TraceLotCodeDto(
 fun TraceLotCode.toTraceLotCodeDto() = TraceLotCodeDto(
     id = id,
     tlc = tlc,
-    desc = desc,
     gtin = gtin,
-    lot = lot,
-    case = case,
+    batch = batch,
+    tlcDate = tlcDate,
+    tlcDateType = tlcDateType,
+    sscc = sscc,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,
@@ -57,10 +61,11 @@ fun TraceLotCode.toTraceLotCodeDto() = TraceLotCodeDto(
 fun TraceLotCodeDto.toTraceLotCode() = TraceLotCode(
     id = id,
     tlc = tlc,
-    desc = desc,
+    batch = batch,
     gtin = gtin,
-    lot = lot,
-    case = case,
+    tlcDate = tlcDate,
+    tlcDateType = tlcDateType,
+    sscc = sscc,
     dateCreated = dateCreated,
     dateModified = dateModified,
     isDeleted = isDeleted,

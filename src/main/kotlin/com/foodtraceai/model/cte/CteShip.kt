@@ -45,13 +45,13 @@ data class CteShip(
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    override val quantity: Double,   // from Initial Packer or Transformer
+    override val quantity: Short,   // from Initial Packer or Transformer
     @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,   // from Initial Packer or Transformer
 
     // (a)(3) The product description for the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
+    override val ftlItem: FtlItem,
     override val variety: String,
     override val foodDesc: String,
 
@@ -103,10 +103,10 @@ data class CteShipDto(
     val id: Long,
     val cteType: CteType,
     val locationId: Long,
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val variety: String,
     val tlcId: Long,
-    val quantity: Double,
+    val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val foodDesc: String,
     val shipToLocationId: Long,
@@ -127,7 +127,7 @@ fun CteShip.toCteShipDto() = CteShipDto(
     id = id,
     cteType = cteType,
     locationId = location.id,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     tlcId = tlc.id,
     quantity = quantity,
@@ -157,7 +157,7 @@ fun CteShipDto.toCteShip(
     id = id,
     cteType = cteType,
     location = location,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     tlc = tlc,
     quantity = quantity,

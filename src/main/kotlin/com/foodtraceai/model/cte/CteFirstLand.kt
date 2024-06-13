@@ -35,7 +35,7 @@ data class CteFirstLand(
     override val location: Location,
 
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
+    override val ftlItem: FtlItem,
 
     // (a) The traceability lot code you assigned;
     @ManyToOne @JoinColumn
@@ -47,7 +47,7 @@ data class CteFirstLand(
     override val foodDesc: String,
 
     //(c) The quantity and unit of measure of the food (e.g., 300 kg);
-    override val quantity: Double,
+    override val quantity: Short,
     @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
@@ -89,11 +89,11 @@ data class CteFirstLandDto(
     val id: Long,
     val cteType: CteType,
     val locationId: Long,
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val tlc: TraceLotCode,
     val variety: String,
     val foodDesc: String,
-    val quantity: Double,
+    val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val harvestDateBegin: LocalDate,
     val harvestDateEnd: LocalDate,
@@ -114,7 +114,7 @@ fun CteFirstLand.toCteFirstLandDto() = CteFirstLandDto(
     id = id,
     cteType = cteType,
     locationId = location.id,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     tlc = tlc,
     variety = variety,
     foodDesc = foodDesc,
@@ -142,7 +142,7 @@ fun CteFirstLandDto.toCteFirstLand(
     id = id,
     cteType = cteType,
     location = location,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     tlc = tlc,
     variety = variety,
     foodDesc = foodDesc,

@@ -45,7 +45,7 @@ data class CteIPackExempt(
 
     // (c)(1) The commodity and, if applicable, variety of the food received;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem, // or commodity
+    override val ftlItem: FtlItem, // or commodity
     override val variety: String,
     override val foodDesc: String,  // not required for this CTE
 
@@ -78,7 +78,7 @@ data class CteIPackExempt(
 
     // (c)(7) The quantity and unit of measure of the packed food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    override val quantity: Double,
+    override val quantity: Short,
     @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
@@ -108,7 +108,7 @@ data class CteIPackExemptDto(
     val id: Long,
     val cteType: CteType,
     val locationId: Long,
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val variety: String,
     val foodDesc: String,
     val receiveDate: LocalDate,
@@ -118,7 +118,7 @@ data class CteIPackExemptDto(
     val sourceLocationId: Long,
     val packTlcId: Long,
     val packFoodDesc: String,
-    val quantity: Double,
+    val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val packTlcSourceId: Long?,
     val packTlcSourceReference: String?,
@@ -135,7 +135,7 @@ fun CteIPackExempt.toCteIPackExemptDto() = CteIPackExemptDto(
     id = id,
     cteType = cteType,
     locationId = location.id,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     foodDesc = foodDesc,
     receiveDate = receiveDate,
@@ -167,7 +167,7 @@ fun CteIPackExemptDto.toCteIPackExempt(
     id = id,
     cteType = cteType,
     location = location,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     foodDesc = foodDesc,
     receiveDate = receiveDate,

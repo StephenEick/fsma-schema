@@ -78,7 +78,7 @@ data class CteTrans(
 
     // (a)(2)(iv) The product description for the new food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem, // new food item
+    override val ftlItem: FtlItem, // new food item
     override val variety: String,   // new variety
     override val foodDesc: String,  // new food description
 
@@ -86,7 +86,7 @@ data class CteTrans(
     // (a)(2)(v) The quantity and unit of measure of the
     // food (e.g., 6 cases, 25 reusable plastic containers,
     // 100 tanks, 200 pounds); and
-    override val quantity: Double,
+    override val quantity: Short,
     @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
@@ -119,7 +119,7 @@ data class CteTransDto(
     val id: Long,
     val cteType: CteType,
     val locationId: Long,
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val variety: String,
     val inputTlcId: Long,  // from Initial Packer or previous Transformer
     val inputFoodDesc: String, // from Initial Packer or previous Transformer
@@ -130,7 +130,7 @@ data class CteTransDto(
     val newTlcSourceReference: String? = null,
     val transDate: LocalDate,
     val foodDesc: String,
-    val quantity: Double,
+    val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val referenceDocumentType: ReferenceDocumentType,
     val referenceDocumentNum: String,
@@ -144,7 +144,7 @@ fun CteTrans.toCteTransDto() = CteTransDto(
     id = id,
     cteType = cteType,
     locationId = location.id,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     inputTlcId = inputTlc.id,  // from Initial Packer or previous Transformer
     inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer
@@ -174,7 +174,7 @@ fun CteTransDto.toCteTrans(
     id = id,
     cteType = cteType,
     location = location,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     inputTlc = inputTlc,  // from Initial Packer or previous Transformer
     inputFoodDesc = inputFoodDesc, // from Initial Packer or previous Transformer

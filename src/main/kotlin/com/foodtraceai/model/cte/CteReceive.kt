@@ -29,7 +29,7 @@ data class CteReceive(
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Receive,
 
-    // Location for this CTE
+    // Location for this CTE - for this CTE it's redundant with receiveLocation
     @ManyToOne @JoinColumn
     override val location: Location,
 
@@ -40,40 +40,40 @@ data class CteReceive(
     // information and linking this information to the traceability lot:
 
     // (a)(1) The traceability lot code for the food;
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
     val tlc: TraceLotCode,
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    override val quantity: Double,
+    override val quantity: Short,
     @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
     // (a)(3) The product description for the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem,
+    override val ftlItem: FtlItem,
     override val variety: String,
     override val foodDesc: String,
 
     // (a)(4) The location description for the immediate previous source
     // (other than a transporter) for the food;
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
     val prevSourceLocation: Location,   // e.g. ShipFromLocation on CteShip
 
     // (a)(5) The location description for where the food was received;
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
     val receiveLocation: Location,  // ship to location on CteShip
 
     // (a)(6) The date you received the food;
     val receiveDate: LocalDate,
-    val receiveTime: OffsetDateTime,    // Not required but useful
+    val receiveTime: OffsetDateTime? = null,    // Not required but useful
 
     // (a)(7) The location description for the traceability lot code source,
     // or the traceability lot code source reference; and
-    @ManyToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn
     val tlcSource: Location? = null,
     val tlcSourceReference: String? = null,
@@ -126,16 +126,16 @@ data class CteReceiveDto(
     val id: Long,
     val cteType: CteType,
     val locationId: Long,
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val variety: String,
     val tlcId: Long,
-    val quantity: Double,
+    val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val foodDesc: String,
     val prevSourcLocationId: Long,
     val shipToLocationId: Long,
     val receiveDate: LocalDate,
-    val receiveTime: OffsetDateTime,
+    val receiveTime: OffsetDateTime?,
     val tlcSourceId: Long?,
     val tlcSourceReference: String?,
     val referenceDocumentType: ReferenceDocumentType,
@@ -150,7 +150,7 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     id = id,
     cteType = cteType,
     locationId = location.id,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     tlcId = tlc.id,
     quantity = quantity,
@@ -180,7 +180,7 @@ fun CteReceiveDto.toCteReceive(
     id = id,
     cteType = cteType,
     location = location,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     tlc = tlc,
     quantity = quantity,

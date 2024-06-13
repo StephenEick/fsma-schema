@@ -50,7 +50,7 @@ data class CteIPackSprouts(
 
     // (a)(1) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
-    override val foodItem: FtlItem, // or commodity
+    override val ftlItem: FtlItem, // or commodity
     override val variety: String,
     override val foodDesc: String,  // not required for this CTE
 
@@ -113,7 +113,7 @@ data class CteIPackSprouts(
 
     // Quantity packed and pack unit of measure.
     // (a)(13) The quantity and unit of measure of the packed food (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    override val quantity: Double,
+    override val quantity: Short,
     @Enumerated(EnumType.STRING)
     override val unitOfMeasure: UnitOfMeasure,
 
@@ -204,7 +204,7 @@ data class CteIPackSproutsDto(
     val cteType: CteType,
     val locationId: Long,
     val cteHarvestId: Long?,
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val variety: String,
     val foodDesc: String,
     val receiveDate: LocalDate,
@@ -222,7 +222,7 @@ data class CteIPackSproutsDto(
     val coolDate: LocalDate?,
     val packTlcId: Long,
     val packFoodDesc: String,
-    val quantity: Double,
+    val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val packTlcSourceId: Long?,
     val packTlcSourceReference: String? = null,
@@ -261,7 +261,7 @@ fun CteIPackSprouts.toCteIPackSproutsDto() = CteIPackSproutsDto(
     cteType = cteType,
     locationId = location.id,
     cteHarvestId = cteHarvest?.id,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     foodDesc = foodDesc,
     receiveDate = receiveDate,
@@ -332,7 +332,7 @@ fun CteIPackSproutsDto.toCteIPackSprouts(
     cteType = cteType,
     location = location,
     cteHarvest = cteHarvest,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     foodDesc = foodDesc,
     receiveDate = receiveDate,

@@ -15,6 +15,7 @@ import com.foodtraceai.util.UnitOfMeasure
 abstract class CteBase<T> : BaseLocationModel<T>() {
     abstract val cteType: CteType
 
+    // TODO: delete this - we pick this up from the BaseLocationModel
 //    // Business name for the creator of this CTE
 //    val foodBus: FoodBus
 //        get() = location.foodBus
@@ -28,7 +29,7 @@ abstract class CteBase<T> : BaseLocationModel<T>() {
 //        get() = foodBus.reseller
 
     // Common to all CTEs.  For raw agricultural commodities use commodity name
-    abstract val foodItem: FtlItem  // or commodity
+    abstract val ftlItem: FtlItem  // or commodity
     abstract val variety: String
     abstract val foodDesc: String
     //TODO: Add product name, brand, commodity, and variety,
@@ -37,7 +38,7 @@ abstract class CteBase<T> : BaseLocationModel<T>() {
     // TODO: Do it as a json text
 
     // quantity & unitOfMeasure is the amount after CTE is finished
-    abstract val quantity: Double   // from Initial Packer or Transformer
+    abstract val quantity: Short   // from Initial Packer or Transformer
     abstract val unitOfMeasure: UnitOfMeasure   // from Initial Packer or Transformer
 
     // TODO: need retain a list referenceDocuments for debugging

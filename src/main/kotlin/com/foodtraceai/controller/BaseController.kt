@@ -74,6 +74,9 @@ class BaseController {
     protected lateinit var resellerService: ResellerService
 
     @Autowired
+    protected lateinit var spreadsheetService: SpreadsheetService
+
+    @Autowired
     protected lateinit var supShipCteService: SupShipCteService
 
     @Autowired

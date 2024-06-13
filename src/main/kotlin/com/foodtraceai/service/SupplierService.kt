@@ -29,7 +29,7 @@ class SupplierService(
             tlc = supShipCte.tlc,
             quantity = supShipCte.quantity,
             unitOfMeasure = supShipCte.unitOfMeasure,
-            foodItem = supShipCte.foodItem,
+            ftlItem = supShipCte.ftlItem,
             variety = supShipCte.variety,
             foodDesc = supShipCte.foodDesc,
             prevSourceLocation = supShipCte.shipFromLocation,

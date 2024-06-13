@@ -24,6 +24,11 @@ enum class CteType {
     Transform,
 }
 
+enum class TlcDateType {
+    PackDate,
+    ShipDate,
+}
+
 enum class FoodBusType(val cteTypes: List<CteType>) {
     Farm(listOf(CteType.Harvest)),
     Cooler(listOf(CteType.Cool)),

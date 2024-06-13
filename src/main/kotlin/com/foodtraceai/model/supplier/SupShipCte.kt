@@ -55,13 +55,13 @@ data class SupShipCte(
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
-    val quantity: Double,   // from the supplier
+    val quantity: Short,   // from the supplier
     @Enumerated(EnumType.STRING)
     val unitOfMeasure: UnitOfMeasure,   // from the supplier
 
     // (a)(3) The product description for the food;
     @Enumerated(EnumType.STRING)
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val variety: String,
     val foodDesc: String,
 
@@ -111,10 +111,10 @@ data class SupShipCteDto(
     val id: Long,
     val supCteStatus: SupCteStatus,
     val cteReceive: CteReceive?,
-    val foodItem: FtlItem,
+    val ftlItem: FtlItem,
     val variety: String,
     val tlcId: Long,
-    val quantity: Double,
+    val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val foodDesc: String,
     val shipToLocationId: Long,
@@ -132,7 +132,7 @@ fun SupShipCte.toSupShipCteDto() = SupShipCteDto(
     id = id,
     supCteStatus = supCteStatus,
     cteReceive = cteReceive,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     tlcId = tlc.id,
     quantity = quantity,
@@ -158,7 +158,7 @@ fun SupShipCteDto.toSupCteShip(
     id = id,
     supCteStatus = supCteStatus,
     cteReceive = cteReceive,
-    foodItem = foodItem,
+    ftlItem = ftlItem,
     variety = variety,
     tlc = tlc,
     quantity = quantity,

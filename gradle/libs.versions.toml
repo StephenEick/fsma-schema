@@ -3,12 +3,17 @@ v-commons-csv = "1.10.0"
 v-jsonwebtoken = "0.11.5"
 v-kotlin = "1.9.23"
 v-ktlint = "11.0.0"
+v-poi = "5.2.5"     # from https://www.baeldung.com/java-microsoft-excel
 v-postgresql-driver = "42.7.3"
 v-spring-boot = "3.2.4"
 v-springdependency = "1.1.4"
 v-springdoc = "2.0.2"
 
+
 [libraries]
+# from https://www.baeldung.com/java-microsoft-excel
+apache-poi = { module = "org.apache.poi:poi", version.ref = "v-poi" }
+apache-poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "v-poi" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "v-commons-csv" }
 h2database = { module = "com.h2database:h2" }
 jackson = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }

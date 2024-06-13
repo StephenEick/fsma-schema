@@ -5,8 +5,10 @@ package com.foodtraceai.util
 
 import com.foodtraceai.auth.AuthService
 import com.foodtraceai.model.*
+import com.foodtraceai.model.cte.CteReceive
 import com.foodtraceai.model.supplier.SupShipCte
 import com.foodtraceai.service.*
+import com.foodtraceai.service.cte.CteReceiveService
 import com.foodtraceai.service.supplier.SupShipCteService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
@@ -29,6 +31,10 @@ class DataLoader : ApplicationRunner {
     @Autowired
     private lateinit var addressService: AddressService
     private val addressList: MutableList<Address> = mutableListOf()
+
+    @Autowired
+    private lateinit var cteReceiveService: CteReceiveService
+    private val cteReceiveList: MutableList<CteReceive> = mutableListOf()
 
     @Autowired
     private lateinit var foodBusService: FoodBusService
@@ -65,6 +71,7 @@ class DataLoader : ApplicationRunner {
         addLocations()
         addFsmaUsers()
         addTlcs()
+        addCteReceives()
         addSupShipCtes()
     }
 
@@ -296,14 +303,97 @@ class DataLoader : ApplicationRunner {
     }
 
     fun addTlcs() {
-        var tlc = TraceLotCode(tlc = "TraceLotCode1")
+        var tlc = TraceLotCode(
+            tlc = "TraceLotCode1",
+            gtin = "10333830000016",
+            batch = "187",
+            tlcDate = LocalDate.of(2023, 7, 12),
+            tlcDateType = TlcDateType.PackDate,
+        )
         tlcList.add(tlcService.insert(tlc))
 
-        tlc = TraceLotCode(tlc = "TraceLotCode2")
+        tlc = TraceLotCode(
+            tlc = "TraceLotCode2",
+            gtin = "10333830000016",
+            batch = "188",
+            tlcDate = LocalDate.of(2023, 7, 13),
+            tlcDateType = TlcDateType.PackDate,
+        )
         tlcList.add(tlcService.insert(tlc))
 
-        tlc = TraceLotCode(tlc = "TraceLotCode3")
+        tlc = TraceLotCode(
+            tlc = "TraceLotCode3",
+            gtin = "10333830000016",
+            batch = "123456",
+            tlcDate = LocalDate.of(2023, 7, 15),
+            tlcDateType = TlcDateType.PackDate,
+        )
         tlcList.add(tlcService.insert(tlc))
+    }
+
+    fun addCteReceives() {
+//        var previousLoc = locationService.findById(locationList[0].id)
+//            ?: throw Exception("bad previousLoc find")
+//        var curLoc = locationService.findById(locationList[1].id)
+//        ?: throw Exception("bad curLoc find")
+
+        var prevLoc = locationList[0]
+        var curLoc = locationList[1]
+        var cteReceive = CteReceive(
+            location = curLoc,
+            tlc = tlcList[0],
+            quantity = 15,
+            unitOfMeasure = UnitOfMeasure.Case,
+            ftlItem = FtlItem.LeafyGreens,
+            foodDesc = "Iceberg Lettuce Wrapped - 24 heads",
+            variety = "variety",
+            prevSourceLocation = prevLoc,
+            receiveLocation = curLoc,
+            receiveDate = LocalDate.of(2023, 7, 17),
+            tlcSource = prevLoc,
+            tlcSourceReference = null,
+            referenceDocumentType = ReferenceDocumentType.BOL,
+            referenceDocumentNum = "INV-12005",
+        )
+        cteReceiveList.add(cteReceiveService.insert(cteReceive))
+
+        cteReceive = CteReceive(
+            location = curLoc,
+            tlc = tlcList[1],
+            quantity = 10,
+            unitOfMeasure = UnitOfMeasure.Case,
+            ftlItem = FtlItem.LeafyGreens,
+            foodDesc = "Iceberg Lettuce Wrapped - 24 heads",
+            variety = "variety",
+            prevSourceLocation = prevLoc,
+            receiveLocation = curLoc,
+            receiveDate = LocalDate.of(2023, 7, 18),
+            tlcSource = prevLoc,
+            tlcSourceReference = null,
+            referenceDocumentType = ReferenceDocumentType.BOL,
+            referenceDocumentNum = "INV-12345",
+        )
+        cteReceiveList.add(cteReceiveService.insert(cteReceive))
+
+        prevLoc = locationList[0]
+        curLoc = locationList[1]
+        cteReceive = CteReceive(
+            location = curLoc,
+            tlc = tlcList[2],
+            quantity = 5,
+            unitOfMeasure = UnitOfMeasure.Case,
+            ftlItem = FtlItem.LeafyGreens,
+            foodDesc = "Iceburg Lettuce Whole - Georgia Grown",
+            variety = "variety",
+            prevSourceLocation = prevLoc,
+            receiveLocation = curLoc,
+            receiveDate = LocalDate.of(2023, 7, 17),
+            tlcSource = prevLoc,
+            tlcSourceReference = null,
+            referenceDocumentType = ReferenceDocumentType.BOL,
+            referenceDocumentNum = "BOL-023",
+        )
+        cteReceiveList.add(cteReceiveService.insert(cteReceive))
     }
 
     fun addSupShipCtes() {
@@ -312,9 +402,9 @@ class DataLoader : ApplicationRunner {
             supCteStatus = SupCteStatus.Pending,
             cteReceive = null,
             tlc = tlcList[0],
-            quantity = 5.0,
+            quantity = 5,
             unitOfMeasure = UnitOfMeasure.Carton,
-            foodItem = FtlItem.Fruits,
+            ftlItem = FtlItem.Fruits,
             variety = "Variety of Fruits",
             foodDesc = "Food Description goes Here",
             shipToLocation = locationList[0],
@@ -328,9 +418,9 @@ class DataLoader : ApplicationRunner {
             supCteStatus = SupCteStatus.Pending,
             cteReceive = null,
             tlc = tlcList[1],
-            quantity = 10.0,
+            quantity = 10,
             unitOfMeasure = UnitOfMeasure.Carton,
-            foodItem = FtlItem.Cucumbers,
+            ftlItem = FtlItem.Cucumbers,
             variety = "Cucumbers",
             foodDesc = "Cucumbers goes Here",
             shipToLocation = locationList[2],
@@ -344,9 +434,9 @@ class DataLoader : ApplicationRunner {
             supCteStatus = SupCteStatus.Pending,
             cteReceive = null,
             tlc = tlcList[1],
-            quantity = 15.0,
+            quantity = 15,
             unitOfMeasure = UnitOfMeasure.Carton,
-            foodItem = FtlItem.DeliSalads,
+            ftlItem = FtlItem.DeliSalads,
             variety = "Deli Salads",
             foodDesc = "Description of Deli Salad goes Here",
             shipToLocation = locationList[2],
