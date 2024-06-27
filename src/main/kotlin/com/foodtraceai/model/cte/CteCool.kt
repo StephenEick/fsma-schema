@@ -43,7 +43,7 @@ data class CteCool(
     // (b)(1)(i) The location description for the immediate subsequent
     // recipient (other than a transporter) of the food;
     @ManyToOne @JoinColumn
-    val subsequentRecipient: Location,
+    val isrLocation: Location,
 
     // (b)(1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
@@ -90,7 +90,7 @@ data class CteCoolDto(
     val id: Long,
     val cteType: CteType = CteType.Cool,
     val locationId: Long,
-    val subsequentRecipientId: Long,
+    val isrLocationId: Long,
     val ftlItem: FtlItem,
     val variety: String,
     val foodDesc: String,
@@ -111,7 +111,7 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
     id = id,
     cteType = cteType,
     locationId = location.id,
-    subsequentRecipientId = subsequentRecipient.id,
+    isrLocationId = isrLocation.id,
     ftlItem = ftlItem,
     variety = variety,
     foodDesc = foodDesc,
@@ -130,12 +130,12 @@ fun CteCool.toCteCoolDto() = CteCoolDto(
 
 fun CteCoolDto.toCteCool(
     location: Location,
-    subsequentRecipient: Location,
+    isrLocation: Location,
 ) = CteCool(
     id = id,
     cteType = cteType,
     location = location,
-    subsequentRecipient = subsequentRecipient,
+    isrLocation = isrLocation,
     ftlItem = ftlItem,
     variety = variety,
     foodDesc = foodDesc,

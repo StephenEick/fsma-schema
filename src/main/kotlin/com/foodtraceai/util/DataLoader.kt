@@ -304,7 +304,7 @@ class DataLoader : ApplicationRunner {
 
     fun addTlcs() {
         var tlc = TraceLotCode(
-            tlc = "TraceLotCode1",
+            tlcVal = "TraceLotCode1",
             gtin = "10333830000016",
             batch = "187",
             tlcDate = LocalDate.of(2023, 7, 12),
@@ -313,7 +313,7 @@ class DataLoader : ApplicationRunner {
         tlcList.add(tlcService.insert(tlc))
 
         tlc = TraceLotCode(
-            tlc = "TraceLotCode2",
+            tlcVal = "TraceLotCode2",
             gtin = "10333830000016",
             batch = "188",
             tlcDate = LocalDate.of(2023, 7, 13),
@@ -322,7 +322,7 @@ class DataLoader : ApplicationRunner {
         tlcList.add(tlcService.insert(tlc))
 
         tlc = TraceLotCode(
-            tlc = "TraceLotCode3",
+            tlcVal = "TraceLotCode3",
             gtin = "10333830000016",
             batch = "123456",
             tlcDate = LocalDate.of(2023, 7, 15),
@@ -341,14 +341,13 @@ class DataLoader : ApplicationRunner {
         var curLoc = locationList[1]
         var cteReceive = CteReceive(
             location = curLoc,
-            tlc = tlcList[0],
+            traceLotCode = tlcList[0],
             quantity = 15,
             unitOfMeasure = UnitOfMeasure.Case,
             ftlItem = FtlItem.LeafyGreens,
             foodDesc = "Iceberg Lettuce Wrapped - 24 heads",
             variety = "variety",
-            prevSourceLocation = prevLoc,
-            receiveLocation = curLoc,
+            ipsLocation = prevLoc,
             receiveDate = LocalDate.of(2023, 7, 17),
             tlcSource = prevLoc,
             tlcSourceReference = null,
@@ -359,14 +358,13 @@ class DataLoader : ApplicationRunner {
 
         cteReceive = CteReceive(
             location = curLoc,
-            tlc = tlcList[1],
+            traceLotCode = tlcList[1],
             quantity = 10,
             unitOfMeasure = UnitOfMeasure.Case,
             ftlItem = FtlItem.LeafyGreens,
             foodDesc = "Iceberg Lettuce Wrapped - 24 heads",
             variety = "variety",
-            prevSourceLocation = prevLoc,
-            receiveLocation = curLoc,
+            ipsLocation = prevLoc,
             receiveDate = LocalDate.of(2023, 7, 18),
             tlcSource = prevLoc,
             tlcSourceReference = null,
@@ -379,14 +377,13 @@ class DataLoader : ApplicationRunner {
         curLoc = locationList[1]
         cteReceive = CteReceive(
             location = curLoc,
-            tlc = tlcList[2],
+            traceLotCode = tlcList[2],
             quantity = 5,
             unitOfMeasure = UnitOfMeasure.Case,
             ftlItem = FtlItem.LeafyGreens,
             foodDesc = "Iceburg Lettuce Whole - Georgia Grown",
             variety = "variety",
-            prevSourceLocation = prevLoc,
-            receiveLocation = curLoc,
+            ipsLocation = prevLoc,
             receiveDate = LocalDate.of(2023, 7, 17),
             tlcSource = prevLoc,
             tlcSourceReference = null,

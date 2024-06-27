@@ -1,9 +1,11 @@
 // ----------------------------------------------------------------------------
 // Copyright 2024 FoodTraceAI LLC or its affiliates. All Rights Reserved.
 // ----------------------------------------------------------------------------
+
 package com.foodtraceai.service
 
 import com.foodtraceai.service.cte.CteReceiveService
+import com.foodtraceai.util.ColHeaderType
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.core.io.ByteArrayResource
@@ -11,6 +13,10 @@ import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+
+// Sample sortable spreadsheets are https://producetraceability.org/resources/#sortable
+// This is the example for Receiver
+// https://producetraceability.org/wp-content/uploads/2023/09/PTI-Sortable-Spreadsheet-Receiving-2-1.xlsx
 
 // Example taken from
 // https://www.baeldung.com/java-microsoft-excel
@@ -21,9 +27,36 @@ import java.io.FileOutputStream
 // To Run it  http://localhost:8080/api/v1/sheet/cte?which=receive
 @Service
 class SpreadsheetService(
+    private val usePti: Boolean = false,
     private val cteReceiveService: CteReceiveService,
 ) {
-    private val receiveColHeaders = listOf(
+    private val masterColHeaders = listOf(
+        Triple("(a)(1) TLC - GTIN", ColHeaderType.Required, 'A'),
+        Triple("(a)(1) TLC - Batch", ColHeaderType.Required, 'B'),
+        Triple("(a)(1) TLC - Date**", ColHeaderType.PtiBestPractices, 'C'),
+        Triple("(a)(1) TLC - Date Type**", ColHeaderType.PtiBestPractices, 'D'),
+        Triple("(a)(1) TLC - SSCC**", ColHeaderType.PtiBestPractices, 'E'),
+        Triple("(b)(1) TLC - Assigned By", ColHeaderType.Required, 'F'),
+        Triple("(a)(2) Qty & UOM", ColHeaderType.Required, 'G'),
+        Triple("(a)(3) Product Description", ColHeaderType.Required, 'H'),
+        //"(a)(4) Immediate Previous Source (IPS) Location - (Shipped from Location)"
+        Triple("(a)(4) IPS Location", ColHeaderType.Required, 'I'),
+        Triple("(a)(5) Receive Location", ColHeaderType.Required, 'J'),
+        Triple("(a)(6) Receive Date", ColHeaderType.Required, 'K'),
+        Triple("(a)(7) TLC Source ReferenceGLN", ColHeaderType.Required, 'L'),
+        Triple("(a)(7) TLC Source ReferenceFFRN", ColHeaderType.Required, 'M'),
+        Triple("(a)(7) TLC Source ReferenceURL", ColHeaderType.Required, 'N'),
+        Triple("(a)(7) TLC Source ReferenceGGN", ColHeaderType.Required, 'O'),
+        Triple("(b)(5) TLC Source Reference - Assigned By", ColHeaderType.Required, 'P'),
+        Triple("(a)(8) Ref Doc", ColHeaderType.Required, 'Q'),
+    )
+
+    // What columns to display
+    private val colHeaders = masterColHeaders.filter {
+        it.second == ColHeaderType.Required || usePti
+    }
+
+    private val oldReceiveColHeaders = listOf(
         "(a)(1) TLC - GTIN",
         "(a)(1) TLC - Batch",
         "(a)(1) TLC - Date**",
@@ -32,7 +65,7 @@ class SpreadsheetService(
         "(b)(1) TLC - Assigned By",
         "(a)(2) Qty & UOM",
         "(a)(3) Product Description",
-        "(a)(4) Immediate Previous Source (IPS) Location - (Shipped from Location)",
+        "(a)(4) IPS Location", //"(a)(4) Immediate Previous Source (IPS) Location - (Shipped from Location)",
         "(a)(5) Receive Location",
         "(a)(6) Receive Date",
         "(a)(7) TLC Source ReferenceGLN",
@@ -41,6 +74,7 @@ class SpreadsheetService(
         "(a)(7) TLC Source ReferenceGGN",
         "(b)(5) TLC Source Reference - Assigned By",
         "(a)(8) Ref Doc",
+
         "(a)(7) TLC Source Name",
         "(a)(7) TLC Source Street",
         "(a)(7) TLC Source City",
@@ -52,7 +86,7 @@ class SpreadsheetService(
 
     private fun makeReceivingTab(workbook: Workbook) {
         val receiving: Sheet = workbook.createSheet("Receiving")
-        receiveColHeaders.forEachIndexed { idx, title ->
+        colHeaders.forEachIndexed { idx, _ ->
             receiving.setColumnWidth(idx, 5000)
         }
 
@@ -68,10 +102,10 @@ class SpreadsheetService(
         font.bold = true
         headerStyle.setFont(font)
 
-        receiveColHeaders.forEachIndexed { idx, title ->
+        colHeaders.forEachIndexed { idx, triple ->
             val headerCell = header.createCell(idx)
-            headerCell.setCellValue(title)
-            headerCell.setCellStyle(headerStyle)
+            headerCell.setCellValue(triple.first)
+            headerCell.cellStyle = headerStyle
         }
 
         // ***************  Content Rows **********
@@ -80,26 +114,24 @@ class SpreadsheetService(
 //        style.shrinkToFit = true
         style.alignment = HorizontalAlignment.CENTER
 
-        for (i in 1..3) {
-            val cte = cteReceiveService.findById(i.toLong())
-                ?: throw Exception("cteReceive not found row: $i")
+        val cteList = cteReceiveService.findAll()
 
-            val row = receiving.createRow(i)
-            receiveColHeaders.forEachIndexed { col, title ->
-                val cell = row.createCell(col)
+        cteList.forEachIndexed { rowNum, cte ->
+            val row = receiving.createRow(rowNum + 1 /* 1 leave space for headers */)
+            colHeaders.forEachIndexed { idx, triple ->
+                val cell = row.createCell(idx)
                 cell.cellStyle = style
-                val letter = 'A' + col
-                when (letter) {
-                    'A' -> cell.setCellValue(cte.tlc.tlc)
-                    'B' -> cell.setCellValue(cte.tlc.batch)
-                    'C' -> cell.setCellValue(cte.tlc.tlcDate)
-                    'D' -> cell.setCellValue(cte.tlc.tlcDateType?.name)
-                    'E' -> cell.setCellValue(cte.tlc.sscc)
+                when (triple.third) {
+                    'A' -> cell.setCellValue(cte.traceLotCode.tlcVal)
+                    'B' -> cell.setCellValue(cte.traceLotCode.batch)
+                    'C' -> cell.setCellValue(cte.traceLotCode.tlcDate)
+                    'D' -> cell.setCellValue(cte.traceLotCode.tlcDateType?.name)
+                    'E' -> cell.setCellValue(cte.traceLotCode.sscc)
                     'F' -> {}
                     'G' -> cell.setCellValue("${cte.quantity} ${cte.unitOfMeasure.name}")
                     'H' -> cell.setCellValue(cte.foodDesc)
-                    'I' -> cell.setCellValue(cte.prevSourceLocation.foodBus.foodBusName)
-                    'J' -> cell.setCellValue(cte.receiveLocation.foodBus.foodBusName)
+                    'I' -> cell.setCellValue(cte.ipsLocation.foodBus.foodBusName)
+                    'J' -> cell.setCellValue(cte.location.foodBus.foodBusName)
                     'K' -> cell.setCellValue(cte.receiveDate)
                     'M' -> cell.setCellValue(cte.tlcSourceReference)
                     'Q' -> cell.setCellValue(cte.referenceDocumentNum)
@@ -107,16 +139,6 @@ class SpreadsheetService(
                 }
             }
         }
-
-//        val row = receiving.createRow(2)
-//        var cell = row.createCell(0)
-//        cell.setCellValue("John Smith")
-//        cell.cellStyle = style
-//
-//        cell = row.createCell(1)
-//        cell.setCellValue(20.0)
-//        cell.cellStyle = style
-        // *****************
     }
 
     private fun makeLocationsTab(workbook: Workbook) {

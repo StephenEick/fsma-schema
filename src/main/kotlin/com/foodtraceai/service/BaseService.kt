@@ -20,9 +20,9 @@ abstract class BaseService<T : BaseModel<T>>(
 
     open fun findById(id: Long): T? = repo.findByIdOrNull(id)
 
-    open fun save(entity: T): T {
-        return repo.save(entity)
-    }
+    open fun findAll(): List<T> = repo.findAll()
+
+    open fun save(entity: T): T = repo.save(entity)
 
     // --------------------------------
 

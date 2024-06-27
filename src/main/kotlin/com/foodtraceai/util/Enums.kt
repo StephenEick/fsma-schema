@@ -3,12 +3,16 @@
 // ----------------------------------------------------------------------------
 package com.foodtraceai.util
 
+enum class ColHeaderType {
+    Required,
+    PtiBestPractices,
+}
+
 // -- ISO-3166 3-Letter Country codes
 enum class Country {
     USA,
-    CANADA,
+    CAN,
     MEX,
-    OTHER // TODO: Fill in later
 }
 
 enum class CteType {
@@ -22,11 +26,6 @@ enum class CteType {
     Ship,
     Receive,
     Transform,
-}
-
-enum class TlcDateType {
-    PackDate,
-    ShipDate,
 }
 
 enum class FoodBusType(val cteTypes: List<CteType>) {
@@ -60,13 +59,18 @@ enum class FtlItem {
     Vegetables,
 }
 
+enum class TlcDateType {
+    PackDate,
+    ShipDate,
+}
+
 enum class ReferenceDocumentType {
     ASN,
     BOL,
     CTE,
     PO,
     WO,
-    OTHER, // TODO: fill in later
+    OTHER,
 }
 
 // SGE: The order of the Roles is important - highest permissions last

@@ -12,7 +12,7 @@ import java.time.OffsetDateTime
 data class TraceLotCode(
     @Id @GeneratedValue
     override val id: Long = 0,
-    val tlc: String,
+    val tlcVal: String,
     val gtin: String? = null,   // not required
     val batch: String? = null,  // not required
     val tlcDate: LocalDate? = null,    // not required
@@ -30,7 +30,7 @@ data class TraceLotCode(
 
 data class TraceLotCodeDto(
     val id: Long = 0,
-    val tlc: String,
+    val tlcVal: String,
     val gtin: String?,
     val batch: String?,
     val tlcDate: LocalDate?,
@@ -46,7 +46,7 @@ data class TraceLotCodeDto(
 // but I expect this to change in the future
 fun TraceLotCode.toTraceLotCodeDto() = TraceLotCodeDto(
     id = id,
-    tlc = tlc,
+    tlcVal = tlcVal,
     gtin = gtin,
     batch = batch,
     tlcDate = tlcDate,
@@ -60,7 +60,7 @@ fun TraceLotCode.toTraceLotCodeDto() = TraceLotCodeDto(
 
 fun TraceLotCodeDto.toTraceLotCode() = TraceLotCode(
     id = id,
-    tlc = tlc,
+    tlcVal = tlcVal,
     batch = batch,
     gtin = gtin,
     tlcDate = tlcDate,

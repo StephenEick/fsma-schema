@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.OffsetDateTime
 
+/*
+Business Logic to receive a shipment associated with a previously
+sent CteShip cte
+ */
+
 @Service
 class SupplierService(
     private val cteReceiveService: CteReceiveService,
@@ -25,15 +30,14 @@ class SupplierService(
         referenceDocumentNum: String,
     ): CteReceive {
         val cteReceive = CteReceive(
-            location = location,
-            tlc = supShipCte.tlc,
+            location = supShipCte.shipToLocation,
+            traceLotCode = supShipCte.tlc,
             quantity = supShipCte.quantity,
             unitOfMeasure = supShipCte.unitOfMeasure,
             ftlItem = supShipCte.ftlItem,
             variety = supShipCte.variety,
             foodDesc = supShipCte.foodDesc,
-            prevSourceLocation = supShipCte.shipFromLocation,
-            receiveLocation = supShipCte.shipToLocation,
+            ipsLocation = supShipCte.shipFromLocation,
             receiveDate = receiveDate,
             receiveTime = OffsetDateTime.now(),
             tlcSource = supShipCte.tlcSource,

@@ -43,7 +43,7 @@ data class CteHarvest(
     // Will usually be the initial packer but could be the cooler
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-    val subsequentRecipient: Location,
+    val isrLocation: Location,
 
     // (a)(1)(ii) The commodity and, if applicable, variety of the food;
     @Enumerated(EnumType.STRING)
@@ -103,7 +103,7 @@ data class CteHarvestDto(
     val id: Long,
     val cteType: CteType,
     val locationId: Long,
-    val subsequentRecipientId: Long,
+    val isrLocationId: Long,
     val ftlItem: FtlItem,
     val commodityVariety: String,
     val foodDesc: String,
@@ -127,7 +127,7 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
     id = id,
     cteType = cteType,
     locationId = location.id,
-    subsequentRecipientId = subsequentRecipient.id,
+    isrLocationId = isrLocation.id,
     ftlItem = ftlItem,
     commodityVariety = variety,
     foodDesc = foodDesc,
@@ -149,13 +149,13 @@ fun CteHarvest.toCteHarvestDto() = CteHarvestDto(
 
 fun CteHarvestDto.toCteHarvest(
     location: Location,
-    subsequentRecipient: Location,
+    isrLocation: Location,
     harvestLocation: Location,
 ) = CteHarvest(
     id = id,
     cteType = cteType,
     location = location,
-    subsequentRecipient = subsequentRecipient,
+    isrLocation = isrLocation,
     ftlItem = ftlItem,
     variety = commodityVariety,
     foodDesc = foodDesc,

@@ -29,8 +29,9 @@ data class CteReceive(
     @Enumerated(EnumType.STRING)
     override val cteType: CteType = CteType.Receive,
 
-    // Location for this CTE - for this CTE it's redundant with receiveLocation
-    @ManyToOne @JoinColumn
+    // (a)(5) The location description for where the food was received;
+    @ManyToOne
+    @JoinColumn
     override val location: Location,
 
     // ************** KDEs *************
@@ -42,7 +43,7 @@ data class CteReceive(
     // (a)(1) The traceability lot code for the food;
     @ManyToOne
     @JoinColumn
-    val tlc: TraceLotCode,
+    val traceLotCode: TraceLotCode,
 
     // (a)(2) The quantity and unit of measure of the food
     // (e.g., 6 cases, 25 reusable plastic containers, 100 tanks, 200 pounds);
@@ -60,12 +61,7 @@ data class CteReceive(
     // (other than a transporter) for the food;
     @ManyToOne
     @JoinColumn
-    val prevSourceLocation: Location,   // e.g. ShipFromLocation on CteShip
-
-    // (a)(5) The location description for where the food was received;
-    @ManyToOne
-    @JoinColumn
-    val receiveLocation: Location,  // ship to location on CteShip
+    val ipsLocation: Location,   // e.g. ShipFromLocation on CteShip
 
     // (a)(6) The date you received the food;
     val receiveDate: LocalDate,
@@ -125,15 +121,14 @@ data class CteReceive(
 data class CteReceiveDto(
     val id: Long,
     val cteType: CteType,
-    val locationId: Long,
+    val locationId: Long,   // Receive location
     val ftlItem: FtlItem,
     val variety: String,
-    val tlcId: Long,
+    val traceLotCodeId: Long,
     val quantity: Short,
     val unitOfMeasure: UnitOfMeasure,
     val foodDesc: String,
-    val prevSourcLocationId: Long,
-    val shipToLocationId: Long,
+    val ipsLocationId: Long,
     val receiveDate: LocalDate,
     val receiveTime: OffsetDateTime?,
     val tlcSourceId: Long?,
@@ -152,12 +147,11 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
     locationId = location.id,
     ftlItem = ftlItem,
     variety = variety,
-    tlcId = tlc.id,
+    traceLotCodeId = traceLotCode.id,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     foodDesc = foodDesc,
-    prevSourcLocationId = prevSourceLocation.id,
-    shipToLocationId = receiveLocation.id,
+    ipsLocationId = ipsLocation.id,
     receiveDate = receiveDate,
     receiveTime = receiveTime,
     tlcSourceId = tlcSource?.id,
@@ -172,9 +166,8 @@ fun CteReceive.toCteReceiveDto() = CteReceiveDto(
 
 fun CteReceiveDto.toCteReceive(
     location: Location,
-    tlc: TraceLotCode,
-    prevSourceLocation: Location,
-    shipToLocation: Location,
+    traceLotCode: TraceLotCode,
+    ipsLocation: Location,
     tlcSource: Location?,
 ) = CteReceive(
     id = id,
@@ -182,12 +175,11 @@ fun CteReceiveDto.toCteReceive(
     location = location,
     ftlItem = ftlItem,
     variety = variety,
-    tlc = tlc,
+    traceLotCode = traceLotCode,
     quantity = quantity,
     unitOfMeasure = unitOfMeasure,
     foodDesc = foodDesc,
-    prevSourceLocation = prevSourceLocation,
-    receiveLocation = shipToLocation,
+    ipsLocation = ipsLocation,
     receiveDate = receiveDate,
     receiveTime = receiveTime,
     tlcSource = tlcSource,

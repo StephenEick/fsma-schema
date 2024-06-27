@@ -47,8 +47,8 @@ class CteHarvestController : BaseController() {
         val location = locationService.findById(cteHarvestDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteHarvestDto.locationId}")
 
-        val subsequentRecipient = locationService.findById(cteHarvestDto.subsequentRecipientId)
-            ?: throw EntityNotFoundException("SubsequentRecipient not found: ${cteHarvestDto.subsequentRecipientId}")
+        val subsequentRecipient = locationService.findById(cteHarvestDto.isrLocationId)
+            ?: throw EntityNotFoundException("SubsequentRecipient not found: ${cteHarvestDto.isrLocationId}")
 
         val harvestLocation = locationService.findById(cteHarvestDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteHarvestDto.harvestLocationId}")
@@ -72,8 +72,8 @@ class CteHarvestController : BaseController() {
         val location = locationService.findById(cteHarvestDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteHarvestDto.locationId}")
 
-        val subsequentRecipient = locationService.findById(cteHarvestDto.subsequentRecipientId)
-            ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteHarvestDto.subsequentRecipientId}")
+        val subsequentRecipient = locationService.findById(cteHarvestDto.isrLocationId)
+            ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteHarvestDto.isrLocationId}")
 
         val harvestLocation = locationService.findById(cteHarvestDto.harvestLocationId)
             ?: throw EntityNotFoundException("HarvestLocation not found: ${cteHarvestDto.harvestLocationId}")

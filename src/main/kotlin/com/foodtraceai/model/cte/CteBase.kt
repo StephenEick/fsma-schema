@@ -15,19 +15,6 @@ import com.foodtraceai.util.UnitOfMeasure
 abstract class CteBase<T> : BaseLocationModel<T>() {
     abstract val cteType: CteType
 
-    // TODO: delete this - we pick this up from the BaseLocationModel
-//    // Business name for the creator of this CTE
-//    val foodBus: FoodBus
-//        get() = location.foodBus
-//    val foodBusId: Long
-//        get() = foodBus.id
-//
-//    // Location where this CTE is created
-//    override val location: Location
-//
-//    val reseller:Reseller
-//        get() = foodBus.reseller
-
     // Common to all CTEs.  For raw agricultural commodities use commodity name
     abstract val ftlItem: FtlItem  // or commodity
     abstract val variety: String

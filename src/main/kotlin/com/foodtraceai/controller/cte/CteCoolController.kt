@@ -50,8 +50,8 @@ class CteCoolController : BaseController() {
         val location = locationService.findById(cteCoolDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteCoolDto.locationId}")
 
-        val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
-            ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
+        val subsequentRecipient = locationService.findById(cteCoolDto.isrLocationId)
+            ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.isrLocationId}")
 
         val cteCool = cteCoolDto.toCteCool(location, subsequentRecipient)
         val cteCoolResponse = cteCoolService.insert(cteCool).toCteCoolDto()
@@ -72,8 +72,8 @@ class CteCoolController : BaseController() {
         val location = locationService.findById(cteCoolDto.locationId)
             ?: throw EntityNotFoundException("Location not found: ${cteCoolDto.locationId}")
 
-        val subsequentRecipient = locationService.findById(cteCoolDto.subsequentRecipientId)
-            ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.subsequentRecipientId}")
+        val subsequentRecipient = locationService.findById(cteCoolDto.isrLocationId)
+            ?: throw EntityNotFoundException("SubsequentRecipient Location not found: ${cteCoolDto.isrLocationId}")
 
         val cteCool = cteCoolDto.toCteCool(location, subsequentRecipient)
         val cteCoolCto = cteCoolService.update(cteCool).toCteCoolDto()

@@ -66,7 +66,7 @@ class TestsTraceLotCode {
         accessToken = authenticate(rootAuthLogin).first
 
         traceLotCodeDto = TraceLotCodeDto(
-            tlc = "trace lot code 1",
+            tlcVal = "trace lot code 1",
             batch = "batch trace lot code 1",
             gtin = null,
             tlcDate = null,
@@ -87,7 +87,7 @@ class TestsTraceLotCode {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
             jsonPath("$.id") { value(traceLotCodeId) }
-            jsonPath("$.tlc") { value("trace lot code 1") }
+            jsonPath("$.tlcVal") { value("trace lot code 1") }
             jsonPath(".batch") { value("batch trace lot code 1") }
         }
     }
